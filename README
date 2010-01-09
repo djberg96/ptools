@@ -3,16 +3,10 @@
    File class based on Unix command line tools.
    
 == Prerequisites
-   Ruby 1.8.0 or later is recommended.
    On MS Windows you will need win32-file 0.5.4 or later.
 
 == Installation
-=== Gem
-   ruby ptools.gemspec
-   gem install ptools-x.y.z.gem
-=== Manual
-   rake test (optional)
-   rake install
+   gem install ptools
 
 == Synopsis
    require "ptools"
@@ -62,7 +56,7 @@
    Artistic 2.0
     
 == Copyright
-   (C) 2003-2009 Daniel J. Berger
+   (C) 2003-2010 Daniel J. Berger
    All Rights Reserved.
     
 == Warranty
