@@ -1,0 +1,103 @@
+require 'rake'
+require 'rake/testtask'
+require 'rbconfig'
+include Config
+
+desc 'Install the ptools package (non-gem)'
+task :install do
+   sitelibdir = CONFIG["sitelibdir"]
+   file = "lib/ptools.rb"
+   FileUtils.cp(file, sitelibdir, :verbose => true)
+end
+
+task :gem do
+   spec = eval(IO.read('ptools.gemspec'))
+   Gem::Builder.new(spec).build
+end
+
+task :install_gem => [:gem] do
+   file = Dir["*.gem"].first
+   sh "gem install #{file}"
+end
+
+Rake::TestTask.new do |t|
+   t.verbose = true
+   t.warning = true
+end
+
+Rake::TestTask.new('test_binary') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_binary.rb']
+end
+
+Rake::TestTask.new('test_constants') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_constants.rb']
+end
+
+Rake::TestTask.new('test_head') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_head.rb']
+end
+
+Rake::TestTask.new('test_middle') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_middle.rb']
+end
+
+Rake::TestTask.new('test_nlconvert') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_nlconvert.rb']
+end
+
+Rake::TestTask.new('test_null') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_null.rb']
+end
+
+Rake::TestTask.new('test_tail') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_tail.rb']
+end
+
+Rake::TestTask.new('test_touch') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_touch.rb']
+end
+
+Rake::TestTask.new('test_wc') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_wc.rb']
+end
+
+Rake::TestTask.new('test_whereis') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_whereis.rb']
+end
+
+Rake::TestTask.new('test_which') do |t|
+   t.libs << 'test'
+   t.verbose = true
+   t.warning = true
+   t.test_files = FileList['test/test_which.rb']
+end
