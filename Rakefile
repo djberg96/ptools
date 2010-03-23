@@ -21,83 +21,85 @@ task :install_gem => [:gem] do
 end
 
 Rake::TestTask.new do |t|
-   t.verbose = true
-   t.warning = true
+  t.verbose = true
+  t.warning = true
 end
 
-Rake::TestTask.new('test_binary') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_binary.rb']
-end
+namespace 'test' do
+  Rake::TestTask.new('binary') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_binary.rb']
+  end
 
-Rake::TestTask.new('test_constants') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_constants.rb']
-end
+  Rake::TestTask.new('constants') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_constants.rb']
+  end
 
-Rake::TestTask.new('test_head') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_head.rb']
-end
+  Rake::TestTask.new('head') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_head.rb']
+  end
 
-Rake::TestTask.new('test_middle') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_middle.rb']
-end
+  Rake::TestTask.new('middle') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_middle.rb']
+  end
 
-Rake::TestTask.new('test_nlconvert') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_nlconvert.rb']
-end
+  Rake::TestTask.new('nlconvert') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_nlconvert.rb']
+  end
 
-Rake::TestTask.new('test_null') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_null.rb']
-end
+  Rake::TestTask.new('null') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_null.rb']
+  end
 
-Rake::TestTask.new('test_tail') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_tail.rb']
-end
+  Rake::TestTask.new('tail') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_tail.rb']
+  end
 
-Rake::TestTask.new('test_touch') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_touch.rb']
-end
+  Rake::TestTask.new('touch') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_touch.rb']
+  end
 
-Rake::TestTask.new('test_wc') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_wc.rb']
-end
+  Rake::TestTask.new('wc') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_wc.rb']
+  end
 
-Rake::TestTask.new('test_whereis') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_whereis.rb']
-end
+  Rake::TestTask.new('whereis') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_whereis.rb']
+  end
 
-Rake::TestTask.new('test_which') do |t|
-   t.libs << 'test'
-   t.verbose = true
-   t.warning = true
-   t.test_files = FileList['test/test_which.rb']
+  Rake::TestTask.new('which') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_which.rb']
+  end
 end
