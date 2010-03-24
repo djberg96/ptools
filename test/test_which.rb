@@ -25,7 +25,7 @@ class TC_FileWhich < Test::Unit::TestCase
     Dir.mkdir(@@dir) unless File.exists?(@@dir)
     FileUtils.touch(@@non_exe)
     File.chmod(775, @@dir)
-    File.chmod(444, @@non_exe)
+    File.chmod(644, @@non_exe)
   end
 
   def setup
@@ -54,13 +54,13 @@ class TC_FileWhich < Test::Unit::TestCase
   end
 
   test "which handles executables without extensions on windows" do
-    omit_unless(@@windows, "test skipped on MS Windows")
+    omit_unless(@@windows, "test skipped unless MS Windows")
     assert_not_nil(File.which('ruby'))
     assert_not_nil(File.which('notepad'))
   end
 
   test "which handles executables that already contain extensions on windows" do
-    omit_unless(@@windows, "test skipped on MS Windows")
+    omit_unless(@@windows, "test skipped unless MS Windows")
     assert_not_nil(File.which('ruby.exe'))
     assert_not_nil(File.which('notepad.exe'))
   end
@@ -101,7 +101,7 @@ class TC_FileWhich < Test::Unit::TestCase
 
   def self.shutdown
     FileUtils.rm(@@non_exe)
-    FileUtils.rm_f(@@dir)
+    FileUtils.rm_rf(@@dir)
     @@windows = nil
     @@dir = nil
     @@non_exe = nil
