@@ -116,9 +116,9 @@ class File
     # Bail out early if an absolute path is provided.
     if program =~ /^\/|^[a-z]:[\\\/]/i
       program += WIN32EXTS if MSWINDOWS && File.extname(program).empty?
-      found = Dir[program]
-      if found.size > 0
-        return found[0]
+      found = Dir[program].first
+      if found && File.executable?(found) && !File.directory?(found)
+        return found
       else
         return nil
       end
