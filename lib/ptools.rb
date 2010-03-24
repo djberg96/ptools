@@ -148,14 +148,12 @@ class File
     nil
   end
 
-  # In block form, yields each +program+ within +path+. In non-block
-  # form, returns an array of each +program+ within +path+.
+  # Returns an array of each +program+ within +path+, or nil if it cannot
+  # be found.
   #
   # On Windows, it looks for executables ending with the suffixes defined
   # in your PATHEXT environment variable, or '.exe', '.bat' and '.com' if
   # that isn't defined, which you may optionally include in +program+.
-  #
-  # Returns nil if not found.
   #
   # Examples:
   #
@@ -163,32 +161,45 @@ class File
   #   File.whereis('foo')  # => nil
   #
   def self.whereis(program, path=ENV['PATH'])
-    dirs = []
-    programs = [program]
-      
-    # If no file extension is provided on Windows, try the WIN32EXT's in turn
-    if MSWINDOWS && File.extname(program).empty?
-      unless WIN32EXTS.include?(File.extname(program).downcase)
-        WIN32EXTS.each{ |ext|
-          programs.push(program + ext)
-        }
+    if path.nil? || path.empty?
+      raise ArgumentError, "path cannot be empty"
+    end
+
+    paths = []
+
+    # Bail out early if an absolute path is provided.
+    if program =~ /^\/|^[a-z]:[\\\/]/i
+      program += WIN32EXTS if MSWINDOWS && File.extname(program).empty?
+      found = Dir[program]
+      if found[0] && File.executable?(found[0]) && !File.directory?(found[0])
+        return found
+      else
+        return nil
       end
     end
-      
+
+    # Iterate over each path glob the dir + program.
     path.split(File::PATH_SEPARATOR).each{ |dir|
-      programs.each{ |prog|
-        file = File.join(dir,prog)
-        file.tr!('/', File::ALT_SEPARATOR) if File::ALT_SEPARATOR
-        if File.executable?(file) && !File.directory?(file)
-          if block_given?
-            yield file
-          else
-            dirs << file
-          end
-        end
-      }
+      next unless File.exists?(dir) # In case of bogus second argument
+      file = File.join(dir, program)
+
+      # Dir[] doesn't handle backslashes properly, so convert them. Also, if
+      # the program name doesn't have an extension, try them all.
+      if MSWINDOWS
+        file = file.tr("\\", "/")
+        file += WIN32EXTS if File.extname(program).empty?
+      end
+
+      found = Dir[file].first
+
+      # Convert all forward slashes to backslashes if supported
+      if found && File.executable?(found) && !File.directory?(found)
+        found.tr!(File::SEPARATOR, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
+        paths << found
+      end
     }
-    dirs.empty? ? nil : dirs.uniq
+
+    paths.empty? ? nil : paths.uniq
   end
 
    # In block form, yields the first +num_lines+ from +filename+.  In non-block

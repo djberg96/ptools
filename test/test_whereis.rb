@@ -1,8 +1,7 @@
 ######################################################################
 # test_whereis.rb
 #
-# Test case for the File.whereis method. This test should be run
-# via the 'rake test_whereis' task.
+# Tests for the File.whereis method.
 ######################################################################
 require 'rubygems'
 gem 'test-unit'
@@ -13,40 +12,81 @@ require 'rbconfig'
 include Config
 
 class TC_FileWhereis < Test::Unit::TestCase
-   def setup
-      @expected_locs = [CONFIG['bindir']]
+  def self.startup
+    @@windows = Config::CONFIG['host_os'] =~ /mswin|win32|msdos|cygwin|mingw/i
+  end
+
+  def setup
+    @expected_locs = [File.join(CONFIG['bindir'], 'ruby')]
       
-      if Config::CONFIG['host_os'] =~ /mswin|win32|dos|cygwin|mingw/i
-         @expected_locs = ["c:\\ruby\\bin\\ruby.exe"]
-      else
-         @expected_locs << '/usr/local/bin/ruby'
-         @expected_locs << '/opt/sfw/bin/ruby'
-         @expected_locs << '/opt/bin/ruby'
-         @expected_locs << '/usr/bin/ruby'
-      end
-   end
+    unless @@windows
+      @expected_locs << '/usr/local/bin/ruby'
+      @expected_locs << '/opt/sfw/bin/ruby'
+      @expected_locs << '/opt/bin/ruby'
+      @expected_locs << '/usr/bin/ruby'
+    end
 
-   def test_whereis_basic
-      assert_respond_to(File, :whereis)
-      assert_nothing_raised{ File.whereis("ruby") }
-      assert_nothing_raised{ File.whereis("ruby","/usr/bin:/usr/local/bin") }
-      assert_nothing_raised{ File.whereis("ruby"){} }
-   end
+    @actual_locs = nil
+  end
 
-   def test_whereis_expected_return_values
-      msg = "You may need to adjust the setup method if this test failed"
-      locs = File.whereis('ruby').map{ |e| e.downcase }
-      assert_kind_of(Array, locs)
-      assert(@expected_locs.include?(locs.first), msg)
-      assert_equal(nil, File.whereis("blahblah"))
-   end
+  test "whereis basic functionality" do
+    assert_respond_to(File, :whereis)
+    assert_nothing_raised{ File.whereis('ruby') }
+    assert_kind_of([Array, NilClass], File.whereis('ruby'))
+  end
 
-   def test_whereis_expected_errors
-      assert_raises(ArgumentError){ File.whereis }
-      assert_raises(ArgumentError){ File.whereis("ruby", "foo", "bar") }
-   end
+  test "whereis accepts an optional second argument" do
+    assert_nothing_raised{ File.whereis('ruby', '/usr/bin:/usr/local/bin') }
+  end
 
-   def teardown
-      @expected_locs = nil
-   end
+  test "whereis returns expected values" do
+    assert_nothing_raised{ @actual_locs = File.whereis('ruby') }
+    assert_kind_of(Array, @actual_locs)
+    assert_true((@expected_locs & @actual_locs).size > 0)
+  end
+
+  test "whereis returns nil if program not found" do
+    assert_nil(File.whereis('xxxyyy'))
+  end
+
+  test "whereis returns nil if program cannot be found in provided path" do
+    assert_nil(File.whereis('ruby', '/foo/bar'))
+  end
+
+  test "whereis returns single element array or nil if absolute path is provided" do
+    absolute = File.join(CONFIG['bindir'], 'ruby')
+    assert_equal([absolute], File.whereis(absolute))
+    assert_nil(File.whereis('/foo/bar/baz/ruby'))
+  end
+
+  test "whereis works with an explicit extension on ms windows" do
+    omit_unless(@@windows, 'test skipped except on MS Windows')
+    assert_not_nil(File.whereis('ruby.exe'))
+  end
+
+  test "whereis requires at least one argument" do
+    assert_raise(ArgumentError){ File.whereis }
+  end
+
+  test "whereis returns unique paths only" do
+    assert_true(File.whereis('ruby') == File.whereis('ruby').uniq)
+  end
+
+  test "whereis accepts a maximum of two arguments" do
+    assert_raise(ArgumentError){ File.whereis('ruby', 'foo', 'bar') }
+  end
+
+  test "the second argument to whereis cannot be nil or empty" do
+    assert_raise(ArgumentError){ File.whereis('ruby', nil) }
+    assert_raise(ArgumentError){ File.whereis('ruby', '') }
+  end
+
+  def teardown
+    @expected_locs = nil
+    @actual_locs = nil
+  end
+
+  def self.shutdown
+    @@windows = nil
+  end
 end
