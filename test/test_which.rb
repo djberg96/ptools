@@ -12,12 +12,20 @@ gem 'test-unit'
 
 require 'test/unit'
 require 'rbconfig'
+require 'fileutils'
 require 'ptools'
 include Config
 
 class TC_FileWhich < Test::Unit::TestCase
   def self.startup
     @@windows = Config::CONFIG['host_os'] =~ /mswin|msdos|win32|cygwin|mingw/i
+    @@dir = File.join(Dir.pwd, 'tempdir')
+    @@non_exe = File.join(Dir.pwd, 'tempfile')
+
+    Dir.mkdir(@@dir) unless File.exists?(@@dir)
+    FileUtils.touch(@@non_exe)
+    File.chmod(775, @@dir)
+    File.chmod(444, @@non_exe)
   end
 
   def setup
@@ -62,7 +70,15 @@ class TC_FileWhich < Test::Unit::TestCase
   end
 
   test "which returns nil if a non-existent absolute path is provided" do
-    assert_equal(nil, File.which('/foo/bar/baz/ruby'))
+    assert_nil(File.which('/foo/bar/baz/ruby'))
+  end
+
+  test "which does not pickup files that are not executable" do
+    assert_nil(File.which(@@non_exe))
+  end
+
+  test "which does not pickup executable directories" do
+    assert_nil(File.which(@@dir))
   end
 
   test "which accepts a minimum of one argument" do
@@ -73,8 +89,9 @@ class TC_FileWhich < Test::Unit::TestCase
     assert_raises(ArgumentError){ File.which(@ruby, "foo", "bar") }
   end
 
-  test "the second argument cannot be nil" do
+  test "the second argument cannot be nil or empty" do
     assert_raises(ArgumentError){ File.which(@ruby, nil) }
+    assert_raises(ArgumentError){ File.which(@ruby, '') }
   end
 
   def teardown
@@ -83,6 +100,10 @@ class TC_FileWhich < Test::Unit::TestCase
   end
 
   def self.shutdown
+    FileUtils.rm(@@non_exe)
+    FileUtils.rm_f(@@dir)
     @@windows = nil
+    @@dir = nil
+    @@non_exe = nil
   end
 end
