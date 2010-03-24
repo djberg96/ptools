@@ -132,11 +132,11 @@ class File
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
       # the program name doesn't have an extension, try them all.
       if MSWINDOWS
-        glob = file.tr("\\", "/")
-        glob += WIN32EXTS if File.extname(program).empty?
+        file = file.tr("\\", "/")
+        file += WIN32EXTS if File.extname(program).empty?
       end
 
-      found = Dir[glob].first
+      found = Dir[file].first
 
       # Convert all forward slashes to backslashes if supported
       if found && File.executable?(found) && !File.directory?(found)
