@@ -1,3 +1,10 @@
+== 1.1.9 - ???
+* Refactored File.which and File.whereis and added additional tests for each.
+* Removed the block form of File.whereis.
+* Reorganized the Rakefile a bit and put the test tasks under the 'test'
+  namespace.
+* Updated the test-unit development dependency.
+
 == 1.1.8 - 6-Oct-2009
 * Fixed some bad variable names that crept into the File.nl_convert method.
 * Added the File.null_device alias for File.null.
