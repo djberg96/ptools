@@ -1,9 +1,10 @@
-== 1.1.9 - ???
+== 1.1.9 - 25-Mar-2010
 * Refactored File.which and File.whereis and added additional tests for each.
 * Removed the block form of File.whereis.
 * Reorganized the Rakefile a bit and put the test tasks under the 'test'
-  namespace.
+  namespace, and the gem tasks under the 'gem' namespace.
 * Updated the test-unit development dependency.
+* Updates the README.
 
 == 1.1.8 - 6-Oct-2009
 * Fixed some bad variable names that crept into the File.nl_convert method.
