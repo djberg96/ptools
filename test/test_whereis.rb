@@ -18,6 +18,11 @@ class TC_FileWhereis < Test::Unit::TestCase
 
   def setup
     @expected_locs = [File.join(CONFIG['bindir'], 'ruby')]
+
+    if @@windows
+      @expected_locs[0] << '.exe'
+      @expected_locs[0].tr!("/", "\\")
+    end
       
     unless @@windows
       @expected_locs << '/usr/local/bin/ruby'
@@ -55,6 +60,7 @@ class TC_FileWhereis < Test::Unit::TestCase
 
   test "whereis returns single element array or nil if absolute path is provided" do
     absolute = File.join(CONFIG['bindir'], 'ruby')
+    absolute << '.exe' if @@windows
     assert_equal([absolute], File.whereis(absolute))
     assert_nil(File.whereis('/foo/bar/baz/ruby'))
   end
