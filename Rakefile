@@ -10,14 +10,19 @@ task :install do
    FileUtils.cp(file, sitelibdir, :verbose => true)
 end
 
-task :gem do
-   spec = eval(IO.read('ptools.gemspec'))
-   Gem::Builder.new(spec).build
-end
+namespace 'gem' do
+  desc 'Create the ptools gem'
+  task :create do
+    Dir["*.gem"].each{ |f| File.delete(f) } # Clean first
+    spec = eval(IO.read('ptools.gemspec'))
+    Gem::Builder.new(spec).build
+  end
 
-task :install_gem => [:gem] do
-   file = Dir["*.gem"].first
-   sh "gem install #{file}"
+  desc 'Install the ptools gem'
+  task :install => [:create] do
+    file = Dir["*.gem"].first
+    sh "gem install #{file}"
+  end
 end
 
 Rake::TestTask.new do |t|
