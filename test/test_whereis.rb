@@ -14,10 +14,11 @@ include Config
 class TC_FileWhereis < Test::Unit::TestCase
   def self.startup
     @@windows = Config::CONFIG['host_os'] =~ /mswin|win32|msdos|cygwin|mingw/i
+    @@ruby = RUBY_PLATFORM == 'java' ? 'jruby' : 'ruby'
   end
 
   def setup
-    @expected_locs = [File.join(CONFIG['bindir'], 'ruby')]
+    @expected_locs = [File.join(CONFIG['bindir'], @@ruby)]
 
     if @@windows
       @expected_locs[0] << '.exe'
@@ -25,10 +26,10 @@ class TC_FileWhereis < Test::Unit::TestCase
     end
       
     unless @@windows
-      @expected_locs << '/usr/local/bin/ruby'
-      @expected_locs << '/opt/sfw/bin/ruby'
-      @expected_locs << '/opt/bin/ruby'
-      @expected_locs << '/usr/bin/ruby'
+      @expected_locs << "/usr/local/bin/#{@@ruby}"
+      @expected_locs << "/opt/sfw/bin/#{@@ruby}"
+      @expected_locs << "/opt/bin/#{@@ruby}"
+      @expected_locs << "/usr/bin/#{@@ruby}"
     end
 
     @actual_locs = nil
@@ -45,7 +46,7 @@ class TC_FileWhereis < Test::Unit::TestCase
   end
 
   test "whereis returns expected values" do
-    assert_nothing_raised{ @actual_locs = File.whereis('ruby') }
+    assert_nothing_raised{ @actual_locs = File.whereis(@@ruby) }
     assert_kind_of(Array, @actual_locs)
     assert_true((@expected_locs & @actual_locs).size > 0)
   end
@@ -55,19 +56,19 @@ class TC_FileWhereis < Test::Unit::TestCase
   end
 
   test "whereis returns nil if program cannot be found in provided path" do
-    assert_nil(File.whereis('ruby', '/foo/bar'))
+    assert_nil(File.whereis(@@ruby, '/foo/bar'))
   end
 
   test "whereis returns single element array or nil if absolute path is provided" do
-    absolute = File.join(CONFIG['bindir'], 'ruby')
+    absolute = File.join(CONFIG['bindir'], @@ruby)
     absolute << '.exe' if @@windows
     assert_equal([absolute], File.whereis(absolute))
-    assert_nil(File.whereis('/foo/bar/baz/ruby'))
+    assert_nil(File.whereis("/foo/bar/baz/#{@@ruby}"))
   end
 
   test "whereis works with an explicit extension on ms windows" do
     omit_unless(@@windows, 'test skipped except on MS Windows')
-    assert_not_nil(File.whereis('ruby.exe'))
+    assert_not_nil(File.whereis(@@ruby + '.exe'))
   end
 
   test "whereis requires at least one argument" do
@@ -75,16 +76,16 @@ class TC_FileWhereis < Test::Unit::TestCase
   end
 
   test "whereis returns unique paths only" do
-    assert_true(File.whereis('ruby') == File.whereis('ruby').uniq)
+    assert_true(File.whereis(@@ruby) == File.whereis(@@ruby).uniq)
   end
 
   test "whereis accepts a maximum of two arguments" do
-    assert_raise(ArgumentError){ File.whereis('ruby', 'foo', 'bar') }
+    assert_raise(ArgumentError){ File.whereis(@@ruby, 'foo', 'bar') }
   end
 
   test "the second argument to whereis cannot be nil or empty" do
-    assert_raise(ArgumentError){ File.whereis('ruby', nil) }
-    assert_raise(ArgumentError){ File.whereis('ruby', '') }
+    assert_raise(ArgumentError){ File.whereis(@@ruby, nil) }
+    assert_raise(ArgumentError){ File.whereis(@@ruby, '') }
   end
 
   def teardown
