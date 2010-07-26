@@ -14,7 +14,6 @@ require 'test/unit'
 require 'rbconfig'
 require 'fileutils'
 require 'ptools'
-include Config
 
 class TC_FileWhich < Test::Unit::TestCase
   def self.startup
@@ -30,7 +29,7 @@ class TC_FileWhich < Test::Unit::TestCase
 
   def setup
     @ruby = RUBY_PLATFORM.match('java') ? 'jruby' : 'ruby'
-    @exe = File.join(CONFIG['bindir'], CONFIG['ruby_install_name']) 
+    @exe = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
 
     if @@windows
       @exe.tr!('/','\\')
@@ -38,7 +37,7 @@ class TC_FileWhich < Test::Unit::TestCase
     end
   end
 
-  test "which basic functionality" do
+  test "which method basic functionality" do
     assert_respond_to(File, :which)
     assert_nothing_raised{ File.which(@ruby) }
     assert_kind_of(String, File.which(@ruby))
