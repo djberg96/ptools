@@ -3,6 +3,12 @@ require 'rake/testtask'
 require 'rbconfig'
 include Config
 
+desc 'Clean any .gem or .rbc files'
+task :clean do
+  Dir['*.gem'].each{ |f| File.delete(f) }
+  Dir['**/*.rbc'].each{ |f| File.delete(f) } # Rubinius
+end
+
 desc 'Install the ptools package (non-gem)'
 task :install do
    sitelibdir = CONFIG["sitelibdir"]
@@ -26,6 +32,7 @@ namespace 'gem' do
 end
 
 Rake::TestTask.new do |t|
+  task :test => :clean
   t.verbose = true
   t.warning = true
 end
@@ -108,3 +115,5 @@ namespace 'test' do
     t.test_files = FileList['test/test_which.rb']
   end
 end
+
+task :default => :test
