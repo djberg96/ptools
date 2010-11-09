@@ -1,13 +1,10 @@
 require 'rake'
+require 'rake/clean'
 require 'rake/testtask'
 require 'rbconfig'
 include Config
 
-desc 'Clean any .gem or .rbc files'
-task :clean do
-  Dir['*.gem'].each{ |f| File.delete(f) }
-  Dir['**/*.rbc'].each{ |f| File.delete(f) } # Rubinius
-end
+CLEAN.include("**/*.gem", "**/*.rbc")
 
 desc 'Install the ptools package (non-gem)'
 task :install do

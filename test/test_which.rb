@@ -29,6 +29,8 @@ class TC_FileWhich < Test::Unit::TestCase
 
   def setup
     @ruby = RUBY_PLATFORM.match('java') ? 'jruby' : 'ruby'
+    @ruby = 'rbx' if defined?(Rubinius)
+
     @exe = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
 
     if @@windows
@@ -65,7 +67,7 @@ class TC_FileWhich < Test::Unit::TestCase
   end
 
   test "which returns argument if an existent absolute path is provided" do
-    assert_equal(@exe, File.which(@ruby))
+    assert_equal(@exe, File.which(@ruby), "=> May fail on a symlink")
   end
 
   test "which returns nil if a non-existent absolute path is provided" do
