@@ -15,7 +15,7 @@ end
 
 namespace 'gem' do
   desc 'Create the ptools gem'
-  task :create do
+  task :create => [:clean] do
     Dir["*.gem"].each{ |f| File.delete(f) } # Clean first
     spec = eval(IO.read('ptools.gemspec'))
     Gem::Builder.new(spec).build
