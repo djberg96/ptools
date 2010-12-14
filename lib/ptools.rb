@@ -40,7 +40,7 @@ class File
   #    File.image?('somefile.txt') # => true
   #--
   # The approach I used here is based on information found at
-  # http://en.wikipedia.org/wiki/Magic_number_(programming) 
+  # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
   def self.image?(file)
     bool = IMAGE_EXT.include?(File.extname(file).downcase)      # Match ext
@@ -94,14 +94,14 @@ class File
     s = (File.read(file, File.stat(file).blksize) || "").split(//)
     ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30
   end
-   
+
   # Looks for the first occurrence of +program+ within +path+.
-  # 
+  #
   # On Windows, it looks for executables ending with the suffixes defined
   # in your PATHEXT environment variable, or '.exe', '.bat' and '.com' if
   # that isn't defined, which you may optionally include in +program+.
   #
-  # Returns nil if not found. 
+  # Returns nil if not found.
   #
   # Examples:
   #
@@ -202,41 +202,43 @@ class File
     paths.empty? ? nil : paths.uniq
   end
 
-   # In block form, yields the first +num_lines+ from +filename+.  In non-block
-   # form, returns an Array of +num_lines+
-   #
-   # Examples:
-   #
-   #   # Return an array
-   #   File.head('somefile.txt') # => ['This is line1', 'This is line2', ...]
-   #
-   #   # Use a block
-   #   File.head('somefile.txt'){ |line| puts line }
-   #
-   def self.head(filename, num_lines=10)
-      a = []
-      IO.foreach(filename){ |line|
-         break if num_lines <= 0
-         num_lines -= 1
-         if block_given?
-            yield line
-         else
-            a << line
-         end
-      }
-      return a.empty? ? nil : a # Return nil in block form
-   end
+  # In block form, yields the first +num_lines+ from +filename+.  In non-block
+  # form, returns an Array of +num_lines+
+  #
+  # Examples:
+  #
+  #  # Return an array
+  #  File.head('somefile.txt') # => ['This is line1', 'This is line2', ...]
+  #
+  #  # Use a block
+  #  File.head('somefile.txt'){ |line| puts line }
+  #
+  def self.head(filename, num_lines=10)
+    a = []
 
-   # In block form, yields line +from+ up to line +to+.  In non-block form
-   # returns an Array of lines from +from+ to +to+.
-   #
-   def self.middle(filename, from=10, to=20)
+    IO.foreach(filename){ |line|
+      break if num_lines <= 0
+      num_lines -= 1
       if block_given?
-         IO.readlines(filename)[from-1..to-1].each{ |line| yield line }
+        yield line
       else
-         IO.readlines(filename)[from-1..to-1]
+        a << line
       end
-   end
+    }
+
+    return a.empty? ? nil : a # Return nil in block form
+  end
+
+  # In block form, yields line +from+ up to line +to+.  In non-block form
+  # returns an Array of lines from +from+ to +to+.
+  #
+  def self.middle(filename, from=10, to=20)
+    if block_given?
+      IO.readlines(filename)[from-1..to-1].each{ |line| yield line }
+    else
+      IO.readlines(filename)[from-1..to-1]
+    end
+  end
 
   # In block form, yields the last +num_lines+ of file +filename+.
   # In non-block form, it returns the lines as an array.
@@ -259,68 +261,69 @@ class File
     end
   end
 
-   # Converts a text file from one OS platform format to another, ala
-   # 'dos2unix'. The possible values for +platform+ include:
-   #
-   # * MS Windows -> dos, windows, win32, mswin
-   # * Unix/BSD   -> unix, linux, bsd
-   # * Mac        -> mac, macintosh, apple, osx
-   #
-   # Note that this method is only valid for an ftype of "file".  Otherwise a
-   # TypeError will be raised.  If an invalid format value is received, an
-   # ArgumentError is raised.
-   #
-   def self.nl_convert(old_file, new_file = old_file, platform = 'dos')
-      unless File.file?(old_file)
-         raise ArgumentError, 'Only valid for plain text files'
+  # Converts a text file from one OS platform format to another, ala
+  # 'dos2unix'. The possible values for +platform+ include:
+  #
+  # * MS Windows -> dos, windows, win32, mswin
+  # * Unix/BSD   -> unix, linux, bsd
+  # * Mac        -> mac, macintosh, apple, osx
+  #
+  # Note that this method is only valid for an ftype of "file".  Otherwise a
+  # TypeError will be raised.  If an invalid format value is received, an
+  # ArgumentError is raised.
+  #
+  def self.nl_convert(old_file, new_file = old_file, platform = 'dos')
+    unless File.file?(old_file)
+      raise ArgumentError, 'Only valid for plain text files'
+    end
+
+    if platform =~ /dos|windows|win32|mswin|cygwin|mingw/i
+      format = "\cM\cJ"
+    elsif platform =~ /unix|linux|bsd/i
+      format = "\cJ"
+    elsif platform =~ /mac|apple|macintosh|osx/i
+      format = "\cM"
+    else
+      raise ArgumentError, "Invalid platform string"
+    end
+
+    orig = $\
+    $\ = format
+
+    if old_file == new_file
+      require 'fileutils'
+      require 'tempfile'
+
+      begin
+        temp_name = Time.new.strftime("%Y%m%d%H%M%S")
+        tf = Tempfile.new('ruby_temp_' + temp_name)
+        tf.open
+
+        IO.foreach(old_file){ |line|
+          line.chomp!
+          tf.print line
+        }
+      ensure
+        tf.close if tf && !tf.closed?
       end
 
-      if platform =~ /dos|windows|win32|mswin|cygwin|mingw/i
-         format = "\cM\cJ"
-      elsif platform =~ /unix|linux|bsd/i
-         format = "\cJ"
-      elsif platform =~ /mac|apple|macintosh|osx/i
-         format = "\cM"
-      else
-         raise ArgumentError, "Invalid platform string"
+      File.delete(old_file)
+      FileUtils.cp(tf.path, old_file)
+    else
+      begin
+        nf = File.new(new_file, 'w')
+        IO.foreach(old_file){ |line|
+          line.chomp!
+          nf.print line
+        }
+      ensure
+        nf.close if nf && !nf.closed?
       end
+    end
 
-      orig = $\
-      $\ = format
-
-      if old_file == new_file
-         require 'fileutils'
-         require 'tempfile'
-
-         begin
-            temp_name = Time.new.strftime("%Y%m%d%H%M%S")
-            tf = Tempfile.new('ruby_temp_' + temp_name)
-            tf.open
-
-            IO.foreach(old_file){ |line|
-               line.chomp!
-               tf.print line
-            }
-         ensure
-            tf.close if tf && !tf.closed?
-         end
-         File.delete(old_file)
-         FileUtils.cp(tf.path, old_file)
-      else
-         begin
-            nf = File.new(new_file, 'w')  
-            IO.foreach(old_file){ |line|
-               line.chomp!
-               nf.print line
-            }
-         ensure
-            nf.close if nf && !nf.closed?
-         end
-      end
-
-      $\ = orig
-      self
-   end
+    $\ = orig
+    self
+  end
 
   # Changes the access and modification time if present, or creates a 0
   # byte file +filename+ if it doesn't already exist.
@@ -350,6 +353,7 @@ class File
     end
 
     n = 0
+
     if option == 'lines'
       IO.foreach(filename){ n += 1 }
       return n
@@ -401,6 +405,6 @@ class File
   end
 
   def self.gif?(file)
-     ['GIF89a', 'GIF97a'].include?(IO.read(file, 6))
+    ['GIF89a', 'GIF97a'].include?(IO.read(file, 6))
   end
 end
