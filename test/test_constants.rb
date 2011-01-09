@@ -13,7 +13,7 @@ require 'ptools'
 
 class TC_Constants < Test::Unit::TestCase
    def test_version
-      assert_equal('1.1.9', File::PTOOLS_VERSION)
+      assert_equal('1.2.0', File::PTOOLS_VERSION)
    end
 
    def test_image_ext
