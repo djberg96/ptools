@@ -35,6 +35,13 @@ Rake::TestTask.new do |t|
 end
 
 namespace 'test' do
+  desc "Check test coverage using rcov"
+  task :coverage => [:clean] do
+    require 'rcov'
+    rm_rf 'coverage'
+    sh "rcov -Ilib test/test*.rb" 
+  end
+
   Rake::TestTask.new('binary') do |t|
     t.libs << 'test'
     t.verbose = true
