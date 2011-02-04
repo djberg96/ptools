@@ -84,6 +84,13 @@ namespace 'test' do
     t.test_files = FileList['test/test_null.rb']
   end
 
+  Rake::TestTask.new('sparse') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_is_sparse.rb']
+  end
+
   Rake::TestTask.new('tail') do |t|
     t.libs << 'test'
     t.verbose = true

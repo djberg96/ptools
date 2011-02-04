@@ -1,3 +1,7 @@
+== 1.2.0 - 8-Jan-2011
+* Added the File.sparse? method for Unix platforms. This method already
+  exists on Windows courtesy of the win32-file library.
+
 == 1.1.9 - 25-Mar-2010
 * Refactored File.which and File.whereis and added additional tests for each.
 * Removed the block form of File.whereis.

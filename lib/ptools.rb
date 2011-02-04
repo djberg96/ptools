@@ -6,12 +6,12 @@ end
 
 class File
   # The version of the ptools library.
-  PTOOLS_VERSION = '1.1.9'
+  PTOOLS_VERSION = '1.2.0'
 
   # :stopdoc:
 
   # The WIN32EXTS string is used as part of a Dir[] call in certain methods.
-  if Config::CONFIG['host_os'] =~ /mswin|dos|win32|cygwin|mingw/i
+  if Config::CONFIG['host_os'] =~ /mswin|dos|win32|cygwin|mingw|windows/i
     MSWINDOWS = true
     if ENV['PATHEXT']
       WIN32EXTS = ('.{' + ENV['PATHEXT'].tr(';', ',').tr('.','') + '}').downcase
@@ -387,6 +387,24 @@ class File
         end
       }
       return [bytes,chars,words,lines]
+    end
+  end
+
+  class << self
+    # Already provided by win32-file on MS Windows
+    unless respond_to?(:sparse?)
+      # Returns whether or not +file+ is a sparse file.
+      #
+      # A sparse file is a any file where its size is greater than the number
+      # of 512k blocks it consumes, i.e. its apparent and actual file size is
+      # not the same.
+      #
+      # See http://en.wikipedia.org/wiki/Sparse_file for more information.
+      #
+      def sparse?(file)
+        stats = File.stat(file)
+        stats.size > stats.blocks * 512
+      end
     end
   end
 

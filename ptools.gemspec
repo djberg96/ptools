@@ -3,7 +3,7 @@ require 'rbconfig'
 
 Gem::Specification.new do |gem|
   gem.name       = 'ptools'
-  gem.version    = '1.1.9'
+  gem.version    = '1.2.0'
   gem.license    = 'Artistic 2.0'
   gem.author     = 'Daniel J. Berger'
   gem.email      = 'djberg96@gmail.com'
@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency('test-unit', '>= 2.0.7')
 
-  if Config::CONFIG['host_os'] =~ /mswin|win32|msdos|cygwin|mingw/i
+  if Config::CONFIG['host_os'] =~ /mswin|win32|msdos|cygwin|mingw|windows/i
     gem.platform = Gem::Platform::CURRENT
     gem.add_dependency('win32-file', '>= 0.5.4')
   end

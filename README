@@ -22,6 +22,7 @@
   File.touch("newfile")      # "newfile" now exists
   File.null                  # '/dev/null' on Unix, 'NUL' on Windows
   File.binary?('some_file')  # true or false
+  File.sparse?('some_file')  # true or false
 
   # Creates a copy of 'myfile' called 'newfile', in DOS format
   File.nl_convert("myfile", "newfile", "dos")
@@ -52,7 +53,7 @@
   Artistic 2.0
     
 == Copyright
-  (C) 2003-2010 Daniel J. Berger
+  (C) 2003-2011 Daniel J. Berger
   All Rights Reserved.
     
 == Warranty
