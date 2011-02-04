@@ -11,79 +11,91 @@ require 'test/unit'
 require 'ptools'
 
 class TC_FileNLConvert < Test::Unit::TestCase
-   def self.startup
-      Dir.chdir('test') if File.exists?('test')
-      File.open('test_file1.txt', 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
-      File.open('test_file2.txt', 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
-   end
-   
-   def setup   
-      @test_file1 = 'test_file1.txt'
-      @test_file2 = 'test_file2.txt'
-      @dos_file   = 'dos_test_file.txt'
-      @mac_file   = 'mac_test_file.txt'
-      @unix_file  = 'nix_test_file.txt'
-   end
+  def self.startup
+    Dir.chdir('test') if File.exists?('test')
+    @@test_file1 = 'test_nl_convert1.txt'
+    @@test_file2 = 'test_nl_convert2.txt'
+    File.open(@@test_file1, 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
+    File.open(@@test_file2, 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
+  end
 
-   def test_nl_convert_basic
-      assert_respond_to(File, :nl_convert)
-      assert_nothing_raised{ File.nl_convert(@test_file2) }
-      assert_nothing_raised{ File.nl_convert(@test_file2, @test_file2) }
-      assert_nothing_raised{ File.nl_convert(@test_file2, @test_file2, "unix") }
-   end
+  def setup
+    @test_file1 = 'test_nl_convert1.txt'
+    @test_file2 = 'test_nl_convert2.txt'
+    @dos_file   = 'dos_test_file.txt'
+    @mac_file   = 'mac_test_file.txt'
+    @unix_file  = 'nix_test_file.txt'
+  end
 
-   def test_nl_convert_to_dos
-      msg = "dos file should be larger, but isn't"
+  test "nl_convert basic functionality" do
+    assert_respond_to(File, :nl_convert)
+  end
 
-      assert_nothing_raised{ File.nl_convert(@test_file1, @dos_file, "dos") }
-      assert_equal(true, File.size(@dos_file) > File.size(@test_file1), msg)
-      assert_equal(["\cM","\cJ"],
-         IO.readlines(@dos_file).first.split("")[-2..-1]
-      )
-   end
+  test "nl_convert accepts one, two or three arguments" do
+    assert_nothing_raised{ File.nl_convert(@test_file2) }
+    assert_nothing_raised{ File.nl_convert(@test_file2, @test_file2) }
+    assert_nothing_raised{ File.nl_convert(@test_file2, @test_file2, "unix") }
+  end
 
-   def test_nl_convert_to_mac
-      assert_nothing_raised{ File.nl_convert(@test_file1, @mac_file, 'mac') }
-      assert_equal("\cM", IO.readlines(@mac_file).first.split("").last)
+  test "nl_convert with dos platform argument works as expected" do
+    msg = "dos file should be larger, but isn't"
 
-      omit_if(Config::CONFIG['host_os'] =~ /win32|mswin|dos|cygwin|mingw/i)
-      msg = "=> Mac file should be the same size (or larger), but isn't"
-      assert_true(File.size(@mac_file) == File.size(@test_file1), msg)
-   end
-   
-   def test_nl_convert_to_unix
-      msg = "unix file should be the same size (or smaller), but isn't"
+    assert_nothing_raised{ File.nl_convert(@test_file1, @dos_file, "dos") }
+    assert_true(File.size(@dos_file) > File.size(@test_file1), msg)
+    assert_equal(["\cM","\cJ"], IO.readlines(@dos_file).first.split("")[-2..-1])
+  end
 
-      assert_nothing_raised{ File.nl_convert(@test_file1, @unix_file, "unix") }
-      assert_equal("\n", IO.readlines(@unix_file).first.split("").last)
+  test "nl_convert with mac platform argument works as expected" do
+    assert_nothing_raised{ File.nl_convert(@test_file1, @mac_file, 'mac') }
+    assert_equal("\cM", IO.readlines(@mac_file).first.split("").last)
 
-      if File::ALT_SEPARATOR
-         assert_equal(true, File.size(@unix_file) >= File.size(@test_file1),msg)
-      else
-         assert_equal(true, File.size(@unix_file) <= File.size(@test_file1),msg)
-      end
-   end
-   
-   def test_nl_convert_expected_errors
-      assert_raises(ArgumentError){ File.nl_convert }
-      assert_raises(ArgumentError){
-         File.nl_convert(@test_file1, "bogus.txt", "blah")
-      }
-   end
+    omit_if(File::ALT_SEPARATOR)
+    msg = "=> Mac file should be the same size (or larger), but isn't"
+    assert_true(File.size(@mac_file) == File.size(@test_file1), msg)
+  end
 
-   def teardown
-      [@dos_file, @mac_file, @unix_file].each{ |file|
-         File.delete(file) if File.exists?(file)
-      }
-      @dos_file   = nil
-      @mac_file   = nil
-      @unix_file  = nil
-      @test_file1 = nil
-      @test_file2 = nil
-   end
+  test "nl_convert with unix platform argument works as expected" do
+    msg = "unix file should be the same size (or smaller), but isn't"
 
-   def self.shutdown
-      File.delete('test_file1.txt') if File.exists?('test_file1.txt')
-      File.delete('test_file2.txt') if File.exists?('test_file2.txt')
-   end
+    assert_nothing_raised{ File.nl_convert(@test_file1, @unix_file, "unix") }
+    assert_equal("\n", IO.readlines(@unix_file).first.split("").last)
+
+    if File::ALT_SEPARATOR
+      assert_true(File.size(@unix_file) >= File.size(@test_file1), msg)
+    else
+      assert_true(File.size(@unix_file) <= File.size(@test_file1), msg)
+    end
+  end
+
+  test "nl_convert requires at least one argument" do
+    assert_raise(ArgumentError){ File.nl_convert }
+  end
+
+  test "nl_convert requires a valid platform string" do
+    assert_raise(ArgumentError){ File.nl_convert(@test_file1, "bogus.txt", "blah") }
+  end
+
+  test "nl_convert accepts a maximum of three arguments" do
+    assert_raise(ArgumentError){ File.nl_convert(@test_file1, @test_file2, 'dos', 1) }
+  end
+
+  test "nl_convert will fail on anything but plain files" do
+    assert_raise(ArgumentError){ File.nl_convert(File.null_device, @test_file1) }
+  end
+
+  def teardown
+    [@dos_file, @mac_file, @unix_file].each{ |file|
+      File.delete(file) if File.exists?(file)
+    }
+    @dos_file   = nil
+    @mac_file   = nil
+    @unix_file  = nil
+    @test_file1 = nil
+    @test_file2 = nil
+  end
+
+  def self.shutdown
+    File.delete(@@test_file1) if File.exists?(@@test_file1)
+    File.delete(@@test_file2) if File.exists?(@@test_file2)
+  end
 end
