@@ -4,7 +4,7 @@ require 'rake/testtask'
 require 'rbconfig'
 include Config
 
-CLEAN.include("**/*.gem", "**/*.rbc")
+CLEAN.include("**/*.gem", "**/*.rbc", "**/*coverage*")
 
 desc 'Install the ptools package (non-gem)'
 task :install do
