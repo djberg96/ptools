@@ -19,7 +19,7 @@ class TC_IsSparse < Test::Unit::TestCase
 
   def setup
     @sparse_file = '/var/log/lastlog'
-    @non_sparse_file = File.expand_path(__FILE__)
+    @non_sparse_file = File.expand_path(File.basename(__FILE__))
   end
 
   test "is_sparse basic functionality" do

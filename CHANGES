@@ -1,3 +1,7 @@
+== 1.2.1 - 20-May-2011
+* Added an (empty) .gemtest file so that it can be used with test.rubygems.org.
+* Fixed a sparse file test.
+
 == 1.2.0 - 8-Jan-2011
 * Added the File.sparse? method for Unix platforms. This method already
   exists on Windows courtesy of the win32-file library.

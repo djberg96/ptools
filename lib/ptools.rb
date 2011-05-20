@@ -1,17 +1,17 @@
 require 'rbconfig'
 
-if Config::CONFIG['host_os'] =~ /mswin|dos|win32|cygwin|mingw/i
+if File::ALT_SEPARATOR
   require 'win32/file'
 end
 
 class File
   # The version of the ptools library.
-  PTOOLS_VERSION = '1.2.0'
+  PTOOLS_VERSION = '1.2.1'
 
   # :stopdoc:
 
   # The WIN32EXTS string is used as part of a Dir[] call in certain methods.
-  if Config::CONFIG['host_os'] =~ /mswin|dos|win32|cygwin|mingw|windows/i
+  if File::ALT_SEPARATOR
     MSWINDOWS = true
     if ENV['PATHEXT']
       WIN32EXTS = ('.{' + ENV['PATHEXT'].tr(';', ',').tr('.','') + '}').downcase
@@ -63,7 +63,7 @@ class File
   #
   def self.null
     case Config::CONFIG['host_os']
-      when /mswin|win32|msdos|cygwin|mingw/i
+      when /mswin|win32|msdos|cygwin|mingw|windows/i
         'NUL'
       when /amiga/i
         'NIL:'
