@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.summary    = 'Extra methods for the File class'
   gem.test_files = Dir['test/test*']
   gem.has_rdoc   = true
-  gem.files      = Dir['**/*'].reject{ |f| f.include?('CVS') || f.include?('git') }
+  gem.files      = Dir['**/*'] << '.gemtest'
 
   gem.rubyforge_project = 'shards'
   gem.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST']
