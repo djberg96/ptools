@@ -15,10 +15,11 @@ class TC_IsSparse < Test::Unit::TestCase
     Dir.chdir("test") if File.exists?("test")
     @@win = Config::CONFIG['host_os'] =~ /windows|mswin|dos|cygwin|mingw/i
     @@osx = Config::CONFIG['host_os'] =~ /darwin|osx/i
+    @@sun = Config::CONFIG['host_os'] =~ /sunos|solaris/i
   end
 
   def setup
-    @sparse_file = '/var/log/lastlog'
+    @sparse_file = @@sun ? '/var/adm/lastlog' : '/var/log/lastlog'
     @non_sparse_file = File.expand_path(File.basename(__FILE__))
   end
 
