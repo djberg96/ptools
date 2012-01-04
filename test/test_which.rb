@@ -17,7 +17,7 @@ require 'ptools'
 
 class TC_FileWhich < Test::Unit::TestCase
   def self.startup
-    @@windows = Config::CONFIG['host_os'] =~ /mswin|msdos|win32|cygwin|mingw/i
+    @@windows = File::ALT_SEPARATOR
     @@dir = File.join(Dir.pwd, 'tempdir')
     @@non_exe = File.join(Dir.pwd, 'tempfile')
 
@@ -31,7 +31,10 @@ class TC_FileWhich < Test::Unit::TestCase
     @ruby = RUBY_PLATFORM.match('java') ? 'jruby' : 'ruby'
     @ruby = 'rbx' if defined?(Rubinius)
 
-    @exe = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
+    @exe = File.join(
+      RbConfig::CONFIG['bindir'],
+      RbConfig::CONFIG['ruby_install_name']
+    )
 
     if @@windows
       @exe.tr!('/','\\')
