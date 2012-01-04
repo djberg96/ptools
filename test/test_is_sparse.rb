@@ -13,9 +13,9 @@ require 'ptools'
 class TC_IsSparse < Test::Unit::TestCase
   def self.startup
     Dir.chdir("test") if File.exists?("test")
-    @@win = Config::CONFIG['host_os'] =~ /windows|mswin|dos|cygwin|mingw/i
-    @@osx = Config::CONFIG['host_os'] =~ /darwin|osx/i
-    @@sun = Config::CONFIG['host_os'] =~ /sunos|solaris/i
+    @@win = RbConfig::CONFIG['host_os'] =~ /windows|mswin|dos|cygwin|mingw/i
+    @@osx = RbConfig::CONFIG['host_os'] =~ /darwin|osx/i
+    @@sun = RbConfig::CONFIG['host_os'] =~ /sunos|solaris/i
   end
 
   def setup
@@ -25,6 +25,8 @@ class TC_IsSparse < Test::Unit::TestCase
 
   test "is_sparse basic functionality" do
     omit_if(@@win, "File.sparse? tests skipped on MS Windows")
+    omit_if(@@osx, "File.sparse? tests skipped on OS X")
+
     assert_respond_to(File, :sparse?)
     assert_nothing_raised{ File.sparse?(@sparse_file) }
     assert_boolean(File.sparse?(@sparse_file))
@@ -33,6 +35,7 @@ class TC_IsSparse < Test::Unit::TestCase
   test "is_sparse returns the expected results" do
     omit_if(@@win, "File.sparse? tests skipped on MS Windows")
     omit_if(@@osx, "File.sparse? tests skipped on OS X")
+
     assert_true(File.sparse?(@sparse_file))
     assert_false(File.sparse?(@non_sparse_file))
   end
