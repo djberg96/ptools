@@ -62,7 +62,7 @@ class File
   # http://en.wikipedia.org/wiki//dev/null
   #
   def self.null
-    case Config::CONFIG['host_os']
+    case RbConfig::CONFIG['host_os']
       when /mswin|win32|msdos|cygwin|mingw|windows/i
         'NUL'
       when /amiga/i
