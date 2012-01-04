@@ -9,11 +9,11 @@ gem 'test-unit'
 require 'test/unit'
 require 'ptools'
 require 'rbconfig'
-include Config
+include RbConfig
 
 class TC_FileWhereis < Test::Unit::TestCase
   def self.startup
-    @@windows = Config::CONFIG['host_os'] =~ /mswin|win32|msdos|cygwin|mingw/i
+    @@windows = File::ALT_SEPARATOR
     @@ruby = RUBY_PLATFORM == 'java' ? 'jruby' : 'ruby'
   end
 
