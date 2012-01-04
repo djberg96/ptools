@@ -6,7 +6,7 @@ end
 
 class File
   # The version of the ptools library.
-  PTOOLS_VERSION = '1.2.1'
+  PTOOLS_VERSION = '1.2.2'
 
   # :stopdoc:
 
