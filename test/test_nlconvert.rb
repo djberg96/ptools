@@ -5,12 +5,10 @@
 # test via the 'rake test_nlconvert' task.
 #####################################################################
 require 'rubygems'
-gem 'test-unit'
-
-require 'test/unit'
+require 'test-unit'
 require 'ptools'
 
-class TC_FileNLConvert < Test::Unit::TestCase
+class TC_Ptools_NLConvert < Test::Unit::TestCase
   def self.startup
     Dir.chdir('test') if File.exists?('test')
     @@test_file1 = 'test_nl_convert1.txt'
