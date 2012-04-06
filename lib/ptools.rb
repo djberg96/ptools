@@ -170,7 +170,11 @@ class File
       program = program.tr("\\", '/') if MSWINDOWS
       found = Dir[program]
       if found[0] && File.executable?(found[0]) && !File.directory?(found[0])
-        return found
+        if File::ALT_SEPARATOR
+          return found.map{ |f| f.tr('/', "\\") }
+        else
+          return found
+        end
       else
         return nil
       end

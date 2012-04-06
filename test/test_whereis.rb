@@ -59,11 +59,7 @@ class TC_Ptools_Whereis < Test::Unit::TestCase
 
   test "whereis returns single element array or nil if absolute path is provided" do
     absolute = File.join(@bin_dir, @@ruby)
-
-    if @@windows
-      absolute << '.exe'
-      absolute.tr!("\\", '/')
-    end
+    absolute << '.exe' if @@windows
 
     assert_equal([absolute], File.whereis(absolute))
     assert_nil(File.whereis("/foo/bar/baz/#{@@ruby}"))
