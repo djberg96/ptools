@@ -5,31 +5,29 @@
 # test case should be run via the 'rake test_constants' task.
 #####################################################################
 require 'rubygems'
-gem 'test-unit'
-
-require 'test/unit'
+require 'test-unit'
 require 'rbconfig'
 require 'ptools'
 
-class TC_Constants < Test::Unit::TestCase
+class TC_Ptools_Constants < Test::Unit::TestCase
   def self.startup
     @@windows = File::ALT_SEPARATOR
   end
 
-  def test_version
+  test "PTOOLS_VERSION constant is set to expected value" do
     assert_equal('1.2.2', File::PTOOLS_VERSION)
   end
 
-  def test_image_ext
-    assert_equal(%w/.bmp .gif .jpeg .jpg .png/, File::IMAGE_EXT.sort)
+  test "IMAGE_EXT constant is set to array of values" do
+    assert_equal(%w[.bmp .gif .jpeg .jpg .png], File::IMAGE_EXT.sort)
   end
 
-  def test_windows
+  test "WINDOWS constant is defined on MS Windows" do
     omit_unless(@@windows, "Skipping on Unix systems")
-    assert_not_nil(File::IS_WINDOWS)
+    assert_not_nil(File::MSWINDOWS)
   end
 
-  def test_win32exts
+  test "WIN32EXTS constant is defiend on MS Windows" do
     omit_unless(@@windows, "Skipping on Unix systems")
     assert_not_nil(File::WIN32EXTS)
   end
