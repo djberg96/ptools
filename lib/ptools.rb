@@ -1,8 +1,5 @@
 require 'rbconfig'
-
-if File::ALT_SEPARATOR
-  require 'win32/file'
-end
+require 'win32/file' if File::ALT_SEPARATOR
 
 class File
   # The version of the ptools library.
@@ -22,7 +19,7 @@ class File
     MSWINDOWS = false
   end
 
-  IMAGE_EXT = %w/.bmp .gif .jpg .jpeg .png/
+  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png]
 
   # :startdoc:
 
@@ -390,21 +387,19 @@ class File
     end
   end
 
-  class << self
-    # Already provided by win32-file on MS Windows
-    unless respond_to?(:sparse?)
-      # Returns whether or not +file+ is a sparse file.
-      #
-      # A sparse file is a any file where its size is greater than the number
-      # of 512k blocks it consumes, i.e. its apparent and actual file size is
-      # not the same.
-      #
-      # See http://en.wikipedia.org/wiki/Sparse_file for more information.
-      #
-      def sparse?(file)
-        stats = File.stat(file)
-        stats.size > stats.blocks * 512
-      end
+  # Already provided by win32-file on MS Windows
+  unless respond_to?(:sparse?)
+    # Returns whether or not +file+ is a sparse file.
+    #
+    # A sparse file is a any file where its size is greater than the number
+    # of 512k blocks it consumes, i.e. its apparent and actual file size is
+    # not the same.
+    #
+    # See http://en.wikipedia.org/wiki/Sparse_file for more information.
+    #
+    def self.sparse?(file)
+      stats = File.stat(file)
+      stats.size > stats.blocks * 512
     end
   end
 
