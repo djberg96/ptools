@@ -1,8 +1,10 @@
 == 1.2.2 - ???
 * Yet another sparse file test fix for OSX, which does not support
   sparse file generation on HFS+.
+* Fixed a bug in the File.whereis method on Windows when dealing with
+  absolute paths.
 * Some Config vs RbConfig fixes to silence 1.9.3 warnings.
-* Minor test tweaks in general.
+* Refactored and cleaned up some tests.
 
 == 1.2.1 - 20-May-2011
 * Added an (empty) .gemtest file so that it can be used with test.rubygems.org.
