@@ -10,7 +10,6 @@ Gem::Specification.new do |gem|
   gem.homepage   = 'http://www.rubyforge.org/projects/shards'
   gem.summary    = 'Extra methods for the File class'
   gem.test_files = Dir['test/test*']
-  gem.has_rdoc   = true
   gem.files      = Dir['**/*'] << '.gemtest'
 
   gem.rubyforge_project = 'shards'
@@ -22,9 +21,9 @@ Gem::Specification.new do |gem|
     File.null to return the null device on your platform, and so on.
   EOF
 
-  gem.add_development_dependency('test-unit', '>= 2.0.7')
+  gem.add_development_dependency('test-unit', '>= 2.4.0')
 
-  if Config::CONFIG['host_os'] =~ /mswin|win32|msdos|cygwin|mingw|windows/i
+  if File::ALT_SEPARATOR
     gem.platform = Gem::Platform::CURRENT
     gem.add_dependency('win32-file', '>= 0.5.4')
   end
