@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('test-unit', '>= 2.4.0')
 
   if File::ALT_SEPARATOR
-    gem.platform = Gem::Platform::CURRENT
+    gem.platform = Gem::Platform.new(['universal', 'mingw32'])
     gem.add_dependency('win32-file', '>= 0.5.4')
   end
 end
