@@ -1,4 +1,4 @@
-== 1.2.2 - ???
+== 1.2.2 - 6-Apr-2012
 * Yet another sparse file test fix for OSX, which does not support
   sparse file generation on HFS+.
 * Fixed a bug in the File.whereis method on Windows when dealing with
