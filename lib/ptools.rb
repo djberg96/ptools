@@ -167,6 +167,7 @@ class File
     # Bail out early if an absolute path is provided.
     if program =~ /^\/|^[a-z]:[\\\/]/i
       program += WIN32EXTS if MSWINDOWS && File.extname(program).empty?
+      program = program.tr("\\", '/') if MSWINDOWS
       found = Dir[program]
       if found[0] && File.executable?(found[0]) && !File.directory?(found[0])
         return found

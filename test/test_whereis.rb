@@ -4,27 +4,25 @@
 # Tests for the File.whereis method.
 ######################################################################
 require 'rubygems'
-gem 'test-unit'
-
-require 'test/unit'
+require 'test-unit'
 require 'ptools'
 require 'rbconfig'
-include RbConfig
 
-class TC_FileWhereis < Test::Unit::TestCase
+class TC_Ptools_Whereis < Test::Unit::TestCase
   def self.startup
     @@windows = File::ALT_SEPARATOR
     @@ruby = RUBY_PLATFORM == 'java' ? 'jruby' : 'ruby'
   end
 
   def setup
-    @expected_locs = [File.join(CONFIG['bindir'], @@ruby)]
+    @bin_dir = RbConfig::CONFIG['bindir']
+    @expected_locs = [File.join(@bin_dir, @@ruby)]
 
     if @@windows
       @expected_locs[0] << '.exe'
       @expected_locs[0].tr!("/", "\\")
     end
-      
+
     unless @@windows
       @expected_locs << "/usr/local/bin/#{@@ruby}"
       @expected_locs << "/opt/sfw/bin/#{@@ruby}"
@@ -60,8 +58,13 @@ class TC_FileWhereis < Test::Unit::TestCase
   end
 
   test "whereis returns single element array or nil if absolute path is provided" do
-    absolute = File.join(CONFIG['bindir'], @@ruby)
-    absolute << '.exe' if @@windows
+    absolute = File.join(@bin_dir, @@ruby)
+
+    if @@windows
+      absolute << '.exe'
+      absolute.tr!("\\", '/')
+    end
+
     assert_equal([absolute], File.whereis(absolute))
     assert_nil(File.whereis("/foo/bar/baz/#{@@ruby}"))
   end
