@@ -270,21 +270,22 @@ class File
   # ArgumentError is raised.
   #
   def self.nl_convert(old_file, new_file = old_file, platform = 'dos')
-    unless File.file?(old_file)
+    unless File::Stat.new(old_file).file?
       raise ArgumentError, 'Only valid for plain text files'
     end
 
-    if platform =~ /dos|windows|win32|mswin|cygwin|mingw/i
-      format = "\cM\cJ"
-    elsif platform =~ /unix|linux|bsd/i
-      format = "\cJ"
-    elsif platform =~ /mac|apple|macintosh|osx/i
-      format = "\cM"
-    else
-      raise ArgumentError, "Invalid platform string"
+    case platform
+      when /dos|windows|win32|mswin|cygwin|mingw/i
+        format = "\cM\cJ"
+      when /unix|linux|bsd/i
+        format = "\cJ"
+      when /mac|apple|macintosh|osx/i
+        format = "\cM"
+      else
+        raise ArgumentError, "Invalid platform string"
     end
 
-    orig = $\
+    orig = $\ # AKA $OUTPUT_RECORD_SEPARATOR
     $\ = format
 
     if old_file == new_file
