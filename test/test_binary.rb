@@ -15,7 +15,7 @@ class TC_Ptools_Binary < Test::Unit::TestCase
     if File::ALT_SEPARATOR
       @@bin_file = File.join(ENV['windir'], 'notepad.exe')
     else
-      @@bin_file = '/usr/bin/ls'
+      @@bin_file = '/bin/ls'
     end
 
     Dir.chdir('test') if File.exists?('test')
