@@ -18,7 +18,12 @@ namespace 'gem' do
   task :create => [:clean] do
     Dir["*.gem"].each{ |f| File.delete(f) } # Clean first
     spec = eval(IO.read('ptools.gemspec'))
-    Gem::Builder.new(spec).build
+    if Gem::VERSION < "2.0.0"
+      Gem::Builder.new(spec).build
+    else
+      require 'rubygems/package'
+      Gem::Package.build(spec)
+    end
   end
 
   desc 'Install the ptools gem'
