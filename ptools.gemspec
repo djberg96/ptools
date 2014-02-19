@@ -3,11 +3,11 @@ require 'rbconfig'
 
 Gem::Specification.new do |gem|
   gem.name       = 'ptools'
-  gem.version    = '1.2.2'
+  gem.version    = '1.2.3'
   gem.license    = 'Artistic 2.0'
   gem.author     = 'Daniel J. Berger'
   gem.email      = 'djberg96@gmail.com'
-  gem.homepage   = 'http://www.rubyforge.org/projects/shards'
+  gem.homepage   = 'https://github.com/djberg96/ptools'
   gem.summary    = 'Extra methods for the File class'
   gem.test_files = Dir['test/test*']
   gem.files      = Dir['**/*'] << '.gemtest'
@@ -21,10 +21,10 @@ Gem::Specification.new do |gem|
     File.null to return the null device on your platform, and so on.
   EOF
 
-  gem.add_development_dependency('test-unit', '>= 2.4.0')
+  gem.add_development_dependency('test-unit', '>= 2.5.0')
 
   if File::ALT_SEPARATOR
     gem.platform = Gem::Platform.new(['universal', 'mingw32'])
-    gem.add_dependency('win32-file', '>= 0.5.4')
+    gem.add_dependency('win32-file', '>= 0.7.0')
   end
 end
