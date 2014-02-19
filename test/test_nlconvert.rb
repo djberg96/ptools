@@ -10,7 +10,7 @@ require 'ptools'
 
 class TC_Ptools_NLConvert < Test::Unit::TestCase
   def self.startup
-    Dir.chdir('test') if File.exists?('test')
+    Dir.chdir('test') if File.exist?('test')
     @@test_file1 = 'test_nl_convert1.txt'
     @@test_file2 = 'test_nl_convert2.txt'
     File.open(@@test_file1, 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
@@ -83,7 +83,7 @@ class TC_Ptools_NLConvert < Test::Unit::TestCase
 
   def teardown
     [@dos_file, @mac_file, @unix_file].each{ |file|
-      File.delete(file) if File.exists?(file)
+      File.delete(file) if File.exist?(file)
     }
     @dos_file   = nil
     @mac_file   = nil
@@ -93,7 +93,7 @@ class TC_Ptools_NLConvert < Test::Unit::TestCase
   end
 
   def self.shutdown
-    File.delete(@@test_file1) if File.exists?(@@test_file1)
-    File.delete(@@test_file2) if File.exists?(@@test_file2)
+    File.delete(@@test_file1) if File.exist?(@@test_file1)
+    File.delete(@@test_file2) if File.exist?(@@test_file2)
   end
 end

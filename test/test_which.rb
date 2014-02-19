@@ -7,10 +7,7 @@
 # NOTE: I make the assumption that Ruby (or JRuby) is in your
 # PATH for these tests.
 #####################################################################
-require 'rubygems'
-gem 'test-unit'
-
-require 'test/unit'
+require 'test-unit'
 require 'rbconfig'
 require 'fileutils'
 require 'ptools'
@@ -21,7 +18,7 @@ class TC_FileWhich < Test::Unit::TestCase
     @@dir = File.join(Dir.pwd, 'tempdir')
     @@non_exe = File.join(Dir.pwd, 'tempfile')
 
-    Dir.mkdir(@@dir) unless File.exists?(@@dir)
+    Dir.mkdir(@@dir) unless File.exist?(@@dir)
     FileUtils.touch(@@non_exe)
     File.chmod(775, @@dir)
     File.chmod(644, @@non_exe)

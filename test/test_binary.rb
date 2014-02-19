@@ -18,7 +18,7 @@ class TC_Ptools_Binary < Test::Unit::TestCase
       @@bin_file = '/bin/ls'
     end
 
-    Dir.chdir('test') if File.exists?('test')
+    Dir.chdir('test') if File.exist?('test')
 
     File.open(@@txt_file, 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
   end
@@ -42,6 +42,6 @@ class TC_Ptools_Binary < Test::Unit::TestCase
   end
 
   def self.shutdown
-    File.delete(@@txt_file) if File.exists?(@@txt_file)
+    File.delete(@@txt_file) if File.exist?(@@txt_file)
   end
 end

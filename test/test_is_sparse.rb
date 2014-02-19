@@ -4,15 +4,12 @@
 # Test case for the File.sparse? method. You should run this test
 # via the 'rake test:is_sparse' task.
 #####################################################################
-require 'rubygems'
-gem 'test-unit'
-
-require 'test/unit'
+require 'test-unit'
 require 'ptools'
 
 class TC_IsSparse < Test::Unit::TestCase
   def self.startup
-    Dir.chdir("test") if File.exists?("test")
+    Dir.chdir("test") if File.exist?("test")
     @@win = RbConfig::CONFIG['host_os'] =~ /windows|mswin|dos|cygwin|mingw/i
     @@osx = RbConfig::CONFIG['host_os'] =~ /darwin|osx/i
     @@sun = RbConfig::CONFIG['host_os'] =~ /sunos|solaris/i

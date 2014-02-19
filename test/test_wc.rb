@@ -4,20 +4,17 @@
 # Test case for the File.wc method. This test should be run via
 # the 'rake test_wc' task.
 #####################################################################
-require 'rubygems'
-gem 'test-unit'
-
-require 'test/unit'
+require 'test-unit'
 require 'ptools'
 
 class TC_FileWC < Test::Unit::TestCase
   def self.startup
-    Dir.chdir('test') if File.exists?('test')      
+    Dir.chdir('test') if File.exist?('test')
     File.open('test_file1.txt', 'w'){ |fh| 25.times{ |n| fh.puts "line#{n+1}" } }
     @@test_file = 'test_file1.txt'
   end
-   
-  def setup     
+
+  def setup
     @test_file = 'test_file1.txt'
   end
 
@@ -71,6 +68,6 @@ class TC_FileWC < Test::Unit::TestCase
   end
 
   def self.shutdown
-    File.delete(@@test_file) if File.exists?(@@test_file)
+    File.delete(@@test_file) if File.exist?(@@test_file)
   end
 end
