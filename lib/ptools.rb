@@ -123,7 +123,7 @@ class File
 
     # Iterate over each path glob the dir + program.
     path.split(File::PATH_SEPARATOR).each{ |dir|
-      next unless File.exists?(dir) # In case of bogus second argument
+      next unless File.exist?(dir) # In case of bogus second argument
       file = File.join(dir, program)
 
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
@@ -182,7 +182,7 @@ class File
 
     # Iterate over each path glob the dir + program.
     path.split(File::PATH_SEPARATOR).each{ |dir|
-      next unless File.exists?(dir) # In case of bogus second argument
+      next unless File.exist?(dir) # In case of bogus second argument
       file = File.join(dir, program)
 
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
@@ -332,7 +332,7 @@ class File
   # byte file +filename+ if it doesn't already exist.
   #
   def self.touch(filename)
-    if File.exists?(filename)
+    if File.exist?(filename)
       time = Time.now
       File.utime(time, time, filename)
     else
