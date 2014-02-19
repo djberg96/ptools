@@ -1,3 +1,8 @@
+== 1.2.3 - 19-Feb-2014
+* Fixed a bug where File.binary? would return true for unicode text. Thanks go
+  to Ben Hollis for the spot.
+* Updated the win32-file and test-unit dependencies.
+
 == 1.2.2 - 6-Apr-2012
 * Yet another sparse file test fix for OSX, which does not support
   sparse file generation on HFS+.
