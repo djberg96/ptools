@@ -28,13 +28,12 @@ class File
   #
   # This method does some simple read and extension checks. For a version
   # that is more robust, but which depends on a 3rd party C library (and is
-  # difficult to build on MS Windows), see the 'filemagic' library, available
-  # on the RAA.
+  # difficult to build on MS Windows), see the 'filemagic' library.
   #
   # Examples:
   #
   #    File.image?('somefile.jpg') # => true
-  #    File.image?('somefile.txt') # => true
+  #    File.image?('somefile.txt') # => false
   #--
   # The approach I used here is based on information found at
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
@@ -88,7 +87,8 @@ class File
   # based on Perl's -B switch).
   #
   def self.binary?(file)
-    s = (File.read(file, File.stat(file).blksize) || "").encode('US-ASCII', :undef => :replace).split(//)
+    #s = (File.read(file, File.stat(file).blksize) || "").encode('US-ASCII', :undef => :replace).split(//)
+    s = (File.read(file, File.stat(file).blksize) || "").split(//)
     ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30
   end
 
@@ -416,11 +416,11 @@ class File
   end
 
   def self.jpg?(file)
-    IO.read(file, 10) == "\377\330\377\340\000\020JFIF"
+    IO.read(file, 10, encoding: 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
   end
 
   def self.png?(file)
-    IO.read(file, 4) == "\211PNG"
+    IO.read(file, 4, encoding: 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
   end
 
   def self.gif?(file)
