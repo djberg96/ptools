@@ -10,11 +10,11 @@ require 'ptools'
 class TC_Ptools_Image < Test::Unit::TestCase
   def self.startup
     Dir.chdir('test') if File.exist?('test')
-    File.open('test_file1.txt', 'w'){ |fh| 25.times{ |n| fh.puts "line#{n+1}" } }
   end
 
   def setup
-    @text_file = 'test_file1.txt'
+    @txt_file  = File.join(Dir.pwd, 'txt', 'english.txt')
+    @uni_file  = File.join(Dir.pwd, 'txt', 'korean.txt')
     @jpg_file  = File.join(Dir.pwd, 'img', 'test.jpg')
     @png_file  = File.join(Dir.pwd, 'img', 'test.png')
     @gif_file  = File.join(Dir.pwd, 'img', 'test.gif')
@@ -22,12 +22,13 @@ class TC_Ptools_Image < Test::Unit::TestCase
 
   test "image? method basic functionality" do
     assert_respond_to(File, :image?)
-    assert_nothing_raised{ File.image?(@text_file) }
-    assert_boolean(File.image?(@text_file))
+    assert_nothing_raised{ File.image?(@txt_file) }
+    assert_boolean(File.image?(@txt_file))
   end
 
   test "image? method returns false for a text file" do
-    assert_false(File.image?(@text_file))
+    assert_false(File.image?(@txt_file))
+    assert_false(File.image?(@uni_file))
   end
 
   test "image? method returns true for a gif" do
@@ -47,13 +48,10 @@ class TC_Ptools_Image < Test::Unit::TestCase
   end
 
   def teardown
-    @text_file = nil
-  end
-
-  def self.shutdown
-    File.delete('test_file1.txt') if File.exist?('test_file1.txt')
-    @jpeg_file = nil
-    @png_file  = nil
-    @gif_file  = nil
+    @txt_file = nil
+    @uni_file = nil
+    @jpg_file = nil
+    @png_file = nil
+    @gif_file = nil
   end
 end
