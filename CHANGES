@@ -1,3 +1,8 @@
+== 1.2.4 - ???
+* The File.binary method now always returns false for images. It is meant to
+  detect executables, shared objects, etc. Use File.image? to detect images.
+* Encoding fixes for the File.image? method.
+
 == 1.2.3 - 19-Feb-2014
 * Fixed a bug where File.binary? would return true for unicode text. Thanks go
   to Ben Hollis for the spot.
