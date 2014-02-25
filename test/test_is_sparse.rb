@@ -32,6 +32,7 @@ class TC_IsSparse < Test::Unit::TestCase
   test "is_sparse returns the expected results" do
     omit_if(@@win, "File.sparse? tests skipped on MS Windows")
     omit_if(@@osx, "File.sparse? tests skipped on OS X")
+    omit_unless(File.size(@sparse_file) > 0)
 
     assert_true(File.sparse?(@sparse_file))
     assert_false(File.sparse?(@non_sparse_file))
