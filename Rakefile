@@ -67,6 +67,13 @@ namespace 'test' do
     t.warning = true
     t.test_files = FileList['test/test_head.rb']
   end
+  
+  Rake::TestTask.new('image') do |t|
+    t.libs << 'test'
+    t.verbose = true
+    t.warning = true
+    t.test_files = FileList['test/test_image.rb']
+  end
 
   Rake::TestTask.new('middle') do |t|
     t.libs << 'test'
