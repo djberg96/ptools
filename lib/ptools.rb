@@ -420,7 +420,7 @@ class File
   end
 
   def self.png?(file)
-    IO.read(file, 4) == "\211PNG"
+    IO.read(file, 4).force_encoding("UTF-8") == "\211PNG"
   end
 
   def self.gif?(file)
