@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
     File.null to return the null device on your platform, and so on.
   EOF
 
+  gem.add_development_dependency('rake')
   gem.add_development_dependency('test-unit', '>= 2.5.0')
 
   if File::ALT_SEPARATOR
