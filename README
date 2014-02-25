@@ -28,9 +28,8 @@
   File.nl_convert("myfile", "newfile", "dos")
    
 == Known Bugs
-  None known. Please report any bugs on the github or RubyForge project page.
+  None known. Please report any bugs on the github project page.
 
-  http://www.rubyforge.org/projects/shards
   http://www.github.com/djberg96/ptools
 
 == Acknowledgements
@@ -53,7 +52,7 @@
   Artistic 2.0
     
 == Copyright
-  (C) 2003-2012 Daniel J. Berger
+  (C) 2003-2014 Daniel J. Berger
   All Rights Reserved.
     
 == Warranty
