@@ -10,13 +10,13 @@ require 'ptools'
 class TC_IsSparse < Test::Unit::TestCase
   def self.startup
     Dir.chdir("test") if File.exist?("test")
-    @@win = RbConfig::CONFIG['host_os'] =~ /windows|mswin|dos|cygwin|mingw/i
+    @@win = File::ALT_SEPARATOR
     @@osx = RbConfig::CONFIG['host_os'] =~ /darwin|osx/i
-    @@sun = RbConfig::CONFIG['host_os'] =~ /sunos|solaris/i
+    system("dd of=test_sparse bs=1k seek=5120 count=0 2>/dev/null") unless @@win
   end
 
   def setup
-    @sparse_file = @@sun ? '/var/adm/lastlog' : '/var/log/lastlog'
+    @sparse_file = 'test_sparse'
     @non_sparse_file = File.expand_path(File.basename(__FILE__))
   end
 
@@ -32,7 +32,6 @@ class TC_IsSparse < Test::Unit::TestCase
   test "is_sparse returns the expected results" do
     omit_if(@@win, "File.sparse? tests skipped on MS Windows")
     omit_if(@@osx, "File.sparse? tests skipped on OS X")
-    omit_unless(File.size(@sparse_file) > 0)
 
     assert_true(File.sparse?(@sparse_file))
     assert_false(File.sparse?(@non_sparse_file))
@@ -46,5 +45,9 @@ class TC_IsSparse < Test::Unit::TestCase
   def teardown
     @sparse_file = nil
     @non_sparse_file = nil
+  end
+
+  def self.shutdown
+    File.delete('test_sparse') if File.exist?('test_sparse')
   end
 end
