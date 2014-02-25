@@ -74,9 +74,10 @@ class File
     alias null_device null
   end
 
-  # Returns whether or not +file+ is a binary file.  Note that this is
-  # not guaranteed to be 100% accurate.  It performs a "best guess" based
-  # on a simple test of the first +File.blksize+ characters.
+  # Returns whether or not +file+ is a binary non-image file, i.e. executable,
+  # shared object, ect. Note that this is NOT guaranteed to be 100% accurate.
+  # It performs a "best guess" based on a simple test of the first
+  # +File.blksize+ characters.
   #
   # Example:
   #
@@ -87,6 +88,7 @@ class File
   # based on Perl's -B switch).
   #
   def self.binary?(file)
+    return false if image?(file)
     s = (File.read(file, File.stat(file).blksize) || "")
     s = s.encode('US-ASCII', :undef => :replace).split(//)
     ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30
