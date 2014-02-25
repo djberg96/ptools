@@ -1,3 +1,9 @@
+== 1.2.5 - ???
+* Added a Gemfile, mostly for Travis CI.
+* Added rake as a development dependency.
+* Updated the tests for File.sparse? so that it doesn't rely on
+  an external file.
+
 == 1.2.4 - 25-Feb-2014
 * The File.binary method now always returns false for images. It is meant to
   detect executables, shared objects, etc. Use File.image? to detect images.
