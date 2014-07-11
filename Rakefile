@@ -29,7 +29,7 @@ namespace 'gem' do
   desc 'Install the ptools gem'
   task :install => [:create] do
     file = Dir["*.gem"].first
-    sh "gem install #{file}"
+    sh "gem install -l #{file}"
   end
 end
 
