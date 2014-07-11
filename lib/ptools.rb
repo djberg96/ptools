@@ -292,7 +292,7 @@ class File
         raise ArgumentError, "Invalid platform string"
     end
 
-    orig = $\ # AKA $OUTPUT_RECORD_SEPARATOR
+    orig = $\ # $OUTPUT_RECORD_SEPARATOR
     $\ = format
 
     if old_file == new_file
@@ -418,11 +418,11 @@ class File
   end
 
   def self.jpg?(file)
-    IO.read(file, 10, encoding: 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
+    IO.read(file, 10, :encoding => 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
   end
 
   def self.png?(file)
-    IO.read(file, 4, encoding: 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
+    IO.read(file, 4, :encoding => 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
   end
 
   def self.gif?(file)
