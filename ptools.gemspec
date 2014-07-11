@@ -3,7 +3,7 @@ require 'rbconfig'
 
 Gem::Specification.new do |gem|
   gem.name       = 'ptools'
-  gem.version    = '1.2.4'
+  gem.version    = '1.2.5'
   gem.license    = 'Artistic 2.0'
   gem.author     = 'Daniel J. Berger'
   gem.email      = 'djberg96@gmail.com'
@@ -12,7 +12,6 @@ Gem::Specification.new do |gem|
   gem.test_files = Dir['test/test*']
   gem.files      = Dir['**/*'] << '.gemtest'
 
-  gem.rubyforge_project = 'shards'
   gem.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST']
 
   gem.description = <<-EOF
