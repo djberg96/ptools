@@ -1,6 +1,7 @@
 == 1.2.5 - ???
 * Added a Gemfile, mostly for Travis CI.
 * Added rake as a development dependency.
+* Revert back to hash syntax supported by 1.9.x.
 * Updated the tests for File.sparse? so that it doesn't rely on
   an external file.
 
