@@ -1,7 +1,8 @@
-== 1.2.5 - ???
+== 1.2.5 - 11-Jul-2014
 * Added a Gemfile, mostly for Travis CI.
 * Added rake as a development dependency.
 * Revert back to hash syntax supported by 1.9.x.
+* Removed rubyforge_project from gemspec.
 * Updated the tests for File.sparse? so that it doesn't rely on
   an external file.
 
