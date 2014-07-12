@@ -1,7 +1,12 @@
+== 1.2.6 - ???
+* Updated the png? and jpg? methods so they explicitly specify the
+  offset argument so that it works with 1.9.2 and earlier. Thanks go to
+  Anurag Priyam for the spot.
+
 == 1.2.5 - 11-Jul-2014
 * Added a Gemfile, mostly for Travis CI.
 * Added rake as a development dependency.
-* Revert back to hash syntax supported by 1.9.x.
+* Revert back to hash syntax supported by 1.8.x.
 * Removed rubyforge_project from gemspec.
 * Updated the tests for File.sparse? so that it doesn't rely on
   an external file.
