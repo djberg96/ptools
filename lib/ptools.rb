@@ -418,11 +418,11 @@ class File
   end
 
   def self.jpg?(file)
-    IO.read(file, 10, :encoding => 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
+    IO.read(file, 10, nil, :encoding => 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
   end
 
   def self.png?(file)
-    IO.read(file, 4, :encoding => 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
+    IO.read(file, 4, nil, :encoding => 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
   end
 
   def self.gif?(file)
