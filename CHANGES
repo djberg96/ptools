@@ -1,3 +1,6 @@
+== 1.2.7 - ???
+* File.which now expands ~ for paths. Thanks go to dg-vrnetze for the patch.
+
 == 1.2.6 - 14-Jul-2014
 * Updated the png? and jpg? methods so they explicitly specify the
   offset argument so that it works with 1.9.2 and earlier. Thanks go to
