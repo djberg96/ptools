@@ -11,6 +11,7 @@ require 'test-unit'
 require 'rbconfig'
 require 'fileutils'
 require 'ptools'
+require 'tempfile'
 
 class TC_FileWhich < Test::Unit::TestCase
   def self.startup
@@ -93,6 +94,20 @@ class TC_FileWhich < Test::Unit::TestCase
   test "the second argument cannot be nil or empty" do
     assert_raises(ArgumentError){ File.which(@ruby, nil) }
     assert_raises(ArgumentError){ File.which(@ruby, '') }
+  end
+
+  test "resolves with with ~" do
+    begin
+      old_home = ENV['HOME']
+
+      ENV['HOME'] = Dir::Tmpname.tmpdir
+      program = Tempfile.new(['program', '.sh'])
+      File.chmod(755, program.path)
+
+      assert_not_nil(File.which(File.basename(program.path), '~/'))
+    ensure
+      ENV['HOME'] = old_home
+    end
   end
 
   def teardown
