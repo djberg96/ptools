@@ -125,6 +125,8 @@ class File
 
     # Iterate over each path glob the dir + program.
     path.split(File::PATH_SEPARATOR).each{ |dir|
+      dir = File.expand_path(dir)
+
       next unless File.exist?(dir) # In case of bogus second argument
       file = File.join(dir, program)
 
