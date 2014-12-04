@@ -97,6 +97,7 @@ class TC_FileWhich < Test::Unit::TestCase
   end
 
   test "resolves with with ~" do
+    omit_if(@@windows, "~ tests skipped on MS Windows")
     begin
       old_home = ENV['HOME']
 
