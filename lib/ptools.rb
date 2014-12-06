@@ -77,7 +77,7 @@ class File
   # Returns whether or not +file+ is a binary non-image file, i.e. executable,
   # shared object, ect. Note that this is NOT guaranteed to be 100% accurate.
   # It performs a "best guess" based on a simple test of the first
-  # +File.blksize+ characters.
+  # +File.blksize+ characters, or 4096, whichever is smaller.
   #
   # Example:
   #
@@ -89,7 +89,9 @@ class File
   #
   def self.binary?(file)
     return false if image?(file)
-    s = (File.read(file, File.stat(file).blksize) || "")
+    bytes = File.stat(file).blksize
+    bytes = 4096 if bytes > 4096
+    s = (File.read(file, bytes) || "")
     s = s.encode('US-ASCII', :undef => :replace).split(//)
     ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30
   end
