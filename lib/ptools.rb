@@ -59,7 +59,7 @@ class File
   #
   def self.null
     case RbConfig::CONFIG['host_os']
-      when /mswin|win32|msdos|cygwin|mingw|windows/i
+      when /mswin|win32|msdos|mingw|windows/i
         'NUL'
       when /amiga/i
         'NIL:'
