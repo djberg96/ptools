@@ -2,6 +2,9 @@
 * File.which now expands ~ for paths. Thanks go to dg-vrnetze for the patch.
 * Use /dev/null for cygwin instead of NUL.
 * Use mv instead of cp in the nl_convert method.
+* Solaris now handled explicitly in nl_convert, and OSX now considered Unix.
+* Modified the binary? method to check 4096 bytes at most.
+* Thanks to Matt Hoyle for many of the changes implemented in this release.
 
 == 1.2.6 - 14-Jul-2014
 * Updated the png? and jpg? methods so they explicitly specify the
