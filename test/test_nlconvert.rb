@@ -25,6 +25,17 @@ class TC_Ptools_NLConvert < Test::Unit::TestCase
     @unix_file  = 'nix_test_file.txt'
   end
 
+  test "nl_for_platform basic functionality" do
+    assert_respond_to(File, :nl_for_platform)
+  end
+
+  test "nl_for_platform" do
+    assert_equal( "\cM\cJ", File.nl_for_platform('dos') )
+    assert_equal( "\cJ",    File.nl_for_platform('unix') )
+    assert_equal( "\cM",    File.nl_for_platform('mac') )
+    assert_nothing_raised{ File.nl_for_platform('local') }
+  end
+  
   test "nl_convert basic functionality" do
     assert_respond_to(File, :nl_convert)
   end

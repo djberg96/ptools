@@ -283,16 +283,7 @@ class File
       raise ArgumentError, 'Only valid for plain text files'
     end
 
-    case platform
-      when /dos|windows|win32|mswin|cygwin|mingw/i
-        format = "\cM\cJ"
-      when /unix|linux|bsd/i
-        format = "\cJ"
-      when /mac|apple|macintosh|osx/i
-        format = "\cM"
-      else
-        raise ArgumentError, "Invalid platform string"
-    end
+    format = nl_for_platform platform
 
     orig = $\ # $OUTPUT_RECORD_SEPARATOR
     $\ = format
@@ -415,6 +406,22 @@ class File
 
   private
 
+  def self.nl_for_platform( platform = 'local')
+    
+    platform = RbConfig::CONFIG["host_os"] if platform == 'local' 
+
+    case platform
+      when /dos|windows|win32|mswin|mingw/i
+        return "\cM\cJ"
+      when /unix|linux|bsd|cygwin|osx|darwin|solaris/i
+        return "\cJ"
+      when /mac|apple|macintosh/i
+        return "\cM"
+      else
+        raise ArgumentError, "Invalid platform string"
+    end
+  end
+  
   def self.bmp?(file)
     IO.read(file, 3) == "BM6"
   end
