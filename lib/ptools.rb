@@ -271,19 +271,22 @@ class File
   # 'dos2unix'. The possible values for +platform+ include:
   #
   # * MS Windows -> dos, windows, win32, mswin
-  # * Unix/BSD   -> unix, linux, bsd
-  # * Mac        -> mac, macintosh, apple, osx
+  # * Unix/BSD   -> unix, linux, bsd, osx, darwin, sunos, solaris
+  # * Mac        -> mac, macintosh, apple
   #
-  # Note that this method is only valid for an ftype of "file".  Otherwise a
-  # TypeError will be raised.  If an invalid format value is received, an
+  # You may also specify 'local', in which case your CONFIG['host_os'] value
+  # will be used.
+  #
+  # Note that this method is only valid for an ftype of "file". Otherwise a
+  # TypeError will be raised. If an invalid format value is received, an
   # ArgumentError is raised.
   #
-  def self.nl_convert(old_file, new_file = old_file, platform = 'dos')
+  def self.nl_convert(old_file, new_file = old_file, platform = 'local')
     unless File::Stat.new(old_file).file?
       raise ArgumentError, 'Only valid for plain text files'
     end
 
-    format = nl_for_platform platform
+    format = nl_for_platform(platform)
 
     orig = $\ # $OUTPUT_RECORD_SEPARATOR
     $\ = format
@@ -406,14 +409,13 @@ class File
 
   private
 
-  def self.nl_for_platform( platform = 'local')
-    
-    platform = RbConfig::CONFIG["host_os"] if platform == 'local' 
+  def self.nl_for_platform(platform)
+    platform = RbConfig::CONFIG["host_os"] if platform == 'local'
 
     case platform
       when /dos|windows|win32|mswin|mingw/i
         return "\cM\cJ"
-      when /unix|linux|bsd|cygwin|osx|darwin|solaris/i
+      when /unix|linux|bsd|cygwin|osx|darwin|solaris|sunos/i
         return "\cJ"
       when /mac|apple|macintosh/i
         return "\cM"
@@ -421,7 +423,7 @@ class File
         raise ArgumentError, "Invalid platform string"
     end
   end
-  
+
   def self.bmp?(file)
     IO.read(file, 3) == "BM6"
   end
