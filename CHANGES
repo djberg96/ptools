@@ -1,4 +1,4 @@
-== 1.2.7 - ???
+== 1.2.7 - 6-Dec-2014
 * File.which now expands ~ for paths. Thanks go to dg-vrnetze for the patch.
 * Use /dev/null for cygwin instead of NUL.
 * Use mv instead of cp in the nl_convert method.
