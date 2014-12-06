@@ -275,7 +275,7 @@ class File
   # * Mac        -> mac, macintosh, apple
   #
   # You may also specify 'local', in which case your CONFIG['host_os'] value
-  # will be used.
+  # will be used. This is the default.
   #
   # Note that this method is only valid for an ftype of "file". Otherwise a
   # TypeError will be raised. If an invalid format value is received, an
