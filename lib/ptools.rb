@@ -315,7 +315,7 @@ class File
       end
 
       File.delete(old_file)
-      FileUtils.cp(tf.path, old_file)
+      FileUtils.mv(tf.path, old_file)
     else
       begin
         nf = File.new(new_file, 'w')
