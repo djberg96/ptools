@@ -40,7 +40,7 @@ class File
   #
   def self.image?(file)
     bool = IMAGE_EXT.include?(File.extname(file).downcase)      # Match ext
-    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) # Check data
+    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) # Check data
     bool
   end
 
@@ -440,5 +440,26 @@ class File
 
   def self.gif?(file)
     ['GIF89a', 'GIF97a'].include?(IO.read(file, 6))
+  end
+
+  def self.tiff?(file)
+    return false if File.size(file) < 12
+
+    bytes = IO.read(file, 4)
+
+    # II is Intel, MM is Motorola
+    if bytes[0..1] != 'II'&& bytes[0..1] != 'MM'
+      return false
+    end
+
+    if bytes[0..1] == 'II' && bytes[2..3].ord != 42
+      return false
+    end
+
+    if bytes[0..1] == 'MM' && bytes[2..3].reverse.ord != 42
+      return false
+    end
+
+    true
   end
 end

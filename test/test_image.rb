@@ -18,6 +18,7 @@ class TC_Ptools_Image < Test::Unit::TestCase
     @jpg_file  = File.join(Dir.pwd, 'img', 'test.jpg')
     @png_file  = File.join(Dir.pwd, 'img', 'test.png')
     @gif_file  = File.join(Dir.pwd, 'img', 'test.gif')
+    @tif_file  = File.join(Dir.pwd, 'img', 'test.tif')
   end
 
   test "image? method basic functionality" do
@@ -43,6 +44,10 @@ class TC_Ptools_Image < Test::Unit::TestCase
     assert_true(File.image?(@png_file))
   end
 
+  test "image? method returns true for a tiff" do
+    assert_true(File.image?(@tif_file))
+  end
+
   test "image? method raises an error if the file does not exist" do
     assert_raises(Errno::ENOENT, ArgumentError){ File.image?('bogus') }
   end
@@ -53,5 +58,6 @@ class TC_Ptools_Image < Test::Unit::TestCase
     @jpg_file = nil
     @png_file = nil
     @gif_file = nil
+    @tif_file = nil
   end
 end
