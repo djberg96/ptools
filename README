@@ -15,7 +15,6 @@
   File.whereis("ruby")       # ['/usr/local/bin/ruby','/opt/bin/ruby']
 
   File.head("myfile")        # Returns first 10 lines of 'myfile'
-  File.middle("myfile",8,12) # Returns lines 8-12 of 'myfile'
   File.tail("myfile",3)      # Returns last 3 lines of 'myfile'
   File.wc("myfile",'words')  # Returns the number of words in 'myfile'
 
@@ -40,8 +39,6 @@
   The File.nl_convert method is based on the nlcvt program found at
   http://www.perl.com/language/ppt/src/nlcvt/nlcvt, written by Tom Christiansen.
     
-  The middle() method was provided by Shashank Date.
-
   The binary?() method was based almost entirely on a blog post by Ryan
   Davis (who, in turn, based his code on Perl's -B switch).
 
