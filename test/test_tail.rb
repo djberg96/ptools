@@ -16,11 +16,11 @@ class TC_FileTail < Test::Unit::TestCase
   def setup
     @test_file = 'test_file1.txt'
 
-    @expected_tail1 = ["line16\n","line17\n","line18\n","line19\n"]
-    @expected_tail1.push("line20\n","line21\n","line22\n", "line23\n")
-    @expected_tail1.push("line24\n","line25\n")
+    @expected_tail1 = ["line16","line17","line18","line19"]
+    @expected_tail1.push("line20","line21","line22", "line23")
+    @expected_tail1.push("line24","line25")
 
-    @expected_tail2 = ["line21\n","line22\n","line23\n","line24\n","line25\n"]
+    @expected_tail2 = ["line21","line22","line23","line24","line25"]
   end
 
   def test_tail_basic
