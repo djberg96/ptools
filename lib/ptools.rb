@@ -237,17 +237,6 @@ class File
     return a.empty? ? nil : a # Return nil in block form
   end
 
-  # In block form, yields line +from+ up to line +to+.  In non-block form
-  # returns an Array of lines from +from+ to +to+.
-  #
-  def self.middle(filename, from=10, to=20)
-    if block_given?
-      IO.readlines(filename)[from-1..to-1].each{ |line| yield line }
-    else
-      IO.readlines(filename)[from-1..to-1]
-    end
-  end
-
   # In block form, yields the last +num_lines+ of file +filename+.
   # In non-block form, it returns the lines as an array.
   #
