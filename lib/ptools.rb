@@ -251,21 +251,39 @@ class File
   # In block form, yields the last +num_lines+ of file +filename+.
   # In non-block form, it returns the lines as an array.
   #
-  # Note that this method slurps the entire file, so I don't recommend it
-  # for very large files. Also note that 'tail -f' functionality is not
-  # present. See the 'file-tail' library for that.
-  #
   # Example:
   #
   #   File.tail('somefile.txt') # => ['This is line7', 'This is line8', ...]
   #
   def self.tail(filename, num_lines=10)
+    tail_size = 2**16 # 64k chunks
+
+    # MS Windows gets unhappy if you try to seek backwards past the
+    # end of the file, so we have some extra checks here and later.
+    file_size = File.size(filename)
+    tail_size = file_size if file_size <= tail_size
+    line_sep  = File::ALT_SEPARATOR ? "\r\n" : "\n"
+
+    buf = ''
+
+    File.open(filename){ |fh|
+      fh.seek(-tail_size, File::SEEK_END)
+
+      while buf.count(line_sep) <= num_lines
+        buf = fh.read(tail_size) + buf
+        break if buf.count(line_sep) >= num_lines
+        if tail_size * 2 < file_size
+          fh.seek(-tail_size * 2, File::SEEK_CUR)
+        else
+          fh.seek(-file_size, File::SEEK_CUR)
+        end
+      end
+    }
+
     if block_given?
-      IO.readlines(filename).reverse[0..num_lines-1].reverse.each{ |line|
-        yield line
-      }
+      buf.split(line_sep)[-num_lines..-1].each{ |line| yield line  }
     else
-      IO.readlines(filename).reverse[0..num_lines-1].reverse
+      buf.split(line_sep)[-num_lines..-1]
     end
   end
 
