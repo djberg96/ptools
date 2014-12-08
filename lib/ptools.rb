@@ -244,6 +244,9 @@ class File
   #
   #   File.tail('somefile.txt') # => ['This is line7', 'This is line8', ...]
   #
+  # If you're looking for tail -f functionality, please use the file-tail
+  # gem instead.
+  #
   def self.tail(filename, num_lines=10)
     tail_size = 2**16 # 64k chunks
 
