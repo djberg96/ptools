@@ -251,21 +251,25 @@ class File
   # In block form, yields the last +num_lines+ of file +filename+.
   # In non-block form, it returns the lines as an array.
   #
-  # Note that this method slurps the entire file, so I don't recommend it
-  # for very large files. Also note that 'tail -f' functionality is not
-  # present. See the 'file-tail' library for that.
+  # Note that this method has to read through the entire file, so I don't 
+  # recommend it for very large files. Also note that 'tail -f' functionality
+  # is not present. See the 'file-tail' library for that.
   #
   # Example:
   #
   #   File.tail('somefile.txt') # => ['This is line7', 'This is line8', ...]
   #
   def self.tail(filename, num_lines=10)
+    lines = []
+    File.open(filename).each do |line|
+      lines << line
+      lines.shift if lines.length > num_lines
+    end
+    
     if block_given?
-      IO.readlines(filename).reverse[0..num_lines-1].reverse.each{ |line|
-        yield line
-      }
+      lines.each{|line| yield line } 
     else
-      IO.readlines(filename).reverse[0..num_lines-1].reverse
+      lines
     end
   end
 
