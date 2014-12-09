@@ -9,18 +9,61 @@ require 'ptools'
 
 class TC_FileTail < Test::Unit::TestCase
   def self.startup
+
     Dir.chdir('test') if File.exist?('test')
-    File.open('test_file1.txt', 'w'){ |fh| 25.times{ |n| fh.puts "line#{n+1}" } }
+
+    File.open('test_file1.txt', 'w'){ |fh| 
+      25.times{ |n| fh.puts "line#{n+1}" }
+    }
+
+    # Trailing newline test
+    File.open('test_file_trail.txt', 'w'){ |fh| 
+      2.times{ |n| fh.puts "trail#{n+1}" }
+      fh.write "trail3"
+    }
+    File.open('test_file_trail_nl.txt', 'w'){ |fh| 
+      3.times{ |n| fh.puts "trail#{n+1}" }
+    }
+
+    # Larger files
+    test_tail_fmt_str = "line data data data data data data data %5s"
+
+    File.open('test_file64.txt', 'w'){ |fh|
+      2000.times{ |n| 
+        fh.puts test_tail_fmt_str % (n+1).to_s 
+      }
+    }
+
+    File.open('test_file128.txt', 'w'){ |fh| 
+      4500.times{ |n| 
+        fh.puts test_tail_fmt_str % (n+1).to_s
+      }
+
+    }
   end
 
   def setup
-    @test_file = 'test_file1.txt'
+    @test_file     = 'test_file1.txt'
+    @test_trail    = 'test_file_trail.txt'
+    @test_trail_nl = 'test_file_trail_nl.txt'
+    @test_file_64  = 'test_file64.txt'
+    @test_file_128 = 'test_file128.txt'
 
-    @expected_tail1 = ["line16","line17","line18","line19"]
-    @expected_tail1.push("line20","line21","line22", "line23")
-    @expected_tail1.push("line24","line25")
+    @expected_tail1 = %w{
+      line16 line17 line18 line19 line20 
+      line21 line22 line23 line24 line25
+    }
 
     @expected_tail2 = ["line21","line22","line23","line24","line25"]
+
+    @expected_tail_more = []
+    25.times{ |n| @expected_tail_more.push "line#{n+1}" }
+
+    @expected_tail_trail = %w{ trail2 trail3 }
+
+    @test_tail_fmt_str = "line data data data data data data data %5s"
+
+
   end
 
   def test_tail_basic
@@ -36,10 +79,33 @@ class TC_FileTail < Test::Unit::TestCase
     assert_equal(@expected_tail2, File.tail(@test_file, 5))
   end
 
+  def test_more_lines_than_file
+    assert_equal( @expected_tail_more, File.tail(@test_file, 30) )
+  end
+
   def test_tail_expected_errors
     assert_raises(ArgumentError){ File.tail }
     assert_raises(ArgumentError){ File.tail(@test_file, 5, 5) }
   end
+
+  def test_no_trailing_newline
+    assert_equal( @expected_tail_trail, File.tail(@test_trail, 2) )
+    assert_equal( @expected_tail_trail, File.tail(@test_trail_nl, 2) )
+  end
+
+  def test_tail_larger_than_64k
+    expected_tail_64k=[]
+    2000.times{ |n| expected_tail_64k.push( @test_tail_fmt_str % (n+1).to_s ) }
+    assert_equal( expected_tail_64k, File.tail(@test_file_64, 2000) )
+  end
+
+  def test_tail_larger_than_128k
+    expected_tail_128k = []
+    4500.times{ |n| expected_tail_128k.push( @test_tail_fmt_str % (n+1).to_s ) }
+    assert_equal( expected_tail_128k, File.tail(@test_file_128, 4500) )
+  end
+
+  
 
   def teardown
     @test_file = nil
@@ -49,5 +115,9 @@ class TC_FileTail < Test::Unit::TestCase
 
   def self.shutdown
     File.delete('test_file1.txt') if File.exist?('test_file1.txt')
+    File.delete('test_file64.txt') if File.exist?('test_file64.txt')
+    File.delete('test_file128.txt') if File.exist?('test_file128.txt')
+    File.delete('test_file_trail_nl.txt') if File.exist?('test_file_trail_nl.txt')
+    File.delete('test_file_trail.txt') if File.exist?('test_file_trail.txt')
   end
 end
