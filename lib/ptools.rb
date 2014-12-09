@@ -264,11 +264,13 @@ class File
       position   = file_size - read_bytes
       
       # Loop until we have the lines or run out of file
-      while buf.count(line_sep) <= num_lines and position >= 0
+      while buf.split(line_sep).count <= num_lines and position >= 0
+        puts "#{position}, #{read_bytes}, #{tail_size}, #{buf.count(line_sep)}"
         fh.seek(position, IO::SEEK_SET)
         buf = fh.read(read_bytes) + buf
         read_bytes = tail_size
         position  -= read_bytes
+        puts "#{position}, #{read_bytes}, #{tail_size}, #{buf.count(line_sep)}"
       end
     }
 
