@@ -264,7 +264,7 @@ class File
       position   = file_size - read_bytes
       
       # Loop until we have the lines or run out of file
-      while buf.split(line_sep).count <= num_lines and position >= 0
+      while buf.scan(line_sep).size <= num_lines and position >= 0
         fh.seek(position, IO::SEEK_SET)
         buf = fh.read(read_bytes) + buf
         read_bytes = tail_size
