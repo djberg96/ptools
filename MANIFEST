@@ -7,7 +7,6 @@
 * test/test_constants.rb
 * test/test_head.rb
 * test/test_image.rb
-* test/test_middle.rb
 * test/test_nlconvert.rb
 * test/test_null.rb
 * test/test_tail.rb
