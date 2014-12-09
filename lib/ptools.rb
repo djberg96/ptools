@@ -252,30 +252,31 @@ class File
 
     # MS Windows gets unhappy if you try to seek backwards past the
     # end of the file, so we have some extra checks here and later.
-    file_size = File.size(filename)
-    tail_size = file_size if file_size <= tail_size
-    line_sep  = File::ALT_SEPARATOR ? "\r\n" : "\n"
+    file_size  = File.size(filename)
+    read_bytes = file_size % tail_size
+    read_bytes = tail_size if read_bytes == 0
+    line_sep   = File::ALT_SEPARATOR ? "\r\n" : "\n"
 
     buf = ''
 
     File.open(filename){ |fh|
-      fh.seek(-tail_size, File::SEEK_END)
-
-      while buf.count(line_sep) <= num_lines
-        buf = fh.read(tail_size) + buf
-        break if buf.count(line_sep) >= num_lines
-        if tail_size * 2 < file_size
-          fh.seek(-tail_size * 2, File::SEEK_CUR)
-        else
-          fh.seek(-file_size, File::SEEK_CUR)
-        end
+      # Set the starting read position
+      position   = file_size - read_bytes
+      
+      # Loop until we have the lines or run out of file
+      while buf.count(line_sep) <= num_lines and position >= 0
+        fh.seek(position, IO::SEEK_SET)
+        buf = fh.read(read_bytes) + buf
+        read_bytes = tail_size
+        position  -= read_bytes
       end
     }
 
+    lines = buf.split(line_sep).pop(num_lines)
     if block_given?
-      buf.split(line_sep)[-num_lines..-1].each{ |line| yield line  }
+      lines.each{ |line| yield line  }
     else
-      buf.split(line_sep)[-num_lines..-1]
+      lines
     end
   end
 
