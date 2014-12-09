@@ -3,7 +3,7 @@ require 'win32/file' if File::ALT_SEPARATOR
 
 class File
   # The version of the ptools library.
-  PTOOLS_VERSION = '1.3.0'
+  PTOOLS_VERSION = '1.3.1'
 
   # :stopdoc:
 
