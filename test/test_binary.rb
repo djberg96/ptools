@@ -16,15 +16,15 @@ class TC_Ptools_Binary < Test::Unit::TestCase
       @@bin_file = '/bin/ls'
     end
 
-    Dir.chdir('test') if File.exist?('test')
+    @@dirname = File.dirname(__FILE__)
   end
 
   def setup
-    @txt_file = File.join('txt', 'english.txt')
-    @uni_file = File.join('txt', 'korean.txt')
-    @png_file = File.join('img', 'test.png')
-    @jpg_file = File.join('img', 'test.jpg')
-    @gif_file = File.join('img', 'test.gif')
+    @txt_file = File.join(@@dirname, 'txt', 'english.txt')
+    @uni_file = File.join(@@dirname, 'txt', 'korean.txt')
+    @png_file = File.join(@@dirname, 'img', 'test.png')
+    @jpg_file = File.join(@@dirname, 'img', 'test.jpg')
+    @gif_file = File.join(@@dirname, 'img', 'test.gif')
   end
 
   test "File.binary? basic functionality" do
