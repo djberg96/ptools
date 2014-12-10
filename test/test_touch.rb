@@ -9,13 +9,14 @@ require 'ptools'
 
 class TC_FileTouch < Test::Unit::TestCase
   def self.startup
-    Dir.chdir('test') if File.exist?('test')
-    File.open('test_file1.txt', 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
+    @@dirname = File.dirname(__FILE__)
+    @@xfile = File.join(@@dirname, 'test_file1.txt')
+    File.open(@@xfile, 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
   end
 
   def setup
-    @test_file = 'delete.this'
-    @xfile = 'test_file1.txt'
+    @test_file = File.join(@@dirname, 'delete.this')
+    @xfile = File.join(@@dirname, 'test_file1.txt')
   end
 
   def test_touch_basic
@@ -47,6 +48,6 @@ class TC_FileTouch < Test::Unit::TestCase
   end
 
   def self.shutdown
-    File.delete('test_file1.txt') if File.exist?('test_file1.txt')
+    File.delete(@@xfile) if File.exist?(@@xfile)
   end
 end
