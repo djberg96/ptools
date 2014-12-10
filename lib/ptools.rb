@@ -261,18 +261,19 @@ class File
 
     File.open(filename){ |fh|
       # Set the starting read position
-      position   = file_size - read_bytes
-      
+      position = file_size - read_bytes
+
       # Loop until we have the lines or run out of file
       while buf.scan(line_sep).size <= num_lines and position >= 0
         fh.seek(position, IO::SEEK_SET)
         buf = fh.read(read_bytes) + buf
         read_bytes = tail_size
-        position  -= read_bytes
+        position -= read_bytes
       end
     }
 
     lines = buf.split(line_sep).pop(num_lines)
+
     if block_given?
       lines.each{ |line| yield line  }
     else
