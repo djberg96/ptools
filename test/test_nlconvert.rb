@@ -10,18 +10,18 @@ require 'ptools'
 
 class TC_Ptools_NLConvert < Test::Unit::TestCase
   def self.startup
-    Dir.chdir('test') if File.exist?('test')
-    @@test_file1 = 'test_nl_convert1.txt'
-    @@test_file2 = 'test_nl_convert2.txt'
+    @@dirname = File.dirname(__FILE__)
+    @@test_file1 = File.join(@@dirname, 'test_nl_convert1.txt')
+    @@test_file2 = File.join(@@dirname, 'test_nl_convert2.txt')
     File.open(@@test_file1, 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
     File.open(@@test_file2, 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
   end
 
   def setup
-    @test_file1 = 'test_nl_convert1.txt'
-    @test_file2 = 'test_nl_convert2.txt'
-    @dos_file   = 'dos_test_file.txt'
-    @mac_file   = 'mac_test_file.txt'
+    @test_file1 = File.join(@@dirname, 'test_nl_convert1.txt')
+    @test_file2 = File.join(@@dirname, 'test_nl_convert2.txt')
+    @dos_file   = File.join(@@dirname, 'dos_test_file.txt')
+    @mac_file   = File.join(@@dirname, 'mac_test_file.txt')
     @unix_file  = 'nix_test_file.txt'
   end
 
@@ -35,7 +35,7 @@ class TC_Ptools_NLConvert < Test::Unit::TestCase
     assert_equal( "\cM",    File.nl_for_platform('mac') )
     assert_nothing_raised{ File.nl_for_platform('local') }
   end
-  
+
   test "nl_convert basic functionality" do
     assert_respond_to(File, :nl_convert)
   end
