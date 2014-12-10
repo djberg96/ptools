@@ -3,7 +3,7 @@ require 'win32/file' if File::ALT_SEPARATOR
 
 class File
   # The version of the ptools library.
-  PTOOLS_VERSION = '1.3.1'
+  PTOOLS_VERSION = '1.3.2'
 
   # :stopdoc:
 
@@ -255,7 +255,16 @@ class File
     file_size  = File.size(filename)
     read_bytes = file_size % tail_size
     read_bytes = tail_size if read_bytes == 0
-    line_sep   = File::ALT_SEPARATOR ? "\r\n" : "\n"
+
+    if File::ALT_SEPARATOR
+      if RUBY_PLATFORM == 'java'
+        line_sep = "\n"
+      else
+        line_sep = "\r\n"
+      end
+    else
+      line_sep = "\n"
+    end
 
     buf = ''
 
