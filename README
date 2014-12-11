@@ -3,7 +3,7 @@
   File class based on Unix command line tools.
    
 == Prerequisites
-  On MS Windows you will need win32-file 0.5.4 or later.
+  On MS Windows you will need the win32-file gem.
 
 == Installation
   gem install ptools
@@ -27,7 +27,10 @@
   File.nl_convert("myfile", "newfile", "dos")
    
 == Known Bugs
-  None known. Please report any bugs on the github project page.
+  The File.which and File.whereis methods may fail when using JRuby on Windows.
+  See https://github.com/jruby/jruby/issues/2291 for details.
+
+  Please report any other issues on the github project page.
 
   http://www.github.com/djberg96/ptools
 
@@ -41,6 +44,8 @@
     
   The binary?() method was based almost entirely on a blog post by Ryan
   Davis (who, in turn, based his code on Perl's -B switch).
+
+  Thanks go to Matt Hoyle for help with the File.tail method.
 
 == Future Plans
   Add whatever other tools people think might be useful.
