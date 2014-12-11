@@ -247,6 +247,10 @@ class File
   # If you're looking for tail -f functionality, please use the file-tail
   # gem instead.
   #
+  #--
+  # Internally I'm using a 64 chunk of memory at a time. I may allow the size
+  # to be configured in the future as an optional 3rd argument.
+  #
   def self.tail(filename, num_lines=10)
     tail_size = 2**16 # 64k chunks
 
@@ -256,21 +260,13 @@ class File
     read_bytes = file_size % tail_size
     read_bytes = tail_size if read_bytes == 0
 
-    if File::ALT_SEPARATOR
-      if RUBY_PLATFORM == 'java'
-        line_sep = "\n"
-      else
-        line_sep = "\r\n"
-      end
-    else
-      line_sep = "\n"
-    end
+    line_sep = File::ALT_SEPARATOR ? "\r\n" : "\n"
 
     buf = ''
 
-    File.open(filename){ |fh|
-      # Set the starting read position
-      position = file_size - read_bytes
+    # Open in binary mode to ensure line endings aren't converted.
+    File.open(filename, 'rb'){ |fh|
+      position = file_size - read_bytes # Set the starting read position
 
       # Loop until we have the lines or run out of file
       while buf.scan(line_sep).size <= num_lines and position >= 0
