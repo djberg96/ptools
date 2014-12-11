@@ -29,7 +29,11 @@ namespace 'gem' do
   desc 'Install the ptools gem'
   task :install => [:create] do
     file = Dir["*.gem"].first
-    sh "gem install -l #{file}"
+    if RUBY_PLATFORM == 'java'
+      sh "jruby -S gem install -l #{file}"
+    else
+      sh "gem install -l #{file}"
+    end
   end
 end
 
