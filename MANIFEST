@@ -3,6 +3,7 @@
 * MANIFEST
 * Rakefile
 * ptools.gemspec
+* certs/djberg96_pub.pem
 * lib/ptools.rb
 * test/test_constants.rb
 * test/test_head.rb
