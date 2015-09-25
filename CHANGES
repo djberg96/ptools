@@ -1,3 +1,7 @@
+== 1.3.3 - 25-Sep-2015
+* This gem is now signed.
+* The Rakefile tasks now assume Rubygems 2.x.
+
 == 1.3.2 - 11-Dec-2014
 * Update to the File.tail method that deals prevents potential line ending
   issues in JRuby.
