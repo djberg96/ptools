@@ -16,14 +16,10 @@ end
 namespace 'gem' do
   desc 'Create the ptools gem'
   task :create => [:clean] do
-    Dir["*.gem"].each{ |f| File.delete(f) } # Clean first
+    require 'rubygems/package'
     spec = eval(IO.read('ptools.gemspec'))
-    if Gem::VERSION < "2.0.0"
-      Gem::Builder.new(spec).build
-    else
-      require 'rubygems/package'
-      Gem::Package.build(spec)
-    end
+    spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
+    Gem::Package.build(spec)
   end
 
   desc 'Install the ptools gem'
