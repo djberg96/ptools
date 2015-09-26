@@ -1,3 +1,4 @@
 # Added to this file to not force others to use this file.
 .rvmrc
 Gemfile.lock
+.overcommit.yml
