@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'rbconfig'
 
 Gem::Specification.new do |spec|
@@ -22,10 +21,10 @@ Gem::Specification.new do |spec|
   EOF
 
   spec.add_development_dependency('rake')
-  spec.add_development_dependency('test-unit', '>= 2.5.0')
+  spec.add_development_dependency('test-unit')
 
   if File::ALT_SEPARATOR
     spec.platform = Gem::Platform.new(['universal', 'mingw32'])
-    spec.add_dependency('win32-file', '>= 0.7.0')
+    spec.add_dependency('win32-file')
   end
 end
