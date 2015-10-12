@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'rbconfig'
 
 Gem::Specification.new do |spec|
