@@ -79,6 +79,10 @@ class File
   # It performs a "best guess" based on a simple test of the first
   # +File.blksize+ characters, or 4096, whichever is smaller.
   #
+  # By default it will check to see if more than 30 percent of the characters
+  # are non-text characters. If so, the method returns true. You can configure
+  # this percentage by passing your own as a second argument.
+  #
   # Example:
   #
   #   File.binary?('somefile.exe') # => true
@@ -87,13 +91,13 @@ class File
   # Based on code originally provided by Ryan Davis (which, in turn, is
   # based on Perl's -B switch).
   #
-  def self.binary?(file)
+  def self.binary?(file, percentage = 0.30)
     return false if image?(file)
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
     s = (File.read(file, bytes) || "")
     s = s.encode('US-ASCII', :undef => :replace).split(//)
-    ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30
+    ((s.size - s.grep(" ".."~").size) / s.size.to_f) > percentage
   end
 
   # Looks for the first occurrence of +program+ within +path+.
