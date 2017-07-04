@@ -47,6 +47,11 @@ class TC_Ptools_Binary < Test::Unit::TestCase
     assert_false(File.binary?(@gif_file))
   end
 
+  test "File.binary? accepts an optional percentage argument" do
+    assert_false(File.binary?(@txt_file, 0.50))
+    assert_true(File.binary?(@txt_file, 0.05))
+  end
+
   test "File.binary? raises an error if the file cannot be found" do
     assert_raise_kind_of(SystemCallError){ File.binary?('bogus') }
   end
