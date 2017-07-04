@@ -1,3 +1,10 @@
+== 1.3.4 - 4-Jul-2017
+* The File.binary? method now lets you set your own percentage for the
+  internal heuristic as an optional second argument.
+* The VERSION constant is now frozen.
+* Minor updates to the Rakefile and gemspec.
+* Updated cert file.
+
 == 1.3.3 - 25-Sep-2015
 * This gem is now signed.
 * The Rakefile tasks now assume Rubygems 2.x.
