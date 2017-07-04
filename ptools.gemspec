@@ -3,14 +3,14 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'ptools'
-  spec.version    = '1.3.3'
-  spec.license    = 'Artistic 2.0'
+  spec.version    = '1.3.4'
+  spec.license    = 'Artistic-2.0'
   spec.author     = 'Daniel J. Berger'
   spec.email      = 'djberg96@gmail.com'
   spec.homepage   = 'https://github.com/djberg96/ptools'
   spec.summary    = 'Extra methods for the File class'
   spec.test_files = Dir['test/test*']
-  spec.files      = Dir['**/*'] << '.gemtest'
+  spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = ['certs/djberg96_pub.pem']
 
   spec.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST']
