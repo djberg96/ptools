@@ -3,7 +3,7 @@ require 'win32/file' if File::ALT_SEPARATOR
 
 class File
   # The version of the ptools library.
-  PTOOLS_VERSION = '1.3.4'.freeze
+  PTOOLS_VERSION = '1.3.5'.freeze
 
   # :stopdoc:
 
@@ -23,8 +23,8 @@ class File
 
   # :startdoc:
 
-  # Returns whether or not the file is an image. Only JPEG, PNG, BMP and
-  # GIF are checked against.
+  # Returns whether or not the file is an image. Only JPEG, PNG, BMP,
+  # GIF, and ICO are checked against.
   #
   # This method does some simple read and extension checks. For a version
   # that is more robust, but which depends on a 3rd party C library (and is
@@ -39,8 +39,8 @@ class File
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
   def self.image?(file)
-    bool = IMAGE_EXT.include?(File.extname(file).downcase)      # Match ext
-    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) # Check data
+    bool = IMAGE_EXT.include?(File.extname(file).downcase)
+    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
     bool
   end
 
@@ -482,5 +482,9 @@ class File
     end
 
     true
+  end
+
+  def self.ico?(file)
+    ["\000\000\001\000", "\000\000\002\000"].include?(IO.read(file, 4, nil, :encoding => 'binary'))
   end
 end
