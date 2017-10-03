@@ -8,9 +8,9 @@ CLEAN.include("**/*.gem", "**/*.rbc", "**/*coverage*")
 
 desc 'Install the ptools package (non-gem)'
 task :install do
-   sitelibdir = CONFIG["sitelibdir"]
-   file = "lib/ptools.rb"
-   FileUtils.cp(file, sitelibdir, :verbose => true)
+  sitelibdir = CONFIG["sitelibdir"]
+  file = "lib/ptools.rb"
+  FileUtils.cp(file, sitelibdir, :verbose => true)
 end
 
 namespace 'gem' do
@@ -19,7 +19,7 @@ namespace 'gem' do
     require 'rubygems/package'
     spec = eval(IO.read('ptools.gemspec'))
     spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
-    Gem::Package.build(spec)
+    Gem::Package.build(spec, true)
   end
 
   desc 'Install the ptools gem'

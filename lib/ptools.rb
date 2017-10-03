@@ -3,7 +3,7 @@ require 'win32/file' if File::ALT_SEPARATOR
 
 class File
   # The version of the ptools library.
-  PTOOLS_VERSION = '1.3.3'
+  PTOOLS_VERSION = '1.3.5'.freeze
 
   # :stopdoc:
 
@@ -23,8 +23,8 @@ class File
 
   # :startdoc:
 
-  # Returns whether or not the file is an image. Only JPEG, PNG, BMP and
-  # GIF are checked against.
+  # Returns whether or not the file is an image. Only JPEG, PNG, BMP,
+  # GIF, and ICO are checked against.
   #
   # This method does some simple read and extension checks. For a version
   # that is more robust, but which depends on a 3rd party C library (and is
@@ -39,8 +39,8 @@ class File
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
   def self.image?(file)
-    bool = IMAGE_EXT.include?(File.extname(file).downcase)      # Match ext
-    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) # Check data
+    bool = IMAGE_EXT.include?(File.extname(file).downcase)
+    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
     bool
   end
 
@@ -79,6 +79,10 @@ class File
   # It performs a "best guess" based on a simple test of the first
   # +File.blksize+ characters, or 4096, whichever is smaller.
   #
+  # By default it will check to see if more than 30 percent of the characters
+  # are non-text characters. If so, the method returns true. You can configure
+  # this percentage by passing your own as a second argument.
+  #
   # Example:
   #
   #   File.binary?('somefile.exe') # => true
@@ -87,13 +91,13 @@ class File
   # Based on code originally provided by Ryan Davis (which, in turn, is
   # based on Perl's -B switch).
   #
-  def self.binary?(file)
+  def self.binary?(file, percentage = 0.30)
     return false if image?(file)
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
     s = (File.read(file, bytes) || "")
     s = s.encode('US-ASCII', :undef => :replace).split(//)
-    ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30
+    ((s.size - s.grep(" ".."~").size) / s.size.to_f) > percentage
   end
 
   # Looks for the first occurrence of +program+ within +path+.
@@ -478,5 +482,9 @@ class File
     end
 
     true
+  end
+
+  def self.ico?(file)
+    ["\000\000\001\000", "\000\000\002\000"].include?(IO.read(file, 4, nil, :encoding => 'binary'))
   end
 end
