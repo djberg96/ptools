@@ -27,7 +27,7 @@ class TC_Ptools_Constants < Test::Unit::TestCase
     assert_not_nil(File::MSWINDOWS)
   end
 
-  test "WIN32EXTS constant is defiend on MS Windows" do
+  test "WIN32EXTS constant is defined on MS Windows" do
     omit_unless(@@windows, "Skipping on Unix systems")
     assert_not_nil(File::WIN32EXTS)
   end
