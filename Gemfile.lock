@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     power_assert (1.1.4)
-    rake (12.3.2)
+    rake (12.3.3)
     structured_warnings (0.3.0)
     test-unit (3.3.3)
       power_assert
