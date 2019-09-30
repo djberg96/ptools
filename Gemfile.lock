@@ -4,7 +4,7 @@ GEM
     power_assert (1.1.5)
     rake (13.0.0)
     structured_warnings (0.4.0)
-    test-unit (3.3.3)
+    test-unit (3.3.4)
       power_assert
 
 PLATFORMS
