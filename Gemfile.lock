@@ -1,10 +1,10 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    power_assert (1.1.0)
-    rake (12.1.0)
-    structured_warnings (0.3.0)
-    test-unit (3.2.6)
+    power_assert (1.1.5)
+    rake (13.0.0)
+    structured_warnings (0.4.0)
+    test-unit (3.3.4)
       power_assert
 
 PLATFORMS
@@ -16,4 +16,4 @@ DEPENDENCIES
   test-unit
 
 BUNDLED WITH
-   1.16.0.pre.3
+   2.1.0.pre.1

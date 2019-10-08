@@ -1,9 +1,11 @@
 language: ruby
 rvm:
-- 1.9.3 
-- 2.2.8
-- 2.3.5
-- 2.4.2
+- 2.2.10
+- 2.3.8
+- 2.4.9
+- 2.5.7
+- 2.6.5
+- 2.7.0-preview1
 before_install: gem update bundler
 cache: bundler
 notifications:
@@ -12,4 +14,8 @@ notifications:
     - jasnow@hotmail.com
     on_success: change
     on_failure: always
-sudo: false
+
+matrix:
+  allow_failures:
+    - rvm: 2.2.10
+    - rvm: 2.3.8
