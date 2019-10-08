@@ -12,6 +12,7 @@ notifications:
   email:
     recipients:
     - jasnow@hotmail.com
+    - djberg96@gmail.com
     on_success: change
     on_failure: always
 
