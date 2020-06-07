@@ -93,6 +93,7 @@ class File
   #
   def self.binary?(file, percentage = 0.30)
     return false if image?(file)
+    return false if check_bom?(file)
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
     s = (File.read(file, bytes) || "")
@@ -431,6 +432,20 @@ class File
   end
 
   private
+
+  # Returns whether or not the given +text+ contains a BOM marker.
+  # If present, we can generally assume it's a text file.
+  #
+  def self.check_bom?(file)
+    text = File.read(file, 4).force_encoding('utf-8')
+
+    bool = false
+    bool = true if text[0,3] == "\xEF\xBB\xBF"
+    bool = true if text[0,4] == "\x00\x00\xFE\xFF" || text[0,4] == "\xFF\xFE\x00\x00"
+    bool = true if text[0,2] == "\xFF\xFE" || text[0,2] == "\xFE\xFF"
+
+    bool
+  end
 
   def self.nl_for_platform(platform)
     platform = RbConfig::CONFIG["host_os"] if platform == 'local'
