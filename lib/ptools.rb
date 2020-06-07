@@ -439,19 +439,19 @@ class File
   def self.check_bom?(text)
     # UTF-8
     if text.size >= 3
-      return true if text[0,3].start_with("\xEF\xBB\xBF")
+      return true if text[0,3].start_with?("\xEF\xBB\xBF")
     end
 
     # UTF-32BE or UTF-32LE
     if text.size >= 4
-      if text[0,4].start_with("\x00\x00\xFE\xFF") || text[0,4].start_with("\xFF\xFE\x00\x00")
+      if text[0,4].start_with?("\x00\x00\xFE\xFF") || text[0,4].start_with?("\xFF\xFE\x00\x00")
         return true
       end
     end
 
     # UTF-16BE or UTF-16LE
     if text.size >= 2
-      if text[0,2].start_with("\xFF\xFE") || text[0,2].start_with("\xFE\xFF")
+      if text[0,2].start_with?("\xFF\xFE") || text[0,2].start_with?("\xFE\xFF")
         return true
       end
     end
