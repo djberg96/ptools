@@ -1,6 +1,8 @@
-== 1.3.6 - 6-Oct-2017
+== 1.3.6 - 7-Jun-2020
 * Updated gemspec, added more versions to .travis.yml file, fixed typo.
   Thanks go to Al Snow for the updates.
+* Fixed a bug where the File.binary? method would return true for utf16
+  or utf32 encoded files. Thanks go to Andrew McAndre for the spot.
 
 == 1.3.5 - 3-Sep-2017
 * The File.image? method now checks against .ico files.
