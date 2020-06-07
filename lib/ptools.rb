@@ -436,27 +436,15 @@ class File
   # Returns whether or not the given +text+ contains a BOM marker.
   # If present, we can generally assume it's a text file.
   #
-  def self.check_bom?(text)
-    # UTF-8
-    if text.size >= 3
-      return true if text[0,3].start_with?("\xEF\xBB\xBF")
-    end
+  def self.check_bom?(file)
+    text = File.read(file, 4).force_encoding('utf-8')
 
-    # UTF-32BE or UTF-32LE
-    if text.size >= 4
-      if text[0,4].start_with?("\x00\x00\xFE\xFF") || text[0,4].start_with?("\xFF\xFE\x00\x00")
-        return true
-      end
-    end
+    bool = false
+    bool = true if text[0,3] == "\xEF\xBB\xBF"
+    bool = true if text[0,4] == "\x00\x00\xFE\xFF" || text[0,4] == "\xFF\xFE\x00\x00"
+    bool = true if text[0,2] == "\xFF\xFE" || text[0,2] == "\xFE\xFF"
 
-    # UTF-16BE or UTF-16LE
-    if text.size >= 2
-      if text[0,2].start_with?("\xFF\xFE") || text[0,2].start_with?("\xFE\xFF")
-        return true
-      end
-    end
-
-    false
+    bool
   end
 
   def self.nl_for_platform(platform)
