@@ -21,6 +21,7 @@ class TC_Ptools_Binary < Test::Unit::TestCase
 
   def setup
     @txt_file = File.join(@@dirname, 'txt', 'english.txt')
+    @emp_file = File.join(@@dirname, 'txt', 'empty.txt')
     @uni_file = File.join(@@dirname, 'txt', 'korean.txt')
     @utf_file = File.join(@@dirname, 'txt', 'english.utf16')
     @png_file = File.join(@@dirname, 'img', 'test.png')
@@ -38,6 +39,7 @@ class TC_Ptools_Binary < Test::Unit::TestCase
   end
 
   test "File.binary? returns false for text files" do
+    assert_false(File.binary?(@emp_file))
     assert_false(File.binary?(@txt_file))
     assert_false(File.binary?(@uni_file))
     assert_false(File.binary?(@utf_file))
