@@ -3,7 +3,7 @@ require 'win32/file' if File::ALT_SEPARATOR
 
 class File
   # The version of the ptools library.
-  PTOOLS_VERSION = '1.3.6'.freeze
+  PTOOLS_VERSION = '1.3.7'.freeze
 
   # :stopdoc:
 
@@ -92,7 +92,7 @@ class File
   # based on Perl's -B switch).
   #
   def self.binary?(file, percentage = 0.30)
-    return false if File.stat(file).zero? 
+    return false if File.stat(file).zero?
     return false if image?(file)
     return false if check_bom?(file)
     bytes = File.stat(file).blksize
