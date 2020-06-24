@@ -15,7 +15,8 @@ class TC_Ptools_Constants < Test::Unit::TestCase
   end
 
   test "PTOOLS_VERSION constant is set to expected value" do
-    assert_equal('1.3.6', File::PTOOLS_VERSION)
+    assert_equal('1.3.7', File::PTOOLS_VERSION)
+    assert_true(File::PTOOLS_VERSION.frozen?)
   end
 
   test "IMAGE_EXT constant is set to array of values" do
