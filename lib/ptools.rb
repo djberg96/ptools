@@ -92,6 +92,7 @@ class File
   # based on Perl's -B switch).
   #
   def self.binary?(file, percentage = 0.30)
+    return false if File.stat(file).zero? 
     return false if image?(file)
     return false if check_bom?(file)
     bytes = File.stat(file).blksize
