@@ -89,7 +89,7 @@ class TC_Ptools_NLConvert < Test::Unit::TestCase
   end
 
   test "nl_convert will fail on anything but plain files" do
-    assert_raise(ArgumentError){ File.nl_convert(File.null_device, @test_file1) }
+    assert_raise(ArgumentError){ File.nl_convert(IO::NULL, @test_file1) }
   end
 
   def teardown
