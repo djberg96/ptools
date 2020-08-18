@@ -44,36 +44,6 @@ class File
     bool
   end
 
-  # Returns the name of the null device (aka bitbucket) on your platform.
-  #
-  # Examples:
-  #
-  #   # On Linux
-  #   File.null # => '/dev/null'
-  #
-  #   # On MS Windows
-  #   File.null # => 'NUL'
-  #--
-  # The values I used here are based on information from
-  # http://en.wikipedia.org/wiki//dev/null
-  #
-  def self.null
-    case RbConfig::CONFIG['host_os']
-      when /mswin|win32|msdos|mingw|windows/i
-        'NUL'
-      when /amiga/i
-        'NIL:'
-      when /openvms/i
-        'NL:'
-      else
-        '/dev/null'
-    end
-  end
-
-  class << self
-    alias null_device null
-  end
-
   # Returns whether or not +file+ is a binary non-image file, i.e. executable,
   # shared object, ect. Note that this is NOT guaranteed to be 100% accurate.
   # It performs a "best guess" based on a simple test of the first
