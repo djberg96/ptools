@@ -22,12 +22,12 @@ RSpec.describe File, :constants do
   end
 
   example "WINDOWS constant is defined on MS Windows" do
-    skip unless windows
+    skip "skipped unless MS Windows" unless windows
     expect(File::MSWINDOWS).not_to be_nil
   end
 
   example "WIN32EXTS constant is defined on MS Windows" do
-    skip unless windows
+    skip "skipped unless MS Windows" unless windows
     expect(File::WIN32EXTS).not_to be_nil
   end
 end

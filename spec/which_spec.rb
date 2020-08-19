@@ -50,13 +50,13 @@ describe File, :which do
   end
 
   example "which handles executables without extensions on windows" do
-    skip "example skipped unless MS Windows" unless @windows
+    skip "skipped unless MS Windows" unless @windows
     expect(File.which('ruby')).not_to be_nil
     expect(File.which('notepad')).not_to be_nil
   end
 
   example "which handles executables that already contain extensions on windows" do
-    skip "example skipped on MS Windows" unless @windows
+    skip "skipped unless MS Windows" unless @windows
     expect(File.which('ruby.exe')).not_to be_nil
     expect(File.which('notepad.exe')).not_to be_nil
   end

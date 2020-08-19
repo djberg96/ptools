@@ -19,14 +19,14 @@ RSpec.describe File, :sparse do
   end
 
   example "is_sparse basic functionality" do
-    skip if windows || osx
+    skip "skipped on MS Windows or OSX" if windows || osx
     expect(File).to respond_to(:sparse?)
     expect{ File.sparse?(sparse_file) }.not_to raise_error
     expect(File.sparse?(sparse_file)).to be(true).or be(false)
   end
 
   example "is_sparse returns the expected results" do
-    skip if windows || osx
+    skip "skipped on MS Windows or OSX" if windows || osx
     expect(File.sparse?(sparse_file)).to be true
     expect(File.sparse?(non_sparse_file)).to be false
   end
