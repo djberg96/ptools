@@ -15,7 +15,7 @@ RSpec.describe File, :sparse do
 
   before do
     Dir.chdir("spec") if File.exist?("spec")
-    system("dd of=test_sparse bs=1k seek=5120 count=0 2>/dev/null") unless windows
+    system("dd of=#{sparse_file} bs=1k seek=5120 count=0 2>/dev/null") unless windows
   end
 
   example "is_sparse basic functionality" do
@@ -37,6 +37,7 @@ RSpec.describe File, :sparse do
   end
 
   after do
+    Dir.chdir("spec") if File.exist?("spec")
     File.delete(sparse_file) if File.exist?(sparse_file)
   end
 end
