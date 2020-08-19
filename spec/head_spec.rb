@@ -34,4 +34,8 @@ RSpec.describe File, :head do
     expect{ File.head(test_file, 5, "foo") }.to raise_error(ArgumentError)
     expect{ File.head("bogus") }.to raise_error(Errno::ENOENT)
   end
+
+  after do
+    File.delete(test_file) if File.exists?(test_file)
+  end
 end
