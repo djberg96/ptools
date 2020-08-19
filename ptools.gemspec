@@ -2,13 +2,13 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'ptools'
-  spec.version    = '1.3.7'
-  spec.license    = 'Artistic-2.0'
+  spec.version    = '1.4.0'
+  spec.license    = 'Apache-2.0'
   spec.author     = 'Daniel J. Berger'
   spec.email      = 'djberg96@gmail.com'
   spec.homepage   = 'https://github.com/djberg96/ptools'
   spec.summary    = 'Extra methods for the File class'
-  spec.test_files = Dir['test/test*']
+  spec.test_files = Dir['spec/_spec*']
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = ['certs/djberg96_pub.pem']
 
@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   EOF
 
   spec.add_development_dependency('rake')
-  spec.add_development_dependency('test-unit')
+  spec.add_development_dependency('rspec', '~> 3.9')
 
   if File::ALT_SEPARATOR
     spec.platform = Gem::Platform.new(['universal', 'mingw32'])
