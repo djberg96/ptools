@@ -58,4 +58,8 @@ RSpec.describe File, :wc do
   example "an invalid option raises an error" do
     expect{ File.wc(test_file, 'bogus') }.to raise_error(ArgumentError)
   end
+
+  after do
+    File.delete(test_file) if File.exists?(test_file)
+  end
 end
