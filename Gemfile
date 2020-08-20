@@ -8,5 +8,5 @@ end
 
 group :test do
   gem 'rake'
-  gem 'test-unit'
+  gem 'rspec'
 end
