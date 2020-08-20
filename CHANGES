@@ -1,3 +1,7 @@
+== 1.4.0 - 20-Aug-2020
+* Switched from test-unit to rspec, and reworked the tests bit in general.
+* Removed the File.null method since Ruby has IO::NULL.
+
 == 1.3.7 - 24-Jun-2020
 * Fixed a bug where the File.binary? method would bomb on a zero byte file.
   Thanks go to Alexandru Emil Lupu for the spot and patch.
