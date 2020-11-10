@@ -57,7 +57,7 @@ RSpec.describe File, :nlconvert do
     expect{ File.nl_convert(@test_file1, @dos_file, 'dos') }.not_to raise_error
     expect{ File.nl_convert(@test_file1, @dos_file, 'dos') }.not_to raise_error
     expect(File.size(@dos_file)).to be > File.size(@test_file1)
-    expect(IO.readlines(@dos_file).first.split('')[-2..-1]).to eq(["\cM","\cJ"])
+    expect(IO.readlines(@dos_file).first.split('')[-2..-1]).to eq(["\cM", "\cJ"])
   end
 
   example 'nl_convert with mac platform argument works as expected' do

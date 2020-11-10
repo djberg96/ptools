@@ -48,7 +48,7 @@ RSpec.describe File, :tail do
       line21 line22 line23 line24 line25
     }
 
-    @expected_tail2 = ['line21','line22','line23','line24','line25']
+    @expected_tail2 = ['line21', 'line22', 'line23', 'line24', 'line25']
 
     @expected_tail_more = []
     25.times{ |n| @expected_tail_more.push "line#{n+1}" }
