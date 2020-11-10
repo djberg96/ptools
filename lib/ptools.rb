@@ -455,7 +455,7 @@ class File
     bytes = IO.read(file, 4)
 
     # II is Intel, MM is Motorola
-    if bytes[0..1] != 'II'&& bytes[0..1] != 'MM'
+    if bytes[0..1] != 'II' && bytes[0..1] != 'MM'
       return false
     end
 
