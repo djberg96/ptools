@@ -8,5 +8,9 @@ end
 
 group :test do
   gem 'rake'
-  gem 'rspec'
+  gem 'rspec', '~> 3.9'
+end
+
+group :development do
+  gem 'rubocop', '~> 1.1'
 end
