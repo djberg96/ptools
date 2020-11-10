@@ -3,6 +3,8 @@ require 'rake/clean'
 require 'rake/testtask'
 require 'rbconfig'
 require 'rspec/core/rake_task'
+require 'rubocop'
+require 'rubocop/rake_task'
 include RbConfig
 
 CLEAN.include("**/*.gem", "**/*.rbc", "**/*coverage*", "**/*.lock")
@@ -83,5 +85,7 @@ namespace 'spec' do
     t.pattern = 'spec/*_spec.rb'
   end
 end
+
+RuboCop::RakeTask.new(:rubocop)
 
 task :default => 'spec:all'
