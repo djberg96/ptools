@@ -17,18 +17,18 @@ RSpec.describe File, :touch do
     @test_file = File.join(dirname, 'delete.this')
   end
 
-  example "touch basic functionality" do
+  example 'touch basic functionality' do
     expect(File).to respond_to(:touch)
     expect{ File.touch(@test_file) }.not_to raise_error
   end
 
-  example "touch a new file returns expected results" do
+  example 'touch a new file returns expected results' do
     expect(File.touch(@test_file)).to eq(File)
     expect(File.exist?(@test_file)).to be true
     expect(File.size(@test_file)).to eq(0)
   end
 
-  example "touch an existing file returns expected results" do
+  example 'touch an existing file returns expected results' do
     stat = File.stat(xfile)
     sleep 0.5
     expect{ File.touch(xfile) }.not_to raise_error
@@ -36,7 +36,7 @@ RSpec.describe File, :touch do
     expect(File.mtime(xfile) == stat.mtime).to be false
   end
 
-  example "touch requires an argument" do
+  example 'touch requires an argument' do
     expect{ File.touch }.to raise_error(ArgumentError)
   end
 

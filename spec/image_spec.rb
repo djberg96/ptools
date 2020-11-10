@@ -18,34 +18,34 @@ RSpec.describe File, :image do
     @ico_file  = File.join(Dir.pwd, 'img', 'test.ico')
   end
 
-  example "image? method basic functionality" do
+  example 'image? method basic functionality' do
     expect(File).to respond_to(:image?)
     expect{ File.image?(@txt_file) }.not_to raise_error
     expect(File.image?(@txt_file)).to be(true).or be(false)
   end
 
-  example "image? method returns false for a text file" do
+  example 'image? method returns false for a text file' do
     expect(File.image?(@txt_file)).to be false
     expect(File.image?(@uni_file)).to be false
   end
 
-  example "image? method returns true for a gif" do
+  example 'image? method returns true for a gif' do
     expect(File.image?(@gif_file)).to be true
   end
 
-  example "image? method returns true for a jpeg" do
+  example 'image? method returns true for a jpeg' do
     expect(File.image?(@jpg_file)).to be true
   end
 
-  example "image? method returns true for a png" do
+  example 'image? method returns true for a png' do
     expect(File.image?(@png_file)).to be true
   end
 
-  example "image? method returns true for an ico" do
+  example 'image? method returns true for an ico' do
     expect(File.image?(@ico_file)).to be true
   end
 
-  example "image? method raises an error if the file does not exist" do
+  example 'image? method raises an error if the file does not exist' do
     expect{ File.image?('bogus') }.to raise_error(Exception) # Errno::ENOENT or ArgumentError
   end
 end
