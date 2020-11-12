@@ -29,9 +29,9 @@ RSpec.describe File, :nlconvert do
   end
 
   example 'nl_for_platform returns expected results' do
-    expect(File.nl_for_platform('dos') ).to eq( "\cM\cJ")
-    expect(File.nl_for_platform('unix') ).to eq( "\cJ")
-    expect(File.nl_for_platform('mac') ).to eq( "\cM")
+    expect(File.nl_for_platform('dos')).to eq("\cM\cJ")
+    expect(File.nl_for_platform('unix')).to eq("\cJ")
+    expect(File.nl_for_platform('mac')).to eq("\cM")
 
   end
 
