@@ -1,32 +1,34 @@
-== Description
+## Description
   The ptools (power tools) library is an additional set of commands for the
   File class based on Unix command line tools.
    
-== Prerequisites
+## Prerequisites
   On MS Windows you will need the win32-file gem.
 
-== Installation
-  gem install ptools
+## Installation
+`gem install ptools`
 
-== Synopsis
-  require "ptools"
+## Synopsis
+```ruby
+require "ptools"
 
-  File.which("ruby")         # '/usr/local/bin/ruby'
-  File.whereis("ruby")       # ['/usr/local/bin/ruby','/opt/bin/ruby']
+File.which("ruby")         # '/usr/local/bin/ruby'
+File.whereis("ruby")       # ['/usr/local/bin/ruby','/opt/bin/ruby']
 
-  File.head("myfile")        # Returns first 10 lines of 'myfile'
-  File.tail("myfile",3)      # Returns last 3 lines of 'myfile'
-  File.wc("myfile",'words')  # Returns the number of words in 'myfile'
+File.head("myfile")        # Returns first 10 lines of 'myfile'
+File.tail("myfile",3)      # Returns last 3 lines of 'myfile'
+File.wc("myfile",'words')  # Returns the number of words in 'myfile'
 
-  File.touch("newfile")      # "newfile" now exists
-  File.null                  # '/dev/null' on Unix, 'NUL' on Windows
-  File.binary?('some_file')  # true or false
-  File.sparse?('some_file')  # true or false
+File.touch("newfile")      # "newfile" now exists
+File.null                  # '/dev/null' on Unix, 'NUL' on Windows
+File.binary?('some_file')  # true or false
+File.sparse?('some_file')  # true or false
 
-  # Creates a copy of 'myfile' called 'newfile', in DOS format
-  File.nl_convert("myfile", "newfile", "dos")
+# Creates a copy of 'myfile' called 'newfile', in DOS format
+File.nl_convert("myfile", "newfile", "dos")
+```
    
-== Known Bugs
+## Known Bugs
   The File.which and File.whereis methods may fail when using JRuby on Windows.
   See https://github.com/jruby/jruby/issues/2291 for details.
 
@@ -34,7 +36,7 @@
 
   http://www.github.com/djberg96/ptools
 
-== Acknowledgements
+## Acknowledgements
   The File.which method was originally adopted from the FileWhich code posted
   by Michael Granger on the now defunct rubygarden.org website. That code was
   later replaced by a version based on the ruby-which library.
@@ -49,20 +51,20 @@
 
   And thanks to any and all contributors!
 
-== Future Plans
+## Future Plans
   Add whatever other tools people think might be useful.
    
-== License
+## License
   Artistic-2.0
     
-== Copyright
+## Copyright
   (C) 2003-2020 Daniel J. Berger
   All Rights Reserved.
     
-== Warranty
+## Warranty
   This package is provided "as is" and without any express or
   implied warranties, including, without limitation, the implied
   warranties of merchantability and fitness for a particular purpose.
 
-== Author
+## Author
   Daniel J. Berger
