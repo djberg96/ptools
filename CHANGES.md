@@ -1,5 +1,6 @@
 ## 1.4.1 - 29-Dec-2020
 * Switch from rdoc to markdown since github is not rendering rdoc properly.
+* Added metadata to gemspec.
 
 ## 1.4.0 - 20-Aug-2020
 * Switched from test-unit to rspec, and reworked the tests bit in general.

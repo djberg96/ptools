@@ -18,6 +18,15 @@ Gem::Specification.new do |spec|
     File.null to return the null device on your platform, and so on.
   EOF
 
+  spec.metadata = {
+    'homepage_uri'      => 'https://github.com/djberg96/ptools',
+    'bug_tracker_uri'   => 'https://github.com/djberg96/ptools/issues',
+    'changelog_uri'     => 'https://github.com/djberg96/ptools/blob/master/CHANGES.md',
+    'documentation_uri' => 'https://github.com/djberg96/ptools/wiki',
+    'source_code_uri'   => 'https://github.com/djberg96/ptools',
+    'wiki_uri'          => 'https://github.com/djberg96/ptools/wiki'
+  }
+
   spec.add_development_dependency('rake')
   spec.add_development_dependency('rspec', '~> 3.9')
 
