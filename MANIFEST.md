@@ -1,6 +1,6 @@
-* CHANGES
-* README
-* MANIFEST
+* CHANGES.md
+* README.md
+* MANIFEST.md
 * Gemfile
 * Rakefile
 * ptools.gemspec
