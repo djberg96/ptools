@@ -2,7 +2,7 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'ptools'
-  spec.version    = '1.4.0'
+  spec.version    = '1.4.1'
   spec.license    = 'Artistic-2.0'
   spec.author     = 'Daniel J. Berger'
   spec.email      = 'djberg96@gmail.com'
@@ -11,8 +11,6 @@ Gem::Specification.new do |spec|
   spec.test_files = Dir['spec/_spec*']
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = ['certs/djberg96_pub.pem']
-
-  spec.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST']
 
   spec.description = <<-EOF
     The ptools (power tools) library provides several handy methods to
