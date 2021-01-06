@@ -19,16 +19,25 @@ class File
     MSWINDOWS = false
   end
 
-  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png]
+  if File::ALT_SEPARATOR
+    private_constant :WIN32EXTS
+    private_constant :MSWINDOWS
+  end
+
+  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico]
 
   # :startdoc:
 
   # Returns whether or not the file is an image. Only JPEG, PNG, BMP,
   # GIF, and ICO are checked against.
   #
-  # This method does some simple read and extension checks. For a version
+  # This reads and checks the first few bytes of the file. For a version
   # that is more robust, but which depends on a 3rd party C library (and is
   # difficult to build on MS Windows), see the 'filemagic' library.
+  #
+  # By default the filename extension is also checked. You can disable this
+  # by passing false as the second argument, in which case only the contents
+  # are checked.
   #
   # Examples:
   #
@@ -38,9 +47,13 @@ class File
   # The approach I used here is based on information found at
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
-  def self.image?(file)
-    bool = IMAGE_EXT.include?(File.extname(file).downcase)
+  def self.image?(file, check_file_extension = true)
     bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
+
+    if check_file_extension
+      bool = bool && IMAGE_EXT.include?(File.extname(file).downcase)
+    end
+
     bool
   end
 
@@ -402,8 +415,6 @@ class File
     end
   end
 
-  private
-
   # Returns whether or not the given +text+ contains a BOM marker.
   # If present, we can generally assume it's a text file.
   #
@@ -418,6 +429,10 @@ class File
     bool
   end
 
+  private_class_method :check_bom?
+
+  # Returns the newline characters for the given platform.
+  #
   def self.nl_for_platform(platform)
     platform = RbConfig::CONFIG["host_os"] if platform == 'local'
 
@@ -433,22 +448,32 @@ class File
     end
   end
 
+  # Is the file a bitmap file?
+  #
   def self.bmp?(file)
     IO.read(file, 3) == "BM6"
   end
 
+  # Is the file a jpeg file?
+  #
   def self.jpg?(file)
     IO.read(file, 10, nil, :encoding => 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
   end
 
+  # Is the file a png file?
+  #
   def self.png?(file)
     IO.read(file, 4, nil, :encoding => 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
   end
 
+  # Is the file a gif?
+  #
   def self.gif?(file)
     ['GIF89a', 'GIF97a'].include?(IO.read(file, 6))
   end
 
+  # Is the file a tiff?
+  #
   def self.tiff?(file)
     return false if File.size(file) < 12
 
@@ -470,6 +495,8 @@ class File
     true
   end
 
+  # Is the file an ico file?
+  #
   def self.ico?(file)
     ["\000\000\001\000", "\000\000\002\000"].include?(IO.read(file, 4, nil, :encoding => 'binary'))
   end

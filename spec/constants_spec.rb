@@ -18,16 +18,6 @@ RSpec.describe File, :constants do
   end
 
   example "IMAGE_EXT constant is set to array of values" do
-    expect(File::IMAGE_EXT.sort).to eq(%w[.bmp .gif .jpeg .jpg .png])
-  end
-
-  example "WINDOWS constant is defined on MS Windows" do
-    skip "skipped unless MS Windows" unless windows
-    expect(File::MSWINDOWS).not_to be_nil
-  end
-
-  example "WIN32EXTS constant is defined on MS Windows" do
-    skip "skipped unless MS Windows" unless windows
-    expect(File::WIN32EXTS).not_to be_nil
+    expect(File::IMAGE_EXT).to match_array(%w[.bmp .gif .ico .jpeg .jpg .png])
   end
 end
