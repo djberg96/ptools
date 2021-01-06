@@ -431,6 +431,8 @@ class File
 
   private_class_method :check_bom?
 
+  # Returns the newline characters for the given platform.
+  #
   def self.nl_for_platform(platform)
     platform = RbConfig::CONFIG["host_os"] if platform == 'local'
 
@@ -446,22 +448,32 @@ class File
     end
   end
 
+  # Is the file a bitmap file?
+  #
   def self.bmp?(file)
     IO.read(file, 3) == "BM6"
   end
 
+  # Is the file a jpeg file?
+  #
   def self.jpg?(file)
     IO.read(file, 10, nil, :encoding => 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
   end
 
+  # Is the file a png file?
+  #
   def self.png?(file)
     IO.read(file, 4, nil, :encoding => 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
   end
 
+  # Is the file a gif?
+  #
   def self.gif?(file)
     ['GIF89a', 'GIF97a'].include?(IO.read(file, 6))
   end
 
+  # Is the file a tiff?
+  #
   def self.tiff?(file)
     return false if File.size(file) < 12
 
@@ -483,6 +495,8 @@ class File
     true
   end
 
+  # Is the file an ico file?
+  #
   def self.ico?(file)
     ["\000\000\001\000", "\000\000\002\000"].include?(IO.read(file, 4, nil, :encoding => 'binary'))
   end
