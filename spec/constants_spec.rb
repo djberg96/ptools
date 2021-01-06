@@ -18,7 +18,7 @@ RSpec.describe File, :constants do
   end
 
   example "IMAGE_EXT constant is set to array of values" do
-    expect(File::IMAGE_EXT.sort).to eq(%w[.bmp .gif .jpeg .jpg .png])
+    expect(File::IMAGE_EXT).to match_array(%w[.bmp .gif .ico .jpeg .jpg .png])
   end
 
   example "WINDOWS constant is defined on MS Windows" do

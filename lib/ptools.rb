@@ -19,14 +19,19 @@ class File
     MSWINDOWS = false
   end
 
-  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png]
+  if File::ALT_SEPARATOR
+    private_constant :WIN32EXTS
+    private_constant :MSWINDOWS
+  end
+
+  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico]
 
   # :startdoc:
 
   # Returns whether or not the file is an image. Only JPEG, PNG, BMP,
   # GIF, and ICO are checked against.
   #
-  # This method does some simple read and extension checks. For a version
+  # This reads and checks the first few bytes of the file. For a version
   # that is more robust, but which depends on a 3rd party C library (and is
   # difficult to build on MS Windows), see the 'filemagic' library.
   #
@@ -39,9 +44,8 @@ class File
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
   def self.image?(file)
-    bool = IMAGE_EXT.include?(File.extname(file).downcase)
-    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
-    bool
+    IMAGE_EXT.include?(File.extname(file).downcase) &&
+    (bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file))
   end
 
   # Returns whether or not +file+ is a binary non-image file, i.e. executable,
@@ -402,8 +406,6 @@ class File
     end
   end
 
-  private
-
   # Returns whether or not the given +text+ contains a BOM marker.
   # If present, we can generally assume it's a text file.
   #
@@ -417,6 +419,8 @@ class File
 
     bool
   end
+
+  private_class_method :check_bom?
 
   def self.nl_for_platform(platform)
     platform = RbConfig::CONFIG["host_os"] if platform == 'local'
