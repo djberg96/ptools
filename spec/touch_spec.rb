@@ -30,7 +30,7 @@ RSpec.describe File, :touch do
 
   example "touch an existing file returns expected results" do
     stat = File.stat(xfile)
-    sleep 0.5
+    sleep 1
     expect{ File.touch(xfile) }.not_to raise_error
     expect(File.size(xfile) == stat.size).to be true
     expect(File.mtime(xfile) == stat.mtime).to be false
