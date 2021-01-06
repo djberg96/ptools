@@ -35,6 +35,10 @@ class File
   # that is more robust, but which depends on a 3rd party C library (and is
   # difficult to build on MS Windows), see the 'filemagic' library.
   #
+  # By default the filename extension is also checked. You can disable this
+  # by passing false as the second argument, in which case only the contents
+  # are checked.
+  #
   # Examples:
   #
   #    File.image?('somefile.jpg') # => true
@@ -43,9 +47,14 @@ class File
   # The approach I used here is based on information found at
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
-  def self.image?(file)
-    IMAGE_EXT.include?(File.extname(file).downcase) &&
-    (bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file))
+  def self.image?(file, check_file_extension = true)
+    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
+
+    if check_file_extension
+      bool = bool && IMAGE_EXT.include?(File.extname(file).downcase)
+    end
+
+    bool
   end
 
   # Returns whether or not +file+ is a binary non-image file, i.e. executable,
