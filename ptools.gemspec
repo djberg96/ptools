@@ -2,7 +2,7 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'ptools'
-  spec.version    = '1.4.1'
+  spec.version    = '1.4.2'
   spec.license    = 'Artistic-2.0'
   spec.author     = 'Daniel J. Berger'
   spec.email      = 'djberg96@gmail.com'

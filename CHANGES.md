@@ -1,3 +1,11 @@
+## 1.4.2 - 6-Jan-2021
+* Fixed a private access modifier that wasn't actually working as intended.
+* Two Windows constants that were never meant for public consumption have been marked private.
+* Minor tweak to one of the touch specs.
+* The Gemfile now just uses the gemspec.
+* The image? singleton method was effectively ignoring filename extensions. This
+  has been fixed, though with the option to disable that check if desired.
+
 ## 1.4.1 - 29-Dec-2020
 * Switch from rdoc to markdown since github is not rendering rdoc properly.
 * Added metadata to gemspec.
