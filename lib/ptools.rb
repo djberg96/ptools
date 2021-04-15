@@ -115,7 +115,7 @@ class File
     end
 
     # Iterate over each path glob the dir + program.
-    path.split(File::PATH_SEPARATOR).each{ |dir|
+    path.split(File::PATH_SEPARATOR).each do |dir|
       dir = File.expand_path(dir)
 
       next unless File.exist?(dir) # In case of bogus second argument
@@ -135,7 +135,7 @@ class File
         found.tr!(File::SEPARATOR, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
         return found
       end
-    }
+    end
 
     nil
   end
@@ -176,7 +176,7 @@ class File
     end
 
     # Iterate over each path glob the dir + program.
-    path.split(File::PATH_SEPARATOR).each{ |dir|
+    path.split(File::PATH_SEPARATOR).each do |dir|
       next unless File.exist?(dir) # In case of bogus second argument
       file = File.join(dir, program)
 
@@ -194,7 +194,7 @@ class File
         found.tr!(File::SEPARATOR, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
         paths << found
       end
-    }
+    end
 
     paths.empty? ? nil : paths.uniq
   end
@@ -213,7 +213,7 @@ class File
   def self.head(filename, num_lines=10)
     a = []
 
-    IO.foreach(filename){ |line|
+    IO.foreach(filename) do |line|
       break if num_lines <= 0
       num_lines -= 1
       if block_given?
@@ -221,7 +221,7 @@ class File
       else
         a << line
       end
-    }
+    end
 
     a.empty? ? nil : a # Return nil in block form
   end
@@ -254,7 +254,7 @@ class File
     buf = ''
 
     # Open in binary mode to ensure line endings aren't converted.
-    File.open(filename, 'rb'){ |fh|
+    File.open(filename, 'rb') do |fh|
       position = file_size - read_bytes # Set the starting read position
 
       # Loop until we have the lines or run out of file
@@ -264,7 +264,7 @@ class File
         read_bytes = tail_size
         position -= read_bytes
       end
-    }
+    end
 
     lines = buf.split(line_sep).pop(num_lines)
 
@@ -308,10 +308,10 @@ class File
         tf = Tempfile.new('ruby_temp_' + temp_name)
         tf.open
 
-        IO.foreach(old_file){ |line|
+        IO.foreach(old_file) do |line|
           line.chomp!
           tf.print line
-        }
+        end
       ensure
         tf.close if tf && !tf.closed?
       end
@@ -321,10 +321,10 @@ class File
     else
       begin
         nf = File.new(new_file, 'w')
-        IO.foreach(old_file){ |line|
+        IO.foreach(old_file) do |line|
           line.chomp!
           nf.print line
-        }
+        end
       ensure
         nf.close if nf && !nf.closed?
       end
@@ -367,34 +367,34 @@ class File
       IO.foreach(filename){ n += 1 }
       n
     elsif option == 'bytes'
-      File.open(filename){ |f|
+      File.open(filename) do |f|
         f.each_byte{ n += 1 }
-      }
+      end
       n
     elsif option == 'characters' || option == 'chars'
-      File.open(filename){ |f|
+      File.open(filename) do |f|
         while f.getc
           n += 1
         end
-      }
+      end
       n
     elsif option == 'words'
-      IO.foreach(filename){ |line|
+      IO.foreach(filename) do |line|
         n += line.split.length
-      }
+      end
       n
     else
       bytes, chars, lines, words = 0, 0, 0, 0
-      IO.foreach(filename){ |line|
+      IO.foreach(filename) do |line|
         lines += 1
         words += line.split.length
         chars += line.split('').length
-      }
-      File.open(filename){ |f|
+      end
+      File.open(filename) do |f|
         while f.getc
           bytes += 1
         end
-      }
+      end
       [bytes, chars, words, lines]
     end
   end
