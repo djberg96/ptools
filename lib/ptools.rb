@@ -223,7 +223,7 @@ class File
       end
     }
 
-    return a.empty? ? nil : a # Return nil in block form
+    a.empty? ? nil : a # Return nil in block form
   end
 
   # In block form, yields the last +num_lines+ of file +filename+.
@@ -365,24 +365,24 @@ class File
 
     if option == 'lines'
       IO.foreach(filename){ n += 1 }
-      return n
+      n
     elsif option == 'bytes'
       File.open(filename){ |f|
         f.each_byte{ n += 1 }
       }
-      return n
+      n
     elsif option == 'characters' || option == 'chars'
       File.open(filename){ |f|
         while f.getc
           n += 1
         end
       }
-      return n
+      n
     elsif option == 'words'
       IO.foreach(filename){ |line|
         n += line.split.length
       }
-      return n
+      n
     else
       bytes, chars, lines, words = 0, 0, 0, 0
       IO.foreach(filename){ |line|
@@ -395,7 +395,7 @@ class File
           bytes += 1
         end
       }
-      return [bytes, chars, words, lines]
+      [bytes, chars, words, lines]
     end
   end
 
@@ -438,11 +438,11 @@ class File
 
     case platform
       when /dos|windows|win32|mswin|mingw/i
-        return "\cM\cJ"
+        "\cM\cJ"
       when /unix|linux|bsd|cygwin|osx|darwin|solaris|sunos/i
-        return "\cJ"
+        "\cJ"
       when /mac|apple|macintosh/i
-        return "\cM"
+        "\cM"
       else
         raise ArgumentError, "Invalid platform string"
     end
