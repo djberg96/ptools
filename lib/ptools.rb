@@ -50,9 +50,7 @@ class File
   def self.image?(file, check_file_extension = true)
     bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
 
-    if check_file_extension
-      bool = bool && IMAGE_EXT.include?(File.extname(file).downcase)
-    end
+    bool = bool && IMAGE_EXT.include?(File.extname(file).downcase) if check_file_extension
 
     bool
   end
@@ -99,9 +97,7 @@ class File
   #   File.which('foo')  # => nil
   #
   def self.which(program, path=ENV['PATH'])
-    if path.nil? || path.empty?
-      raise ArgumentError, "path cannot be empty"
-    end
+    raise ArgumentError, "path cannot be empty" if path.nil? || path.empty?
 
     # Bail out early if an absolute path is provided.
     if program =~ /^\/|^[a-z]:[\\\/]/i
@@ -153,9 +149,7 @@ class File
   #   File.whereis('foo')  # => nil
   #
   def self.whereis(program, path=ENV['PATH'])
-    if path.nil? || path.empty?
-      raise ArgumentError, "path cannot be empty"
-    end
+    raise ArgumentError, "path cannot be empty" if path.nil? || path.empty?
 
     paths = []
 
@@ -290,9 +284,7 @@ class File
   # ArgumentError is raised.
   #
   def self.nl_convert(old_file, new_file = old_file, platform = 'local')
-    unless File::Stat.new(old_file).file?
-      raise ArgumentError, 'Only valid for plain text files'
-    end
+    raise ArgumentError, 'Only valid for plain text files' unless File::Stat.new(old_file).file?
 
     format = nl_for_platform(platform)
 
@@ -357,9 +349,7 @@ class File
     option.downcase!
     valid = %w/all bytes characters chars lines words/
 
-    unless valid.include?(option)
-      raise ArgumentError, "Invalid option: '#{option}'"
-    end
+    raise ArgumentError, "Invalid option: '#{option}'" unless valid.include?(option)
 
     n = 0
 
@@ -480,17 +470,11 @@ class File
     bytes = IO.read(file, 4)
 
     # II is Intel, MM is Motorola
-    if bytes[0..1] != 'II' && bytes[0..1] != 'MM'
-      return false
-    end
+    return false if bytes[0..1] != 'II' && bytes[0..1] != 'MM'
 
-    if bytes[0..1] == 'II' && bytes[2..3].ord != 42
-      return false
-    end
+    return false if bytes[0..1] == 'II' && bytes[2..3].ord != 42
 
-    if bytes[0..1] == 'MM' && bytes[2..3].reverse.ord != 42
-      return false
-    end
+    return false if bytes[0..1] == 'MM' && bytes[2..3].reverse.ord != 42
 
     true
   end
