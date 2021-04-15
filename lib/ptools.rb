@@ -13,7 +13,7 @@ class File
     if ENV['PATHEXT']
       WIN32EXTS = ('.{' + ENV['PATHEXT'].tr(';', ',').tr('.', '') + '}').downcase
     else
-      WIN32EXTS = '.{exe,com,bat}'
+      WIN32EXTS = '.{exe,com,bat}'.freeze
     end
   else
     MSWINDOWS = false
@@ -24,7 +24,7 @@ class File
     private_constant :MSWINDOWS
   end
 
-  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico]
+  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico].freeze
 
   # :startdoc:
 
