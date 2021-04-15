@@ -11,7 +11,7 @@ class File
   if File::ALT_SEPARATOR
     MSWINDOWS = true
     if ENV['PATHEXT']
-      WIN32EXTS = ('.{' + ENV['PATHEXT'].tr(';', ',').tr('.','') + '}').downcase
+      WIN32EXTS = ('.{' + ENV['PATHEXT'].tr(';', ',').tr('.', '') + '}').downcase
     else
       WIN32EXTS = '.{exe,com,bat}'
     end
@@ -384,7 +384,7 @@ class File
       }
       return n
     else
-      bytes,chars,lines,words = 0,0,0,0
+      bytes, chars, lines, words = 0, 0, 0, 0
       IO.foreach(filename){ |line|
         lines += 1
         words += line.split.length
@@ -395,7 +395,7 @@ class File
           bytes += 1
         end
       }
-      return [bytes,chars,words,lines]
+      return [bytes, chars, words, lines]
     end
   end
 
@@ -422,9 +422,9 @@ class File
     text = File.read(file, 4).force_encoding('utf-8')
 
     bool = false
-    bool = true if text[0,3] == "\xEF\xBB\xBF"
-    bool = true if text[0,4] == "\x00\x00\xFE\xFF" || text[0,4] == "\xFF\xFE\x00\x00"
-    bool = true if text[0,2] == "\xFF\xFE" || text[0,2] == "\xFE\xFF"
+    bool = true if text[0, 3] == "\xEF\xBB\xBF"
+    bool = true if text[0, 4] == "\x00\x00\xFE\xFF" || text[0, 4] == "\xFF\xFE\x00\x00"
+    bool = true if text[0, 2] == "\xFF\xFE" || text[0, 2] == "\xFE\xFF"
 
     bool
   end
