@@ -96,7 +96,7 @@ class File
   #   File.which('ruby') # => '/usr/local/bin/ruby'
   #   File.which('foo')  # => nil
   #
-  def self.which(program, path=ENV['PATH'])
+  def self.which(program, path = ENV['PATH'])
     raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     # Bail out early if an absolute path is provided.
@@ -148,7 +148,7 @@ class File
   #   File.whereis('ruby') # => ['/usr/bin/ruby', '/usr/local/bin/ruby']
   #   File.whereis('foo')  # => nil
   #
-  def self.whereis(program, path=ENV['PATH'])
+  def self.whereis(program, path = ENV['PATH'])
     raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     paths = []
@@ -204,7 +204,7 @@ class File
   #  # Use a block
   #  File.head('somefile.txt'){ |line| puts line }
   #
-  def self.head(filename, num_lines=10)
+  def self.head(filename, num_lines = 10)
     a = []
 
     IO.foreach(filename) do |line|
@@ -234,7 +234,7 @@ class File
   # Internally I'm using a 64 chunk of memory at a time. I may allow the size
   # to be configured in the future as an optional 3rd argument.
   #
-  def self.tail(filename, num_lines=10)
+  def self.tail(filename, num_lines = 10)
     tail_size = 2**16 # 64k chunks
 
     # MS Windows gets unhappy if you try to seek backwards past the
@@ -345,7 +345,7 @@ class File
   # Valid options are 'bytes', 'characters' (or just 'chars'), 'words' and
   # 'lines'.
   #
-  def self.wc(filename, option='all')
+  def self.wc(filename, option = 'all')
     option.downcase!
     valid = %w[all bytes characters chars lines words]
 
