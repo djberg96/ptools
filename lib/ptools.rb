@@ -363,9 +363,7 @@ class File
       n
     elsif option == 'characters' || option == 'chars'
       File.open(filename) do |f|
-        while f.getc
-          n += 1
-        end
+        n += 1 while f.getc
       end
       n
     elsif option == 'words'
@@ -381,9 +379,7 @@ class File
         chars += line.split('').length
       end
       File.open(filename) do |f|
-        while f.getc
-          bytes += 1
-        end
+        bytes += 1 while f.getc
       end
       [bytes, chars, words, lines]
     end
