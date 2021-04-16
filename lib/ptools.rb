@@ -120,7 +120,7 @@ class File
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
       # the program name doesn't have an extension, try them all.
       if MSWINDOWS
-        file = file.tr("\\", '/')
+        file = file.tr(File::ALT_SEPARATOR, File::SEPARATOR)
         file += WIN32EXTS if File.extname(program).empty?
       end
 
@@ -156,11 +156,11 @@ class File
     # Bail out early if an absolute path is provided.
     if program =~ /^\/|^[a-z]:[\\\/]/i
       program += WIN32EXTS if MSWINDOWS && File.extname(program).empty?
-      program = program.tr("\\", '/') if MSWINDOWS
+      program = program.tr(File::ALT_SEPARATOR, File::SEPARATOR) if MSWINDOWS
       found = Dir[program]
       if found[0] && File.executable?(found[0]) && !File.directory?(found[0])
         if File::ALT_SEPARATOR
-          return found.map{ |f| f.tr('/', "\\") }
+          return found.map{ |f| f.tr(File::SEPARATOR, File::ALT_SEPARATOR) }
         else
           return found
         end
@@ -177,7 +177,7 @@ class File
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
       # the program name doesn't have an extension, try them all.
       if MSWINDOWS
-        file = file.tr("\\", '/')
+        file = file.tr(File::ALT_SEPARATOR, File::SEPARATOR)
         file += WIN32EXTS if File.extname(program).empty?
       end
 
