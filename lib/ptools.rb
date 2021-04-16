@@ -78,9 +78,9 @@ class File
     return false if check_bom?(file)
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
-    s = (File.read(file, bytes) || "")
+    s = (File.read(file, bytes) || '')
     s = s.encode('US-ASCII', :undef => :replace).split(//)
-    ((s.size - s.grep(" ".."~").size) / s.size.to_f) > percentage
+    ((s.size - s.grep(' '..'~').size) / s.size.to_f) > percentage
   end
 
   # Looks for the first occurrence of +program+ within +path+.
@@ -97,7 +97,7 @@ class File
   #   File.which('foo')  # => nil
   #
   def self.which(program, path=ENV['PATH'])
-    raise ArgumentError, "path cannot be empty" if path.nil? || path.empty?
+    raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     # Bail out early if an absolute path is provided.
     if program =~ /^\/|^[a-z]:[\\\/]/i
@@ -120,7 +120,7 @@ class File
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
       # the program name doesn't have an extension, try them all.
       if MSWINDOWS
-        file = file.tr("\\", "/")
+        file = file.tr("\\", '/')
         file += WIN32EXTS if File.extname(program).empty?
       end
 
@@ -149,7 +149,7 @@ class File
   #   File.whereis('foo')  # => nil
   #
   def self.whereis(program, path=ENV['PATH'])
-    raise ArgumentError, "path cannot be empty" if path.nil? || path.empty?
+    raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     paths = []
 
@@ -177,7 +177,7 @@ class File
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
       # the program name doesn't have an extension, try them all.
       if MSWINDOWS
-        file = file.tr("\\", "/")
+        file = file.tr("\\", '/')
         file += WIN32EXTS if File.extname(program).empty?
       end
 
@@ -296,7 +296,7 @@ class File
       require 'tempfile'
 
       begin
-        temp_name = Time.new.strftime("%Y%m%d%H%M%S")
+        temp_name = Time.new.strftime('%Y%m%d%H%M%S')
         tf = Tempfile.new('ruby_temp_' + temp_name)
         tf.open
 
@@ -424,7 +424,7 @@ class File
   # Returns the newline characters for the given platform.
   #
   def self.nl_for_platform(platform)
-    platform = RbConfig::CONFIG["host_os"] if platform == 'local'
+    platform = RbConfig::CONFIG['host_os'] if platform == 'local'
 
     case platform
       when /dos|windows|win32|mswin|mingw/i
@@ -434,14 +434,14 @@ class File
       when /mac|apple|macintosh/i
         "\cM"
       else
-        raise ArgumentError, "Invalid platform string"
+        raise ArgumentError, 'Invalid platform string'
     end
   end
 
   # Is the file a bitmap file?
   #
   def self.bmp?(file)
-    IO.read(file, 3) == "BM6"
+    IO.read(file, 3) == 'BM6'
   end
 
   # Is the file a jpeg file?
