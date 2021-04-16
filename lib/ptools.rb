@@ -423,14 +423,14 @@ class File
     platform = RbConfig::CONFIG['host_os'] if platform == 'local'
 
     case platform
-      when /dos|windows|win32|mswin|mingw/i
-        "\cM\cJ"
-      when /unix|linux|bsd|cygwin|osx|darwin|solaris|sunos/i
-        "\cJ"
-      when /mac|apple|macintosh/i
-        "\cM"
-      else
-        raise ArgumentError, 'Invalid platform string'
+    when /dos|windows|win32|mswin|mingw/i
+      "\cM\cJ"
+    when /unix|linux|bsd|cygwin|osx|darwin|solaris|sunos/i
+      "\cJ"
+    when /mac|apple|macintosh/i
+      "\cM"
+    else
+      raise ArgumentError, 'Invalid platform string'
     end
   end
 
