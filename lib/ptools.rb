@@ -11,9 +11,9 @@ class File
   if File::ALT_SEPARATOR
     MSWINDOWS = true
     if ENV['PATHEXT']
-      WIN32EXTS = ('.{' + ENV['PATHEXT'].tr(';', ',').tr('.','') + '}').downcase
+      WIN32EXTS = ('.{' + ENV['PATHEXT'].tr(';', ',').tr('.', '') + '}').downcase
     else
-      WIN32EXTS = '.{exe,com,bat}'
+      WIN32EXTS = '.{exe,com,bat}'.freeze
     end
   else
     MSWINDOWS = false
@@ -24,7 +24,7 @@ class File
     private_constant :MSWINDOWS
   end
 
-  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico]
+  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico].freeze
 
   # :startdoc:
 
@@ -50,9 +50,7 @@ class File
   def self.image?(file, check_file_extension = true)
     bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
 
-    if check_file_extension
-      bool = bool && IMAGE_EXT.include?(File.extname(file).downcase)
-    end
+    bool = bool && IMAGE_EXT.include?(File.extname(file).downcase) if check_file_extension
 
     bool
   end
@@ -78,11 +76,12 @@ class File
     return false if File.stat(file).zero?
     return false if image?(file)
     return false if check_bom?(file)
+
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
-    s = (File.read(file, bytes) || "")
+    s = (File.read(file, bytes) || '')
     s = s.encode('US-ASCII', :undef => :replace).split(//)
-    ((s.size - s.grep(" ".."~").size) / s.size.to_f) > percentage
+    ((s.size - s.grep(' '..'~').size) / s.size.to_f) > percentage
   end
 
   # Looks for the first occurrence of +program+ within +path+.
@@ -98,10 +97,8 @@ class File
   #   File.which('ruby') # => '/usr/local/bin/ruby'
   #   File.which('foo')  # => nil
   #
-  def self.which(program, path=ENV['PATH'])
-    if path.nil? || path.empty?
-      raise ArgumentError, "path cannot be empty"
-    end
+  def self.which(program, path = ENV['PATH'])
+    raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     # Bail out early if an absolute path is provided.
     if program =~ /^\/|^[a-z]:[\\\/]/i
@@ -115,16 +112,17 @@ class File
     end
 
     # Iterate over each path glob the dir + program.
-    path.split(File::PATH_SEPARATOR).each{ |dir|
+    path.split(File::PATH_SEPARATOR).each do |dir|
       dir = File.expand_path(dir)
 
       next unless File.exist?(dir) # In case of bogus second argument
+
       file = File.join(dir, program)
 
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
       # the program name doesn't have an extension, try them all.
       if MSWINDOWS
-        file = file.tr("\\", "/")
+        file = file.tr(File::ALT_SEPARATOR, File::SEPARATOR)
         file += WIN32EXTS if File.extname(program).empty?
       end
 
@@ -135,7 +133,7 @@ class File
         found.tr!(File::SEPARATOR, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
         return found
       end
-    }
+    end
 
     nil
   end
@@ -152,21 +150,19 @@ class File
   #   File.whereis('ruby') # => ['/usr/bin/ruby', '/usr/local/bin/ruby']
   #   File.whereis('foo')  # => nil
   #
-  def self.whereis(program, path=ENV['PATH'])
-    if path.nil? || path.empty?
-      raise ArgumentError, "path cannot be empty"
-    end
+  def self.whereis(program, path = ENV['PATH'])
+    raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     paths = []
 
     # Bail out early if an absolute path is provided.
     if program =~ /^\/|^[a-z]:[\\\/]/i
       program += WIN32EXTS if MSWINDOWS && File.extname(program).empty?
-      program = program.tr("\\", '/') if MSWINDOWS
+      program = program.tr(File::ALT_SEPARATOR, File::SEPARATOR) if MSWINDOWS
       found = Dir[program]
       if found[0] && File.executable?(found[0]) && !File.directory?(found[0])
         if File::ALT_SEPARATOR
-          return found.map{ |f| f.tr('/', "\\") }
+          return found.map{ |f| f.tr(File::SEPARATOR, File::ALT_SEPARATOR) }
         else
           return found
         end
@@ -176,14 +172,15 @@ class File
     end
 
     # Iterate over each path glob the dir + program.
-    path.split(File::PATH_SEPARATOR).each{ |dir|
+    path.split(File::PATH_SEPARATOR).each do |dir|
       next unless File.exist?(dir) # In case of bogus second argument
+
       file = File.join(dir, program)
 
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
       # the program name doesn't have an extension, try them all.
       if MSWINDOWS
-        file = file.tr("\\", "/")
+        file = file.tr(File::ALT_SEPARATOR, File::SEPARATOR)
         file += WIN32EXTS if File.extname(program).empty?
       end
 
@@ -194,7 +191,7 @@ class File
         found.tr!(File::SEPARATOR, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
         paths << found
       end
-    }
+    end
 
     paths.empty? ? nil : paths.uniq
   end
@@ -210,20 +207,21 @@ class File
   #  # Use a block
   #  File.head('somefile.txt'){ |line| puts line }
   #
-  def self.head(filename, num_lines=10)
+  def self.head(filename, num_lines = 10)
     a = []
 
-    IO.foreach(filename){ |line|
+    IO.foreach(filename) do |line|
       break if num_lines <= 0
+
       num_lines -= 1
       if block_given?
         yield line
       else
         a << line
       end
-    }
+    end
 
-    return a.empty? ? nil : a # Return nil in block form
+    a.empty? ? nil : a # Return nil in block form
   end
 
   # In block form, yields the last +num_lines+ of file +filename+.
@@ -240,7 +238,7 @@ class File
   # Internally I'm using a 64 chunk of memory at a time. I may allow the size
   # to be configured in the future as an optional 3rd argument.
   #
-  def self.tail(filename, num_lines=10)
+  def self.tail(filename, num_lines = 10)
     tail_size = 2**16 # 64k chunks
 
     # MS Windows gets unhappy if you try to seek backwards past the
@@ -254,7 +252,7 @@ class File
     buf = ''
 
     # Open in binary mode to ensure line endings aren't converted.
-    File.open(filename, 'rb'){ |fh|
+    File.open(filename, 'rb') do |fh|
       position = file_size - read_bytes # Set the starting read position
 
       # Loop until we have the lines or run out of file
@@ -264,7 +262,7 @@ class File
         read_bytes = tail_size
         position -= read_bytes
       end
-    }
+    end
 
     lines = buf.split(line_sep).pop(num_lines)
 
@@ -290,9 +288,7 @@ class File
   # ArgumentError is raised.
   #
   def self.nl_convert(old_file, new_file = old_file, platform = 'local')
-    unless File::Stat.new(old_file).file?
-      raise ArgumentError, 'Only valid for plain text files'
-    end
+    raise ArgumentError, 'Only valid for plain text files' unless File::Stat.new(old_file).file?
 
     format = nl_for_platform(platform)
 
@@ -304,14 +300,14 @@ class File
       require 'tempfile'
 
       begin
-        temp_name = Time.new.strftime("%Y%m%d%H%M%S")
+        temp_name = Time.new.strftime('%Y%m%d%H%M%S')
         tf = Tempfile.new('ruby_temp_' + temp_name)
         tf.open
 
-        IO.foreach(old_file){ |line|
+        IO.foreach(old_file) do |line|
           line.chomp!
           tf.print line
-        }
+        end
       ensure
         tf.close if tf && !tf.closed?
       end
@@ -321,10 +317,10 @@ class File
     else
       begin
         nf = File.new(new_file, 'w')
-        IO.foreach(old_file){ |line|
+        IO.foreach(old_file) do |line|
           line.chomp!
           nf.print line
-        }
+        end
       ensure
         nf.close if nf && !nf.closed?
       end
@@ -353,49 +349,43 @@ class File
   # Valid options are 'bytes', 'characters' (or just 'chars'), 'words' and
   # 'lines'.
   #
-  def self.wc(filename, option='all')
+  def self.wc(filename, option = 'all')
     option.downcase!
-    valid = %w/all bytes characters chars lines words/
+    valid = %w[all bytes characters chars lines words]
 
-    unless valid.include?(option)
-      raise ArgumentError, "Invalid option: '#{option}'"
-    end
+    raise ArgumentError, "Invalid option: '#{option}'" unless valid.include?(option)
 
     n = 0
 
     if option == 'lines'
       IO.foreach(filename){ n += 1 }
-      return n
+      n
     elsif option == 'bytes'
-      File.open(filename){ |f|
+      File.open(filename) do |f|
         f.each_byte{ n += 1 }
-      }
-      return n
+      end
+      n
     elsif option == 'characters' || option == 'chars'
-      File.open(filename){ |f|
-        while f.getc
-          n += 1
-        end
-      }
-      return n
+      File.open(filename) do |f|
+        n += 1 while f.getc
+      end
+      n
     elsif option == 'words'
-      IO.foreach(filename){ |line|
+      IO.foreach(filename) do |line|
         n += line.split.length
-      }
-      return n
+      end
+      n
     else
-      bytes,chars,lines,words = 0,0,0,0
-      IO.foreach(filename){ |line|
+      bytes, chars, lines, words = 0, 0, 0, 0
+      IO.foreach(filename) do |line|
         lines += 1
         words += line.split.length
         chars += line.split('').length
-      }
-      File.open(filename){ |f|
-        while f.getc
-          bytes += 1
-        end
-      }
-      return [bytes,chars,words,lines]
+      end
+      File.open(filename) do |f|
+        bytes += 1 while f.getc
+      end
+      [bytes, chars, words, lines]
     end
   end
 
@@ -422,9 +412,9 @@ class File
     text = File.read(file, 4).force_encoding('utf-8')
 
     bool = false
-    bool = true if text[0,3] == "\xEF\xBB\xBF"
-    bool = true if text[0,4] == "\x00\x00\xFE\xFF" || text[0,4] == "\xFF\xFE\x00\x00"
-    bool = true if text[0,2] == "\xFF\xFE" || text[0,2] == "\xFE\xFF"
+    bool = true if text[0, 3] == "\xEF\xBB\xBF"
+    bool = true if text[0, 4] == "\x00\x00\xFE\xFF" || text[0, 4] == "\xFF\xFE\x00\x00"
+    bool = true if text[0, 2] == "\xFF\xFE" || text[0, 2] == "\xFE\xFF"
 
     bool
   end
@@ -434,24 +424,24 @@ class File
   # Returns the newline characters for the given platform.
   #
   def self.nl_for_platform(platform)
-    platform = RbConfig::CONFIG["host_os"] if platform == 'local'
+    platform = RbConfig::CONFIG['host_os'] if platform == 'local'
 
     case platform
-      when /dos|windows|win32|mswin|mingw/i
-        return "\cM\cJ"
-      when /unix|linux|bsd|cygwin|osx|darwin|solaris|sunos/i
-        return "\cJ"
-      when /mac|apple|macintosh/i
-        return "\cM"
-      else
-        raise ArgumentError, "Invalid platform string"
+    when /dos|windows|win32|mswin|mingw/i
+      "\cM\cJ"
+    when /unix|linux|bsd|cygwin|osx|darwin|solaris|sunos/i
+      "\cJ"
+    when /mac|apple|macintosh/i
+      "\cM"
+    else
+      raise ArgumentError, 'Invalid platform string'
     end
   end
 
   # Is the file a bitmap file?
   #
   def self.bmp?(file)
-    IO.read(file, 3) == "BM6"
+    IO.read(file, 3) == 'BM6'
   end
 
   # Is the file a jpeg file?
@@ -480,17 +470,11 @@ class File
     bytes = IO.read(file, 4)
 
     # II is Intel, MM is Motorola
-    if bytes[0..1] != 'II' && bytes[0..1] != 'MM'
-      return false
-    end
+    return false if bytes[0..1] != 'II' && bytes[0..1] != 'MM'
 
-    if bytes[0..1] == 'II' && bytes[2..3].ord != 42
-      return false
-    end
+    return false if bytes[0..1] == 'II' && bytes[2..3].ord != 42
 
-    if bytes[0..1] == 'MM' && bytes[2..3].reverse.ord != 42
-      return false
-    end
+    return false if bytes[0..1] == 'MM' && bytes[2..3].reverse.ord != 42
 
     true
   end
