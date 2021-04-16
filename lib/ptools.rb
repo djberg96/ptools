@@ -76,6 +76,7 @@ class File
     return false if File.stat(file).zero?
     return false if image?(file)
     return false if check_bom?(file)
+
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
     s = (File.read(file, bytes) || '')
@@ -115,6 +116,7 @@ class File
       dir = File.expand_path(dir)
 
       next unless File.exist?(dir) # In case of bogus second argument
+
       file = File.join(dir, program)
 
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
@@ -172,6 +174,7 @@ class File
     # Iterate over each path glob the dir + program.
     path.split(File::PATH_SEPARATOR).each do |dir|
       next unless File.exist?(dir) # In case of bogus second argument
+
       file = File.join(dir, program)
 
       # Dir[] doesn't handle backslashes properly, so convert them. Also, if
@@ -209,6 +212,7 @@ class File
 
     IO.foreach(filename) do |line|
       break if num_lines <= 0
+
       num_lines -= 1
       if block_given?
         yield line
