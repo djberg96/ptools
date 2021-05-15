@@ -18,7 +18,7 @@ namespace 'gem' do
   desc 'Create the ptools gem'
   task :create => [:clean] do
     require 'rubygems/package'
-    spec = eval(IO.read('ptools.gemspec'))
+    spec = Gem::Specification.load('ptools.gemspec')
     spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
     Gem::Package.build(spec)
   end
