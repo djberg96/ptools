@@ -1,2 +1,2 @@
-# Added to this file to not force others to use this file.
 .bundle
+*.lock
