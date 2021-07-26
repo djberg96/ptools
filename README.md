@@ -37,14 +37,14 @@ File.nl_convert("myfile", "newfile", "dos")
   http://www.github.com/djberg96/ptools
 
 ## Acknowledgements
-  The File.which method was originally adopted from the FileWhich code posted
+  The `File.which` method was originally adopted from the `FileWhich` code posted
   by Michael Granger on the now defunct rubygarden.org website. That code was
-  later replaced by a version based on the ruby-which library.
+  later replaced by a version based on the `ruby-which` library.
 
-  The File.nl_convert method is based on the nlcvt program found at
+  The `File.nl_convert` method is based on the nlcvt program found at
   http://www.perl.com/language/ppt/src/nlcvt/nlcvt, written by Tom Christiansen.
     
-  The binary?() method was based almost entirely on a blog post by Ryan
+  The `binary?` method was based almost entirely on a blog post by Ryan
   Davis (who, in turn, based his code on Perl's -B switch).
 
   Thanks go to Matt Hoyle for help with the File.tail method.
