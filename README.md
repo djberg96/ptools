@@ -8,6 +8,9 @@
 ## Installation
 `gem install ptools`
 
+## Adding the trusted cert
+`gem cert --add <(curl -Ls https://raw.githubusercontent.com/djberg96/ptools/main/certs/djberg96_pub.pem)`
+
 ## Synopsis
 ```ruby
 require "ptools"
