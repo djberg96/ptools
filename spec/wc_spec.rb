@@ -60,6 +60,6 @@ RSpec.describe File, :wc do
   end
 
   after do
-    File.delete(test_file) if File.exists?(test_file)
+    File.delete(test_file) if File.exist?(test_file)
   end
 end
