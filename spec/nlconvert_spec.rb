@@ -88,7 +88,6 @@ RSpec.describe File, :nlconvert do
   end
 
   example "nl_convert accepts a maximum of three arguments" do
-    expect{ File.nl_convert(@example_file1, @test_file2, 'dos', 1) }.to raise_error(ArgumentError)
     expect{ File.nl_convert(@test_file1, @test_file2, 'dos', 1) }.to raise_error(ArgumentError)
   end
 
