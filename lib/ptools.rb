@@ -292,9 +292,6 @@ class File
 
     format = nl_for_platform(platform)
 
-    orig = $\ # $OUTPUT_RECORD_SEPARATOR
-    $\ = format
-
     if old_file == new_file
       require 'fileutils'
       require 'tempfile'
@@ -306,7 +303,7 @@ class File
 
         IO.foreach(old_file) do |line|
           line.chomp!
-          tf.print line
+          tf.print("#{line}#{format}")
         end
       ensure
         tf.close if tf && !tf.closed?
@@ -319,14 +316,13 @@ class File
         nf = File.new(new_file, 'w')
         IO.foreach(old_file) do |line|
           line.chomp!
-          nf.print line
+          nf.print("#{line}#{format}")
         end
       ensure
         nf.close if nf && !nf.closed?
       end
     end
 
-    $\ = orig
     self
   end
 
