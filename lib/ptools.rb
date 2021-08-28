@@ -293,33 +293,25 @@ class File
     format = nl_for_platform(platform)
 
     if old_file == new_file
-      require 'fileutils'
       require 'tempfile'
-
-      begin
-        temp_name = Time.new.strftime('%Y%m%d%H%M%S')
-        tf = Tempfile.new('ruby_temp_' + temp_name)
-        tf.open
-
-        IO.foreach(old_file) do |line|
-          line.chomp!
-          tf.print("#{line}#{format}")
-        end
-      ensure
-        tf.close if tf && !tf.closed?
-      end
-
-      File.delete(old_file)
-      FileUtils.mv(tf.path, old_file)
+      temp_name = Time.new.strftime('%Y%m%d%H%M%S')
+      nf = Tempfile.new('ruby_temp_' + temp_name)
     else
-      begin
-        nf = File.new(new_file, 'w')
-        IO.foreach(old_file) do |line|
-          line.chomp!
-          nf.print("#{line}#{format}")
-        end
-      ensure
-        nf.close if nf && !nf.closed?
+      nf = File.new(new_file, 'w')
+    end
+
+    begin
+      nf.open if old_file == new_file
+      IO.foreach(old_file) do |line|
+        line.chomp!
+        nf.print("#{line}#{format}")
+      end
+    ensure
+      nf.close if nf && !nf.closed?
+      if old_file == new_file
+        require 'fileutils'
+        File.delete(old_file)
+        FileUtils.mv(nf.path, old_file)
       end
     end
 
