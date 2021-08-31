@@ -1,9 +1,11 @@
+[![Ruby](https://github.com/djberg96/ptools/actions/workflows/ruby.yml/badge.svg)](https://github.com/djberg96/ptools/actions/workflows/ruby.yml)
+
 ## Description
-  The ptools (power tools) library is an additional set of commands for the
-  File class based on Unix command line tools.
+The ptools (power tools) library is an additional set of commands for the
+File class based on Unix command line tools.
    
 ## Prerequisites
-  On MS Windows you will need the win32-file gem.
+On MS Windows you will need the win32-file gem.
 
 ## Installation
 `gem install ptools`
@@ -32,42 +34,42 @@ File.nl_convert("myfile", "newfile", "dos")
 ```
    
 ## Known Bugs
-  The File.which and File.whereis methods may fail when using JRuby on Windows.
-  See https://github.com/jruby/jruby/issues/2291 for details.
+The File.which and File.whereis methods may fail when using JRuby on Windows.
+See https://github.com/jruby/jruby/issues/2291 for details.
 
-  Please report any other issues on the github project page.
+Please report any other issues on the github project page.
 
-  http://www.github.com/djberg96/ptools
+http://www.github.com/djberg96/ptools
 
 ## Acknowledgements
-  The `File.which` method was originally adopted from the `FileWhich` code posted
-  by Michael Granger on the now defunct rubygarden.org website. That code was
-  later replaced by a version based on the `ruby-which` library.
+The `File.which` method was originally adopted from the `FileWhich` code posted
+by Michael Granger on the now defunct rubygarden.org website. That code was
+later replaced by a version based on the `ruby-which` library.
 
-  The `File.nl_convert` method is based on the nlcvt program found at
-  http://www.perl.com/language/ppt/src/nlcvt/nlcvt, written by Tom Christiansen.
+The `File.nl_convert` method is based on the nlcvt program found at
+http://www.perl.com/language/ppt/src/nlcvt/nlcvt, written by Tom Christiansen.
     
-  The `binary?` method was based almost entirely on a blog post by Ryan
-  Davis (who, in turn, based his code on Perl's -B switch).
+The `binary?` method was based almost entirely on a blog post by Ryan
+Davis (who, in turn, based his code on Perl's -B switch).
 
-  Thanks go to Matt Hoyle for help with the File.tail method.
+Thanks go to Matt Hoyle for help with the File.tail method.
 
-  And thanks to any and all contributors!
+And thanks to any and all contributors!
 
 ## Future Plans
-  Add whatever other tools people think might be useful.
+Add whatever other tools people think might be useful.
    
 ## License
-  Artistic-2.0
+Artistic-2.0
     
 ## Copyright
-  (C) 2003-2020 Daniel J. Berger
-  All Rights Reserved.
+(C) 2003-2020 Daniel J. Berger
+All Rights Reserved.
     
 ## Warranty
-  This package is provided "as is" and without any express or
-  implied warranties, including, without limitation, the implied
-  warranties of merchantability and fitness for a particular purpose.
+This package is provided "as is" and without any express or
+implied warranties, including, without limitation, the implied
+warranties of merchantability and fitness for a particular purpose.
 
 ## Author
-  Daniel J. Berger
+Daniel J. Berger
