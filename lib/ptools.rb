@@ -416,13 +416,13 @@ class File
 
     case platform
       when /dos|windows|win32|mswin|mingw/i
-      "\cM\cJ"
+        "\cM\cJ"
       when /unix|linux|bsd|cygwin|osx|darwin|solaris|sunos/i
-      "\cJ"
+        "\cJ"
       when /mac|apple|macintosh/i
-      "\cM"
+        "\cM"
     else
-      raise ArgumentError, 'Invalid platform string'
+        raise ArgumentError, 'Invalid platform string'
     end
   end
 
