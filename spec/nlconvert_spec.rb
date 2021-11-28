@@ -57,12 +57,12 @@ RSpec.describe File, :nlconvert do
     expect{ described_class.nl_convert(@test_file1, @dos_file, "dos") }.not_to raise_error
     expect{ described_class.nl_convert(@test_file1, @dos_file, "dos") }.not_to raise_error
     expect(described_class.size(@dos_file)).to be > described_class.size(@test_file1)
-    expect(IO.readlines(@dos_file)).to all(end_with("\cM\cJ"))
+    expect(File.readlines(@dos_file)).to all(end_with("\cM\cJ"))
   end
 
   example "nl_convert with mac platform argument works as expected" do
     expect{ described_class.nl_convert(@test_file1, @mac_file, 'mac') }.not_to raise_error
-    expect(IO.readlines(@mac_file)).to all(end_with("\cM"))
+    expect(File.readlines(@mac_file)).to all(end_with("\cM"))
 
     skip if windows
     expect(described_class.size(@mac_file)).to eq(described_class.size(@test_file1))
@@ -70,7 +70,7 @@ RSpec.describe File, :nlconvert do
 
   example "nl_convert with unix platform argument works as expected" do
     expect{ described_class.nl_convert(@test_file1, @unix_file, "unix") }.not_to raise_error
-    expect(IO.readlines(@unix_file)).to all(end_with("\n"))
+    expect(File.readlines(@unix_file)).to all(end_with("\n"))
 
     if windows
       expect(described_class.size(@unix_file) >= described_class.size(@test_file1)).to be true
