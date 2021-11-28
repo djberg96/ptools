@@ -210,7 +210,7 @@ class File
   def self.head(filename, num_lines = 10)
     a = []
 
-    IO.foreach(filename) do |line|
+    File.foreach(filename) do |line|
       break if num_lines <= 0
 
       num_lines -= 1
@@ -302,7 +302,7 @@ class File
 
     begin
       nf.open if old_file == new_file
-      IO.foreach(old_file) do |line|
+      File.foreach(old_file) do |line|
         line.chomp!
         nf.print("#{line}#{format}")
       end
@@ -346,7 +346,7 @@ class File
     n = 0
 
     if option == 'lines'
-      IO.foreach(filename){ n += 1 }
+      File.foreach(filename){ n += 1 }
       n
     elsif option == 'bytes'
       File.open(filename) do |f|
@@ -359,13 +359,13 @@ class File
       end
       n
     elsif option == 'words'
-      IO.foreach(filename) do |line|
+      File.foreach(filename) do |line|
         n += line.split.length
       end
       n
     else
       bytes, chars, lines, words = 0, 0, 0, 0
-      IO.foreach(filename) do |line|
+      File.foreach(filename) do |line|
         lines += 1
         words += line.split.length
         chars += line.split('').length
@@ -429,25 +429,25 @@ class File
   # Is the file a bitmap file?
   #
   def self.bmp?(file)
-    IO.read(file, 3) == 'BM6'
+    File.read(file, 3) == 'BM6'
   end
 
   # Is the file a jpeg file?
   #
   def self.jpg?(file)
-    IO.read(file, 10, nil, :encoding => 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
+    File.read(file, 10, nil, :encoding => 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
   end
 
   # Is the file a png file?
   #
   def self.png?(file)
-    IO.read(file, 4, nil, :encoding => 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
+    File.read(file, 4, nil, :encoding => 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
   end
 
   # Is the file a gif?
   #
   def self.gif?(file)
-    ['GIF89a', 'GIF97a'].include?(IO.read(file, 6))
+    ['GIF89a', 'GIF97a'].include?(File.read(file, 6))
   end
 
   # Is the file a tiff?
@@ -455,7 +455,7 @@ class File
   def self.tiff?(file)
     return false if File.size(file) < 12
 
-    bytes = IO.read(file, 4)
+    bytes = File.read(file, 4)
 
     # II is Intel, MM is Motorola
     return false if bytes[0..1] != 'II' && bytes[0..1] != 'MM'
@@ -470,6 +470,6 @@ class File
   # Is the file an ico file?
   #
   def self.ico?(file)
-    ["\000\000\001\000", "\000\000\002\000"].include?(IO.read(file, 4, nil, :encoding => 'binary'))
+    ["\000\000\001\000", "\000\000\002\000"].include?(File.read(file, 4, nil, :encoding => 'binary'))
   end
 end
