@@ -12,9 +12,9 @@ RSpec.describe File, :head do
 
   before do
     described_class.open(test_file, 'w'){ |fh| 25.times{ |n| fh.puts "line#{n+1}" } }
-    @expected_head1 = ["line1\n","line2\n","line3\n","line4\n","line5\n"]
-    @expected_head1.push("line6\n","line7\n","line8\n","line9\n","line10\n")
-    @expected_head2 = ["line1\n","line2\n","line3\n","line4\n","line5\n"]
+    @expected_head1 = ["line1\n", "line2\n", "line3\n", "line4\n", "line5\n"]
+    @expected_head1.push("line6\n", "line7\n", "line8\n", "line9\n", "line10\n")
+    @expected_head2 = ["line1\n", "line2\n", "line3\n", "line4\n", "line5\n"]
   end
 
   example "head method basic functionality" do

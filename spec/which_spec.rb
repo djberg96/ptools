@@ -29,7 +29,7 @@ describe File, :which do
     )
 
     if @windows
-      @exe.tr!('/','\\')
+      @exe.tr!('/', '\\')
       @exe << ".exe"
     end
   end
