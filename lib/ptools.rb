@@ -80,7 +80,7 @@ class File
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
     s = (File.read(file, bytes) || '')
-    s = s.encode('US-ASCII', :undef => :replace).split(//)
+    s = s.encode('US-ASCII', :undef => :replace).chars
     ((s.size - s.grep(' '..'~').size) / s.size.to_f) > percentage
   end
 
@@ -267,7 +267,7 @@ class File
     lines = buf.split(line_sep).pop(num_lines)
 
     if block_given?
-      lines.each{ |line| yield line  }
+      lines.each{ |line| yield line }
     else
       lines
     end
@@ -368,7 +368,7 @@ class File
       File.foreach(filename) do |line|
         lines += 1
         words += line.split.length
-        chars += line.split('').length
+        chars += line.chars.length
       end
       File.open(filename) do |f|
         bytes += 1 while f.getc
@@ -415,14 +415,14 @@ class File
     platform = RbConfig::CONFIG['host_os'] if platform == 'local'
 
     case platform
-    when /dos|windows|win32|mswin|mingw/i
-      "\cM\cJ"
-    when /unix|linux|bsd|cygwin|osx|darwin|solaris|sunos/i
-      "\cJ"
-    when /mac|apple|macintosh/i
-      "\cM"
-    else
-      raise ArgumentError, 'Invalid platform string'
+      when /dos|windows|win32|mswin|mingw/i
+        "\cM\cJ"
+      when /unix|linux|bsd|cygwin|osx|darwin|solaris|sunos/i
+        "\cJ"
+      when /mac|apple|macintosh/i
+        "\cM"
+      else
+        raise ArgumentError, 'Invalid platform string'
     end
   end
 

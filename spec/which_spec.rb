@@ -13,81 +13,81 @@ require 'tempfile'
 describe File, :which do
   before(:context) do
     @windows = File::ALT_SEPARATOR
-    @dir = File.join(Dir.pwd, 'tempdir')
-    @non_exe = File.join(Dir.pwd, 'tempfile')
+    @dir = described_class.join(Dir.pwd, 'tempdir')
+    @non_exe = described_class.join(Dir.pwd, 'tempfile')
     @ruby = RUBY_PLATFORM.match('java') ? 'jruby' : 'ruby'
     @ruby = 'rbx' if defined?(Rubinius)
 
-    Dir.mkdir(@dir) unless File.exist?(@dir)
+    Dir.mkdir(@dir) unless described_class.exist?(@dir)
     FileUtils.touch(@non_exe)
-    File.chmod(775, @dir)
-    File.chmod(644, @non_exe)
+    described_class.chmod(775, @dir)
+    described_class.chmod(644, @non_exe)
 
-    @exe = File.join(
+    @exe = described_class.join(
       RbConfig::CONFIG['bindir'],
       RbConfig::CONFIG['ruby_install_name']
     )
 
     if @windows
-      @exe.tr!('/','\\')
+      @exe.tr!('/', '\\')
       @exe << ".exe"
     end
   end
 
   example "which method basic functionality" do
-    expect(File).to respond_to(:which)
-    expect{ File.which(@ruby) }.not_to raise_error
-    expect(File.which(@ruby)).to be_kind_of(String)
+    expect(described_class).to respond_to(:which)
+    expect{ described_class.which(@ruby) }.not_to raise_error
+    expect(described_class.which(@ruby)).to be_kind_of(String)
   end
 
   example "which accepts an optional path to search" do
-    expect{ File.which(@ruby, "/usr/bin:/usr/local/bin") }.not_to raise_error
+    expect{ described_class.which(@ruby, "/usr/bin:/usr/local/bin") }.not_to raise_error
   end
 
   example "which returns nil if not found" do
-    expect(File.which(@ruby, '/bogus/path')).to be_nil
-    expect(File.which('blahblahblah')).to be_nil
+    expect(described_class.which(@ruby, '/bogus/path')).to be_nil
+    expect(described_class.which('blahblahblah')).to be_nil
   end
 
   example "which handles executables without extensions on windows" do
     skip "skipped unless MS Windows" unless @windows
-    expect(File.which('ruby')).not_to be_nil
-    expect(File.which('notepad')).not_to be_nil
+    expect(described_class.which('ruby')).not_to be_nil
+    expect(described_class.which('notepad')).not_to be_nil
   end
 
   example "which handles executables that already contain extensions on windows" do
     skip "skipped unless MS Windows" unless @windows
-    expect(File.which('ruby.exe')).not_to be_nil
-    expect(File.which('notepad.exe')).not_to be_nil
+    expect(described_class.which('ruby.exe')).not_to be_nil
+    expect(described_class.which('notepad.exe')).not_to be_nil
   end
 
   example "which returns argument if an existent absolute path is provided" do
-    expect(File.which(@ruby)).to eq(@exe), "May fail on a symlink"
+    expect(described_class.which(@ruby)).to eq(@exe), "May fail on a symlink"
   end
 
   example "which returns nil if a non-existent absolute path is provided" do
-    expect(File.which('/foo/bar/baz/ruby')).to be_nil
+    expect(described_class.which('/foo/bar/baz/ruby')).to be_nil
   end
 
   example "which does not pickup files that are not executable" do
-    expect(File.which(@non_exe)).to be_nil
+    expect(described_class.which(@non_exe)).to be_nil
   end
 
   example "which does not pickup executable directories" do
-    expect(File.which(@dir)).to be_nil
+    expect(described_class.which(@dir)).to be_nil
   end
 
   example "which accepts a minimum of one argument" do
-    expect{ File.which }.to raise_error(ArgumentError)
+    expect{ described_class.which }.to raise_error(ArgumentError)
   end
 
   example "which accepts a maximum of two arguments" do
-    expect{ File.which(@ruby, "foo", "bar") }.to raise_error(ArgumentError)
+    expect{ described_class.which(@ruby, "foo", "bar") }.to raise_error(ArgumentError)
   end
 
   example "the second argument cannot be nil or empty" do
-    expect{ File.which(@ruby, nil) }.to raise_error(ArgumentError)
-    expect{ File.which(@ruby, '') }.to raise_error(ArgumentError)
+    expect{ described_class.which(@ruby, nil) }.to raise_error(ArgumentError)
+    expect{ described_class.which(@ruby, '') }.to raise_error(ArgumentError)
   end
 
   example "resolves with with ~" do
@@ -97,9 +97,9 @@ describe File, :which do
 
       ENV['HOME'] = Dir::Tmpname.tmpdir
       program = Tempfile.new(['program', '.sh'])
-      File.chmod(755, program.path)
+      described_class.chmod(755, program.path)
 
-      expect(File.which(File.basename(program.path), '~/')).not_to be_nil
+      expect(described_class.which(described_class.basename(program.path), '~/')).not_to be_nil
     ensure
       ENV['HOME'] = old_home
     end
