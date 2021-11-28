@@ -8,40 +8,40 @@ require 'rspec'
 require 'ptools'
 
 RSpec.describe File, :touch do
-  let(:dirname) { File.dirname(__FILE__) }
+  let(:dirname) { described_class.dirname(__FILE__) }
   let(:filename) { 'test_file_touch.txt' }
-  let(:xfile) { File.join(dirname, filename) }
+  let(:xfile) { described_class.join(dirname, filename) }
 
   before do
-    File.open(xfile, 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
-    @test_file = File.join(dirname, 'delete.this')
+    described_class.open(xfile, 'w'){ |fh| 10.times{ |n| fh.puts "line #{n}" } }
+    @test_file = described_class.join(dirname, 'delete.this')
   end
 
   example "touch basic functionality" do
-    expect(File).to respond_to(:touch)
-    expect{ File.touch(@test_file) }.not_to raise_error
+    expect(described_class).to respond_to(:touch)
+    expect{ described_class.touch(@test_file) }.not_to raise_error
   end
 
   example "touch a new file returns expected results" do
-    expect(File.touch(@test_file)).to eq(File)
-    expect(File.exist?(@test_file)).to be true
-    expect(File.size(@test_file)).to eq(0)
+    expect(described_class.touch(@test_file)).to eq(described_class)
+    expect(described_class.exist?(@test_file)).to be true
+    expect(described_class.size(@test_file)).to eq(0)
   end
 
   example "touch an existing file returns expected results" do
-    stat = File.stat(xfile)
+    stat = described_class.stat(xfile)
     sleep 1
-    expect{ File.touch(xfile) }.not_to raise_error
-    expect(File.size(xfile) == stat.size).to be true
-    expect(File.mtime(xfile) == stat.mtime).to be false
+    expect{ described_class.touch(xfile) }.not_to raise_error
+    expect(described_class.size(xfile) == stat.size).to be true
+    expect(described_class.mtime(xfile) == stat.mtime).to be false
   end
 
   example "touch requires an argument" do
-    expect{ File.touch }.to raise_error(ArgumentError)
+    expect{ described_class.touch }.to raise_error(ArgumentError)
   end
 
   after do
-    File.delete(@test_file) if File.exist?(@test_file)
-    File.delete(xfile) if File.exist?(xfile)
+    described_class.delete(@test_file) if described_class.exist?(@test_file)
+    described_class.delete(xfile) if described_class.exist?(xfile)
   end
 end
