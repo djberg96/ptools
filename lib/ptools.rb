@@ -267,7 +267,7 @@ class File
     lines = buf.split(line_sep).pop(num_lines)
 
     if block_given?
-      lines.each{ |line| yield line  }
+      lines.each{ |line| yield line }
     else
       lines
     end
@@ -421,7 +421,7 @@ class File
         "\cJ"
       when /mac|apple|macintosh/i
         "\cM"
-    else
+      else
         raise ArgumentError, 'Invalid platform string'
     end
   end
