@@ -80,7 +80,7 @@ class File
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
     s = (File.read(file, bytes) || '')
-    s = s.encode('US-ASCII', :undef => :replace).split(//)
+    s = s.encode('US-ASCII', :undef => :replace).chars
     ((s.size - s.grep(' '..'~').size) / s.size.to_f) > percentage
   end
 
@@ -368,7 +368,7 @@ class File
       File.foreach(filename) do |line|
         lines += 1
         words += line.split.length
-        chars += line.split('').length
+        chars += line.chars.length
       end
       File.open(filename) do |f|
         bytes += 1 while f.getc
