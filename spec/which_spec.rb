@@ -15,8 +15,7 @@ describe File, :which do
     @windows = File::ALT_SEPARATOR
     @dir = described_class.join(Dir.pwd, 'tempdir')
     @non_exe = described_class.join(Dir.pwd, 'tempfile')
-    @ruby = RUBY_PLATFORM.match('java') ? 'jruby' : 'ruby'
-    @ruby = 'rbx' if defined?(Rubinius)
+    @ruby = RbConfig::CONFIG['RUBY_INSTALL_NAME']
 
     Dir.mkdir(@dir) unless described_class.exist?(@dir)
     FileUtils.touch(@non_exe)
