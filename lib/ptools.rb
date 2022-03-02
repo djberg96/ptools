@@ -238,7 +238,7 @@ class File
   # Internally I'm using a 64 chunk of memory at a time. I may allow the size
   # to be configured in the future as an optional 3rd argument.
   #
-  def self.tail(filename, num_lines = 10)
+  def self.tail(filename, num_lines = 10, &block)
     tail_size = 2**16 # 64k chunks
 
     # MS Windows gets unhappy if you try to seek backwards past the
@@ -267,7 +267,7 @@ class File
     lines = buf.split(line_sep).pop(num_lines)
 
     if block_given?
-      lines.each{ |line| yield line }
+      lines.each(&block)
     else
       lines
     end
