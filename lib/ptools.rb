@@ -11,7 +11,7 @@ class File
   if File::ALT_SEPARATOR
     MSWINDOWS = true
     if ENV['PATHEXT']
-      WIN32EXTS = (".{#{ENV['PATHEXT'].tr(';', ',').tr('.', '')}}").downcase
+      WIN32EXTS = ".{#{ENV['PATHEXT'].tr(';', ',').tr('.', '')}}".downcase
     else
       WIN32EXTS = '.{exe,com,bat}'.freeze
     end

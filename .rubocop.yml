@@ -13,6 +13,10 @@ AllCops:
   NewCops: enable
 Lint/AssignmentInCondition:
   Enabled: false
+Style/AndOr:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
 Style/MethodCallWithoutArgsParentheses:
   Enabled: false
 Style/NumericPredicate:
@@ -24,6 +28,8 @@ Style/ConditionalAssignment:
 Style/IfUnlessModifier:
   Enabled: false
 Style/HashSyntax:
+  Enabled: false
+Style/RegexpLiteral:
   Enabled: false
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
