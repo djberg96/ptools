@@ -47,7 +47,7 @@ class File
   # The approach I used here is based on information found at
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
-  def self.image?(file, check_file_extension = true)
+  def self.image?(file, check_file_extension: true)
     bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
 
     bool &&= IMAGE_EXT.include?(File.extname(file).downcase) if check_file_extension

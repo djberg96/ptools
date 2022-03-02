@@ -16,6 +16,7 @@ RSpec.describe File, :image do
     @png_file  = described_class.join(Dir.pwd, 'img', 'test.png')
     @gif_file  = described_class.join(Dir.pwd, 'img', 'test.gif')
     @ico_file  = described_class.join(Dir.pwd, 'img', 'test.ico')
+    @no_ext    = described_class.join(Dir.pwd, 'img', 'jpg_no_ext')
   end
 
   example "image? method basic functionality" do
@@ -31,21 +32,30 @@ RSpec.describe File, :image do
 
   example "image? method returns true for a gif" do
     expect(described_class.image?(@gif_file)).to be true
+    expect(described_class.image?(@gif_file, check_file_extension: false)).to be true
   end
 
   example "image? method returns true for a jpeg" do
     expect(described_class.image?(@jpg_file)).to be true
+    expect(described_class.image?(@jpg_file, check_file_extension: false)).to be true
   end
 
   example "image? method returns true for a png" do
     expect(described_class.image?(@png_file)).to be true
+    expect(described_class.image?(@png_file, check_file_extension: false)).to be true
   end
 
   example "image? method returns true for an ico" do
     expect(described_class.image?(@ico_file)).to be true
+    expect(described_class.image?(@ico_file, check_file_extension: false)).to be true
   end
 
   example "image? method raises an error if the file does not exist" do
     expect{ described_class.image?('bogus') }.to raise_error(Exception) # Errno::ENOENT or ArgumentError
+  end
+
+  example "image? returns appropriate value if the extension isn't included" do
+    expect(described_class.image?(@no_ext, check_file_extension: true)).to be false
+    expect(described_class.image?(@no_ext, check_file_extension: false)).to be true
   end
 end
