@@ -447,7 +447,7 @@ class File
   # Is the file a gif?
   #
   def self.gif?(file)
-    ['GIF89a', 'GIF97a'].include?(File.read(file, 6))
+    %w[GIF89a GIF97a].include?(File.read(file, 6))
   end
 
   # Is the file a tiff?
