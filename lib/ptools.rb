@@ -50,7 +50,7 @@ class File
   def self.image?(file, check_file_extension = true)
     bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
 
-    bool = bool && IMAGE_EXT.include?(File.extname(file).downcase) if check_file_extension
+    bool &&= IMAGE_EXT.include?(File.extname(file).downcase) if check_file_extension
 
     bool
   end
