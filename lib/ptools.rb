@@ -11,7 +11,7 @@ class File
   if File::ALT_SEPARATOR
     MSWINDOWS = true
     if ENV['PATHEXT']
-      WIN32EXTS = ('.{' + ENV['PATHEXT'].tr(';', ',').tr('.', '') + '}').downcase
+      WIN32EXTS = (".{#{ENV['PATHEXT'].tr(';', ',').tr('.', '')}}").downcase
     else
       WIN32EXTS = '.{exe,com,bat}'.freeze
     end
@@ -295,7 +295,7 @@ class File
     if old_file == new_file
       require 'tempfile'
       temp_name = Time.new.strftime('%Y%m%d%H%M%S')
-      nf = Tempfile.new('ruby_temp_' + temp_name)
+      nf = Tempfile.new("ruby_temp_#{temp_name}")
     else
       nf = File.new(new_file, 'w')
     end
