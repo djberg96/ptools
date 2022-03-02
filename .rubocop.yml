@@ -29,6 +29,8 @@ Style/IfUnlessModifier:
   Enabled: false
 Style/HashSyntax:
   Enabled: false
+Style/ParallelAssignment:
+  Enabled: false
 Style/RegexpLiteral:
   Enabled: false
 Layout/EmptyLineAfterGuardClause:

@@ -353,7 +353,7 @@ class File
         f.each_byte{ n += 1 }
       end
       n
-    elsif ['characters', 'chars'].include?(option)
+    elsif %w[characters chars].include?(option)
       File.open(filename) do |f|
         n += 1 while f.getc
       end
