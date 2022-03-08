@@ -104,5 +104,4 @@ RSpec.describe File, :tail do
     4500.times{ |n| expected_tail_128k.push(@test_tail_fmt_str % (n+1).to_s) }
     expect(described_class.tail(test_file128, 4500)).to eq(expected_tail_128k)
   end
-
 end

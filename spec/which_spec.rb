@@ -108,5 +108,4 @@ describe File, :which do
       ENV['HOME'] = old_home
     end
   end
-
 end

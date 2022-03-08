@@ -38,5 +38,4 @@ RSpec.describe File, :head do
     expect{ described_class.head(test_file, 5, 'foo') }.to raise_error(ArgumentError)
     expect{ described_class.head('bogus') }.to raise_error(Errno::ENOENT)
   end
-
 end

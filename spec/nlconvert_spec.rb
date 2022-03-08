@@ -38,7 +38,6 @@ RSpec.describe File, :nlconvert do
     expect(described_class.nl_for_platform('dos')).to eq("\cM\cJ")
     expect(described_class.nl_for_platform('unix')).to eq("\cJ")
     expect(described_class.nl_for_platform('mac')).to eq("\cM")
-
   end
 
   example "nl_for_platform with 'local' platform does not raise an error" do
@@ -100,5 +99,4 @@ RSpec.describe File, :nlconvert do
   example 'nl_convert will fail on anything but plain files' do
     expect{ described_class.nl_convert(IO::NULL, @test_file1) }.to raise_error(ArgumentError)
   end
-
 end

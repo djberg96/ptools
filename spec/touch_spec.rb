@@ -44,5 +44,4 @@ RSpec.describe File, :touch do
   example 'touch requires an argument' do
     expect{ described_class.touch }.to raise_error(ArgumentError)
   end
-
 end

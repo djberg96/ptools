@@ -40,5 +40,4 @@ RSpec.describe File, :sparse do
     skip if windows
     expect{ described_class.sparse?(sparse_file, sparse_file) }.to raise_error(ArgumentError)
   end
-
 end
