@@ -37,6 +37,7 @@ describe File, :which do
     FileUtils.rm(@non_exe)
     FileUtils.rm_rf(@dir)
   end
+
   example 'which method basic functionality' do
     expect(described_class).to respond_to(:which)
     expect{ described_class.which(@ruby) }.not_to raise_error

@@ -20,6 +20,7 @@ RSpec.describe File, :head do
   after do
     described_class.delete(test_file) if described_class.exist?(test_file)
   end
+
   example 'head method basic functionality' do
     expect(described_class).to respond_to(:head)
     expect{ described_class.head(test_file) }.not_to raise_error

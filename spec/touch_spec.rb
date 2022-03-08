@@ -21,6 +21,7 @@ RSpec.describe File, :touch do
     described_class.delete(@test_file) if described_class.exist?(@test_file)
     described_class.delete(xfile) if described_class.exist?(xfile)
   end
+
   example 'touch basic functionality' do
     expect(described_class).to respond_to(:touch)
     expect{ described_class.touch(@test_file) }.not_to raise_error

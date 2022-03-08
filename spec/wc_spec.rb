@@ -17,6 +17,7 @@ RSpec.describe File, :wc do
   after do
     described_class.delete(test_file) if described_class.exist?(test_file)
   end
+
   example 'wc method basic functionality' do
     expect(described_class).to respond_to(:wc)
     expect{ described_class.wc(test_file) }.not_to raise_error

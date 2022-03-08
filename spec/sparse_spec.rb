@@ -22,6 +22,7 @@ RSpec.describe File, :sparse do
     Dir.chdir('spec') if described_class.exist?('spec')
     described_class.delete(sparse_file) if described_class.exist?(sparse_file)
   end
+
   example 'is_sparse basic functionality' do
     skip 'skipped on MS Windows or OSX' if windows || osx
     expect(described_class).to respond_to(:sparse?)

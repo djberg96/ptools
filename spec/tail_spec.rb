@@ -65,6 +65,7 @@ RSpec.describe File, :tail do
     described_class.delete(test_file_trail_nl) if described_class.exist?(test_file_trail_nl)
     described_class.delete(test_file_trail) if described_class.exist?(test_file_trail)
   end
+
   example 'tail basic functionality' do
     expect(described_class).to respond_to(:tail)
     expect{ described_class.tail(test_file1) }.not_to raise_error
