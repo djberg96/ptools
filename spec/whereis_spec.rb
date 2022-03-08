@@ -65,7 +65,7 @@ RSpec.describe File, :whereis do
 
   example 'whereis works with an explicit extension on ms windows' do
     skip 'skipped unless MS Windows' unless windows
-    expect(described_class.whereis(ruby + '.exe')).not_to be_nil
+    expect(described_class.whereis("#{ruby}.exe")).not_to be_nil
   end
 
   example 'whereis requires at least one argument' do
