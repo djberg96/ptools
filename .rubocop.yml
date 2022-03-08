@@ -39,10 +39,14 @@ Style/ParallelAssignment:
   Enabled: false
 Style/RegexpLiteral:
   Enabled: false
+Style/ZeroLengthPredicate:
+  Enabled: false
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Layout/CaseIndentation:
   IndentOneStep: true
+Layout/SpaceAroundOperators:
+  Enabled: false
 Layout/SpaceBeforeBlockBraces:
   Enabled: false
 Metrics/AbcSize:

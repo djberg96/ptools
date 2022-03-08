@@ -43,17 +43,17 @@ RSpec.describe File, :tail do
       }
     }
 
-    @expected_tail1 = %w{
+    @expected_tail1 = %w[
       line16 line17 line18 line19 line20
       line21 line22 line23 line24 line25
-    }
+    ]
 
     @expected_tail2 = ['line21', 'line22', 'line23', 'line24', 'line25']
 
     @expected_tail_more = []
     25.times{ |n| @expected_tail_more.push "line#{n+1}" }
 
-    @expected_tail_trail = %w{ trail2 trail3 }
+    @expected_tail_trail = %w[trail2 trail3]
 
     @test_tail_fmt_str = 'line data data data data data data data %5s'
   end
