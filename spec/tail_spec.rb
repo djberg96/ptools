@@ -19,29 +19,29 @@ RSpec.describe File, :tail do
     described_class.open(test_file1, 'w'){ |fh| 25.times{ |n| fh.puts "line#{n+1}" } }
 
     # Trailing newline test
-    described_class.open(test_file_trail, 'w'){ |fh|
+    described_class.open(test_file_trail, 'w') do |fh|
       2.times{ |n| fh.puts "trail#{n+1}" }
       fh.write 'trail3'
-    }
+    end
 
-    described_class.open(test_file_trail_nl, 'w'){ |fh|
+    described_class.open(test_file_trail_nl, 'w') do |fh|
       3.times{ |n| fh.puts "trail#{n+1}" }
-    }
+    end
 
     # Larger files
     test_tail_fmt_str = 'line data data data data data data data %5s'
 
-    described_class.open(test_file64, 'w'){ |fh|
-      2000.times{ |n|
+    described_class.open(test_file64, 'w') do |fh|
+      2000.times do |n|
         fh.puts test_tail_fmt_str % (n+1).to_s
-      }
-    }
+      end
+    end
 
-    described_class.open(test_file128, 'w'){ |fh|
-      4500.times{ |n|
+    described_class.open(test_file128, 'w') do |fh|
+      4500.times do |n|
         fh.puts test_tail_fmt_str % (n+1).to_s
-      }
-    }
+      end
+    end
 
     @expected_tail1 = %w[
       line16 line17 line18 line19 line20
