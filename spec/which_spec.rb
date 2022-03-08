@@ -33,6 +33,10 @@ describe File, :which do
     end
   end
 
+  after(:context) do
+    FileUtils.rm(@non_exe)
+    FileUtils.rm_rf(@dir)
+  end
   example 'which method basic functionality' do
     expect(described_class).to respond_to(:which)
     expect{ described_class.which(@ruby) }.not_to raise_error
@@ -104,8 +108,4 @@ describe File, :which do
     end
   end
 
-  after(:context) do
-    FileUtils.rm(@non_exe)
-    FileUtils.rm_rf(@dir)
-  end
 end

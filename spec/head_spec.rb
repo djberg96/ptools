@@ -17,6 +17,9 @@ RSpec.describe File, :head do
     @expected_head2 = ["line1\n", "line2\n", "line3\n", "line4\n", "line5\n"]
   end
 
+  after do
+    described_class.delete(test_file) if described_class.exist?(test_file)
+  end
   example 'head method basic functionality' do
     expect(described_class).to respond_to(:head)
     expect{ described_class.head(test_file) }.not_to raise_error
@@ -35,7 +38,4 @@ RSpec.describe File, :head do
     expect{ described_class.head('bogus') }.to raise_error(Errno::ENOENT)
   end
 
-  after do
-    described_class.delete(test_file) if described_class.exist?(test_file)
-  end
 end

@@ -24,6 +24,11 @@ RSpec.describe File, :nlconvert do
     @unix_file  = 'unix_test_file.txt'
   end
 
+  after do
+    [@dos_file, @mac_file, @unix_file].each{ |file| described_class.delete(file) if described_class.exist?(file) }
+    described_class.delete(test_file1) if described_class.exist?(test_file1)
+    described_class.delete(test_file2) if described_class.exist?(test_file2)
+  end
   example 'nl_for_platform basic functionality' do
     expect(described_class).to respond_to(:nl_for_platform)
   end
@@ -95,9 +100,4 @@ RSpec.describe File, :nlconvert do
     expect{ described_class.nl_convert(IO::NULL, @test_file1) }.to raise_error(ArgumentError)
   end
 
-  after do
-    [@dos_file, @mac_file, @unix_file].each{ |file| described_class.delete(file) if described_class.exist?(file) }
-    described_class.delete(test_file1) if described_class.exist?(test_file1)
-    described_class.delete(test_file2) if described_class.exist?(test_file2)
-  end
 end

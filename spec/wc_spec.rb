@@ -14,6 +14,9 @@ RSpec.describe File, :wc do
     described_class.open(test_file, 'w'){ |fh| 25.times{ |n| fh.puts "line#{n+1}" } }
   end
 
+  after do
+    described_class.delete(test_file) if described_class.exist?(test_file)
+  end
   example 'wc method basic functionality' do
     expect(described_class).to respond_to(:wc)
     expect{ described_class.wc(test_file) }.not_to raise_error
@@ -59,7 +62,4 @@ RSpec.describe File, :wc do
     expect{ described_class.wc(test_file, 'bogus') }.to raise_error(ArgumentError)
   end
 
-  after do
-    described_class.delete(test_file) if described_class.exist?(test_file)
-  end
 end

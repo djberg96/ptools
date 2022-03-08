@@ -58,6 +58,13 @@ RSpec.describe File, :tail do
     @test_tail_fmt_str = 'line data data data data data data data %5s'
   end
 
+  after do
+    described_class.delete(test_file1) if described_class.exist?(test_file1)
+    described_class.delete(test_file64) if described_class.exist?(test_file64)
+    described_class.delete(test_file128) if described_class.exist?(test_file128)
+    described_class.delete(test_file_trail_nl) if described_class.exist?(test_file_trail_nl)
+    described_class.delete(test_file_trail) if described_class.exist?(test_file_trail)
+  end
   example 'tail basic functionality' do
     expect(described_class).to respond_to(:tail)
     expect{ described_class.tail(test_file1) }.not_to raise_error
@@ -97,11 +104,4 @@ RSpec.describe File, :tail do
     expect(described_class.tail(test_file128, 4500)).to eq(expected_tail_128k)
   end
 
-  after do
-    described_class.delete(test_file1) if described_class.exist?(test_file1)
-    described_class.delete(test_file64) if described_class.exist?(test_file64)
-    described_class.delete(test_file128) if described_class.exist?(test_file128)
-    described_class.delete(test_file_trail_nl) if described_class.exist?(test_file_trail_nl)
-    described_class.delete(test_file_trail) if described_class.exist?(test_file_trail)
-  end
 end

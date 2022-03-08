@@ -17,6 +17,10 @@ RSpec.describe File, :touch do
     @test_file = described_class.join(dirname, 'delete.this')
   end
 
+  after do
+    described_class.delete(@test_file) if described_class.exist?(@test_file)
+    described_class.delete(xfile) if described_class.exist?(xfile)
+  end
   example 'touch basic functionality' do
     expect(described_class).to respond_to(:touch)
     expect{ described_class.touch(@test_file) }.not_to raise_error
@@ -40,8 +44,4 @@ RSpec.describe File, :touch do
     expect{ described_class.touch }.to raise_error(ArgumentError)
   end
 
-  after do
-    described_class.delete(@test_file) if described_class.exist?(@test_file)
-    described_class.delete(xfile) if described_class.exist?(xfile)
-  end
 end
