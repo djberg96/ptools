@@ -70,7 +70,7 @@ RSpec.describe File, :tail do
     expect(described_class).to respond_to(:tail)
     expect{ described_class.tail(test_file1) }.not_to raise_error
     expect{ described_class.tail(test_file1, 5) }.not_to raise_error
-    expect{ described_class.tail(test_file1){}.not_to raise_error }
+    expect{ described_class.tail(test_file1){} }.not_to raise_error
   end
 
   example 'tail returns the expected values' do
