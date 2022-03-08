@@ -17,22 +17,22 @@ RSpec.describe File, :head do
     @expected_head2 = ["line1\n", "line2\n", "line3\n", "line4\n", "line5\n"]
   end
 
-  example "head method basic functionality" do
+  example 'head method basic functionality' do
     expect(described_class).to respond_to(:head)
     expect{ described_class.head(test_file) }.not_to raise_error
     expect{ described_class.head(test_file, 5) }.not_to raise_error
     expect{ described_class.head(test_file){} }.not_to raise_error
   end
 
-  example "head method returns the expected results" do
+  example 'head method returns the expected results' do
     expect(described_class.head(test_file)).to be_kind_of(Array)
     expect(described_class.head(test_file)).to eq(@expected_head1)
     expect(described_class.head(test_file, 5)).to eq(@expected_head2)
   end
 
-  example "head method requires two arguments" do
-    expect{ described_class.head(test_file, 5, "foo") }.to raise_error(ArgumentError)
-    expect{ described_class.head("bogus") }.to raise_error(Errno::ENOENT)
+  example 'head method requires two arguments' do
+    expect{ described_class.head(test_file, 5, 'foo') }.to raise_error(ArgumentError)
+    expect{ described_class.head('bogus') }.to raise_error(Errno::ENOENT)
   end
 
   after do

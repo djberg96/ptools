@@ -24,11 +24,11 @@ RSpec.describe File, :nlconvert do
     @unix_file  = 'unix_test_file.txt'
   end
 
-  example "nl_for_platform basic functionality" do
+  example 'nl_for_platform basic functionality' do
     expect(described_class).to respond_to(:nl_for_platform)
   end
 
-  example "nl_for_platform returns expected results" do
+  example 'nl_for_platform returns expected results' do
     expect(described_class.nl_for_platform('dos')).to eq("\cM\cJ")
     expect(described_class.nl_for_platform('unix')).to eq("\cJ")
     expect(described_class.nl_for_platform('mac')).to eq("\cM")
@@ -39,28 +39,28 @@ RSpec.describe File, :nlconvert do
     expect{ described_class.nl_for_platform('local') }.not_to raise_error
   end
 
-  example "nl_for_platform with unsupported platform raises an error" do
+  example 'nl_for_platform with unsupported platform raises an error' do
     expect{ described_class.nl_for_platform('bogus') }.to raise_error(ArgumentError)
   end
 
-  example "nl_convert basic functionality" do
+  example 'nl_convert basic functionality' do
     expect(described_class).to respond_to(:nl_convert)
   end
 
-  example "nl_convert accepts one, two or three arguments" do
+  example 'nl_convert accepts one, two or three arguments' do
     expect{ described_class.nl_convert(@test_file2) }.not_to raise_error
     expect{ described_class.nl_convert(@test_file2, @test_file2) }.not_to raise_error
-    expect{ described_class.nl_convert(@test_file2, @test_file2, "unix") }.not_to raise_error
+    expect{ described_class.nl_convert(@test_file2, @test_file2, 'unix') }.not_to raise_error
   end
 
-  example "nl_convert with dos platform argument works as expected" do
-    expect{ described_class.nl_convert(@test_file1, @dos_file, "dos") }.not_to raise_error
-    expect{ described_class.nl_convert(@test_file1, @dos_file, "dos") }.not_to raise_error
+  example 'nl_convert with dos platform argument works as expected' do
+    expect{ described_class.nl_convert(@test_file1, @dos_file, 'dos') }.not_to raise_error
+    expect{ described_class.nl_convert(@test_file1, @dos_file, 'dos') }.not_to raise_error
     expect(described_class.size(@dos_file)).to be > described_class.size(@test_file1)
     expect(File.readlines(@dos_file)).to all(end_with("\cM\cJ"))
   end
 
-  example "nl_convert with mac platform argument works as expected" do
+  example 'nl_convert with mac platform argument works as expected' do
     expect{ described_class.nl_convert(@test_file1, @mac_file, 'mac') }.not_to raise_error
     expect(File.readlines(@mac_file)).to all(end_with("\cM"))
 
@@ -68,8 +68,8 @@ RSpec.describe File, :nlconvert do
     expect(described_class.size(@mac_file)).to eq(described_class.size(@test_file1))
   end
 
-  example "nl_convert with unix platform argument works as expected" do
-    expect{ described_class.nl_convert(@test_file1, @unix_file, "unix") }.not_to raise_error
+  example 'nl_convert with unix platform argument works as expected' do
+    expect{ described_class.nl_convert(@test_file1, @unix_file, 'unix') }.not_to raise_error
     expect(File.readlines(@unix_file)).to all(end_with("\n"))
 
     if windows
@@ -79,19 +79,19 @@ RSpec.describe File, :nlconvert do
     end
   end
 
-  example "nl_convert requires at least one argument" do
+  example 'nl_convert requires at least one argument' do
     expect{ described_class.nl_convert }.to raise_error(ArgumentError)
   end
 
-  example "nl_convert requires a valid platform string" do
-    expect{ described_class.nl_convert(@test_file1, "bogus.txt", "blah") }.to raise_error(ArgumentError)
+  example 'nl_convert requires a valid platform string' do
+    expect{ described_class.nl_convert(@test_file1, 'bogus.txt', 'blah') }.to raise_error(ArgumentError)
   end
 
-  example "nl_convert accepts a maximum of three arguments" do
+  example 'nl_convert accepts a maximum of three arguments' do
     expect{ described_class.nl_convert(@test_file1, @test_file2, 'dos', 1) }.to raise_error(ArgumentError)
   end
 
-  example "nl_convert will fail on anything but plain files" do
+  example 'nl_convert will fail on anything but plain files' do
     expect{ described_class.nl_convert(IO::NULL, @test_file1) }.to raise_error(ArgumentError)
   end
 
