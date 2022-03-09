@@ -1,10 +1,9 @@
 ######################################################################
-# test_whereis.rb
+# whereis_spec.rb
 #
 # Tests for the File.whereis method.
 ######################################################################
-require 'rubygems'
-require 'rspec'
+require 'spec_helper'
 require 'ptools'
 require 'rbconfig'
 
@@ -63,8 +62,7 @@ RSpec.describe File, :whereis do
     expect(described_class.whereis("/foo/bar/baz/#{ruby}")).to be_nil
   end
 
-  example 'whereis works with an explicit extension on ms windows' do
-    skip 'skipped unless MS Windows' unless windows
+  example 'whereis works with an explicit extension on ms windows', :windows_only => true do
     expect(described_class.whereis("#{ruby}.exe")).not_to be_nil
   end
 
