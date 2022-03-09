@@ -1,11 +1,10 @@
 #####################################################################
-# test_is_sparse.rb
+# sparse_spec.rb
 #
 # Test case for the File.sparse? method. You should run this test
 # via the 'rake test:is_sparse' task.
 #####################################################################
-require 'rspec'
-require 'ptools'
+require 'spec_helper'
 
 RSpec.describe File, :sparse do
   let(:windows) { File::ALT_SEPARATOR }
@@ -22,13 +21,13 @@ RSpec.describe File, :sparse do
     described_class.delete(sparse_file) if described_class.exist?(sparse_file)
   end
 
-  example 'is_sparse basic functionality', :unix_only do
+  example 'is_sparse basic functionality', :unix_only => true do
     expect(described_class).to respond_to(:sparse?)
     expect{ described_class.sparse?(sparse_file) }.not_to raise_error
     expect(described_class.sparse?(sparse_file)).to be(true).or be(false)
   end
 
-  example 'is_sparse returns the expected results', :unix_only do
+  example 'is_sparse returns the expected results', :unix_only => true do
     expect(described_class.sparse?(sparse_file)).to be true
     expect(described_class.sparse?(non_sparse_file)).to be false
   end
