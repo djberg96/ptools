@@ -22,38 +22,38 @@ RSpec.describe File, :binary do
     @gif_file = described_class.join(dirname, 'img', 'test.gif')
   end
 
-  example "File.binary? basic functionality" do
+  example 'File.binary? basic functionality' do
     expect(described_class).to respond_to(:binary?)
     expect{ described_class.binary?(@txt_file) }.not_to raise_error
   end
 
-  example "File.binary? returns true for binary files" do
+  example 'File.binary? returns true for binary files' do
     expect(described_class.binary?(bin_file)).to be true
   end
 
-  example "File.binary? returns false for text files" do
+  example 'File.binary? returns false for text files' do
     expect(described_class.binary?(@emp_file)).to be false
     expect(described_class.binary?(@txt_file)).to be false
     expect(described_class.binary?(@uni_file)).to be false
     expect(described_class.binary?(@utf_file)).to be false
   end
 
-  example "File.binary? returns false for image files" do
+  example 'File.binary? returns false for image files' do
     expect(described_class.binary?(@png_file)).to be false
     expect(described_class.binary?(@jpg_file)).to be false
     expect(described_class.binary?(@gif_file)).to be false
   end
 
-  example "File.binary? accepts an optional percentage argument" do
+  example 'File.binary? accepts an optional percentage argument' do
     expect(described_class.binary?(@txt_file, 0.50)).to be false
     expect(described_class.binary?(@txt_file, 0.05)).to be true
   end
 
-  example "File.binary? raises an error if the file cannot be found" do
+  example 'File.binary? raises an error if the file cannot be found' do
     expect{ described_class.binary?('bogus') }.to raise_error(SystemCallError)
   end
 
-  example "File.binary? only accepts one argument" do
+  example 'File.binary? only accepts one argument' do
     expect{ described_class.binary?(@txt_file, bin_file) }.to raise_error(ArgumentError)
   end
 end

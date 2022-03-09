@@ -11,7 +11,7 @@ class File
   if File::ALT_SEPARATOR
     MSWINDOWS = true
     if ENV['PATHEXT']
-      WIN32EXTS = ('.{' + ENV['PATHEXT'].tr(';', ',').tr('.', '') + '}').downcase
+      WIN32EXTS = ".{#{ENV['PATHEXT'].tr(';', ',').tr('.', '')}}".downcase
     else
       WIN32EXTS = '.{exe,com,bat}'.freeze
     end
@@ -47,10 +47,10 @@ class File
   # The approach I used here is based on information found at
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
-  def self.image?(file, check_file_extension = true)
+  def self.image?(file, check_file_extension: true)
     bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
 
-    bool = bool && IMAGE_EXT.include?(File.extname(file).downcase) if check_file_extension
+    bool &&= IMAGE_EXT.include?(File.extname(file).downcase) if check_file_extension
 
     bool
   end
@@ -238,7 +238,7 @@ class File
   # Internally I'm using a 64 chunk of memory at a time. I may allow the size
   # to be configured in the future as an optional 3rd argument.
   #
-  def self.tail(filename, num_lines = 10)
+  def self.tail(filename, num_lines = 10, &block)
     tail_size = 2**16 # 64k chunks
 
     # MS Windows gets unhappy if you try to seek backwards past the
@@ -267,7 +267,7 @@ class File
     lines = buf.split(line_sep).pop(num_lines)
 
     if block_given?
-      lines.each{ |line| yield line }
+      lines.each(&block)
     else
       lines
     end
@@ -295,7 +295,7 @@ class File
     if old_file == new_file
       require 'tempfile'
       temp_name = Time.new.strftime('%Y%m%d%H%M%S')
-      nf = Tempfile.new('ruby_temp_' + temp_name)
+      nf = Tempfile.new("ruby_temp_#{temp_name}")
     else
       nf = File.new(new_file, 'w')
     end
@@ -353,7 +353,7 @@ class File
         f.each_byte{ n += 1 }
       end
       n
-    elsif option == 'characters' || option == 'chars'
+    elsif %w[characters chars].include?(option)
       File.open(filename) do |f|
         n += 1 while f.getc
       end
@@ -447,7 +447,7 @@ class File
   # Is the file a gif?
   #
   def self.gif?(file)
-    ['GIF89a', 'GIF97a'].include?(File.read(file, 6))
+    %w[GIF89a GIF97a].include?(File.read(file, 6))
   end
 
   # Is the file a tiff?
