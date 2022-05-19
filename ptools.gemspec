@@ -29,6 +29,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency('rake')
   spec.add_development_dependency('rspec', '~> 3.9')
+  spec.add_development_dependency('rubocop')
+  spec.add_development_dependency('rubocop-rspec')
 
   if File::ALT_SEPARATOR
     spec.platform = Gem::Platform.new(['universal', 'mingw32'])
