@@ -92,16 +92,13 @@ describe File, :which do
   end
 
   example 'resolves with with ~', :unix_only => true do
-    begin
-      old_home = ENV['HOME']
+    old_home = ENV['HOME']
+    ENV['HOME'] = Dir::Tmpname.tmpdir
+    program = Tempfile.new(['program', '.sh'])
+    described_class.chmod(755, program.path)
 
-      ENV['HOME'] = Dir::Tmpname.tmpdir
-      program = Tempfile.new(['program', '.sh'])
-      described_class.chmod(755, program.path)
-
-      expect(described_class.which(described_class.basename(program.path), '~/')).not_to be_nil
-    ensure
-      ENV['HOME'] = old_home
-    end
+    expect(described_class.which(described_class.basename(program.path), '~/')).not_to be_nil
+  ensure
+    ENV['HOME'] = old_home
   end
 end
