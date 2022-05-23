@@ -12,7 +12,6 @@ require 'tempfile'
 
 describe File, :which do
   before(:context) do
-    @windows = File::ALT_SEPARATOR
     @dir = described_class.join(Dir.pwd, 'tempdir')
     @non_exe = described_class.join(Dir.pwd, 'tempfile')
     @ruby = RbConfig::CONFIG['RUBY_INSTALL_NAME']
@@ -27,7 +26,7 @@ describe File, :which do
       RbConfig::CONFIG['ruby_install_name']
     )
 
-    if @windows
+    if File::ALT_SEPARATOR
       @exe.tr!('/', '\\')
       @exe << '.exe'
     end
@@ -53,14 +52,12 @@ describe File, :which do
     expect(described_class.which('blahblahblah')).to be_nil
   end
 
-  example 'which handles executables without extensions on windows' do
-    skip 'skipped unless MS Windows' unless @windows
+  example 'which handles executables without extensions on windows', :windows_only => true do
     expect(described_class.which('ruby')).not_to be_nil
     expect(described_class.which('notepad')).not_to be_nil
   end
 
-  example 'which handles executables that already contain extensions on windows' do
-    skip 'skipped unless MS Windows' unless @windows
+  example 'which handles executables that already contain extensions on windows', :windows_only => true do
     expect(described_class.which('ruby.exe')).not_to be_nil
     expect(described_class.which('notepad.exe')).not_to be_nil
   end
@@ -94,8 +91,7 @@ describe File, :which do
     expect{ described_class.which(@ruby, '') }.to raise_error(ArgumentError)
   end
 
-  example 'resolves with with ~' do
-    skip 'skipped on MS Windows' if @windows
+  example 'resolves with with ~', :unix_only => true do
     begin
       old_home = ENV['HOME']
 
