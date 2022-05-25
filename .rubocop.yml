@@ -13,6 +13,10 @@ RSpec/BeforeAfterAll:
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - ptools.gemspec
+    - Rakefile
+    - Gemfile
 Lint/AssignmentInCondition:
   Enabled: false
 Lint/EmptyBlock:
