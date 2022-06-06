@@ -17,6 +17,7 @@
 * spec/wc_spec.rb
 * spec/whereis_spec.rb
 * spec/which_spec.rb
+* spec/img/jpg_no_ext
 * spec/img/test.gif
 * spec/img/test.ico
 * spec/img/test.jpg
