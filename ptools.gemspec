@@ -19,12 +19,13 @@ Gem::Specification.new do |spec|
   EOF
 
   spec.metadata = {
-    'homepage_uri'      => 'https://github.com/djberg96/ptools',
-    'bug_tracker_uri'   => 'https://github.com/djberg96/ptools/issues',
-    'changelog_uri'     => 'https://github.com/djberg96/ptools/blob/main/CHANGES.md',
-    'documentation_uri' => 'https://github.com/djberg96/ptools/wiki',
-    'source_code_uri'   => 'https://github.com/djberg96/ptools',
-    'wiki_uri'          => 'https://github.com/djberg96/ptools/wiki'
+    'homepage_uri'          => 'https://github.com/djberg96/ptools',
+    'bug_tracker_uri'       => 'https://github.com/djberg96/ptools/issues',
+    'changelog_uri'         => 'https://github.com/djberg96/ptools/blob/main/CHANGES.md',
+    'documentation_uri'     => 'https://github.com/djberg96/ptools/wiki',
+    'source_code_uri'       => 'https://github.com/djberg96/ptools',
+    'wiki_uri'              => 'https://github.com/djberg96/ptools/wiki',
+    'rubygems_mfa_required' => 'true'
   }
 
   spec.add_development_dependency('rake')
