@@ -15,6 +15,7 @@ RSpec.describe File, :image do
     @jpg_file  = described_class.join(Dir.pwd, 'img', 'test.jpg')
     @png_file  = described_class.join(Dir.pwd, 'img', 'test.png')
     @gif_file  = described_class.join(Dir.pwd, 'img', 'test.gif')
+    @tif_file  = described_class.join(Dir.pwd, 'img', 'test.tiff')
     @ico_file  = described_class.join(Dir.pwd, 'img', 'test.ico')
     @no_ext    = described_class.join(Dir.pwd, 'img', 'jpg_no_ext')
     @bmp_file  = described_class.join(Dir.pwd, 'img', 'test.bmp')
@@ -119,6 +120,26 @@ RSpec.describe File, :image do
 
     example 'png? method returns false for a text file' do
       expect(described_class.png?(@txt_file)).to be(false)
+    end
+  end
+
+  context 'tiff?' do
+    example 'tiff? method basic functionality' do
+      expect(described_class).to respond_to(:tiff?)
+      expect{ described_class.tiff?(@tif_file) }.not_to raise_error
+      expect(described_class.tiff?(@tif_file)).to be(true).or be(false)
+    end
+
+    example 'tiff? method returns true for a tiff file' do
+      expect(described_class.tiff?(@tif_file)).to be(true)
+    end
+
+    example 'tiff? method returns false for an image that is not a tiff' do
+      expect(described_class.tiff?(@jpg_file)).to be(false)
+    end
+
+    example 'tiff? method returns false for a text file' do
+      expect(described_class.tiff?(@txt_file)).to be(false)
     end
   end
 end
