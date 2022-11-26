@@ -1,8 +1,8 @@
 #####################################################################
 # image_spec.rb
 #
-# Specs for the File.image? method. You should run these specs via
-# the 'rake spec:image' task.
+# Specs for various image methods as well as the File.image? method
+# itself. You should run these specs via the 'rake spec:image' task.
 #####################################################################
 require 'rspec'
 require 'ptools'
