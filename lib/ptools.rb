@@ -429,7 +429,8 @@ class File
   # Is the file a bitmap file?
   #
   def self.bmp?(file)
-    File.read(file, 3) == 'BM6'
+    data = File.read(file, 6, nil, :encoding => 'binary')
+    data[0,2] == 'BM' && File.size(file) == data[2,4].unpack('i').first
   end
 
   # Is the file a jpeg file?
