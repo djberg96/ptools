@@ -1,4 +1,4 @@
-## 1.4.3 - ???
+## 1.4.3 - 26-Nov-2022
 * Added more image specs.
 * Updated the File.bmp? method. It now looks at the first six bytes, and
   uses four of those bytes to verify the file size.
