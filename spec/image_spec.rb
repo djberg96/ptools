@@ -21,6 +21,28 @@ RSpec.describe File, :image do
     @bmp_file  = described_class.join(Dir.pwd, 'img', 'test.bmp')
   end
 
+  context 'bmp?' do
+    example 'bmp? method basic functionality' do
+      described_class.bmp?(@bmp_file)
+      expect(described_class).to respond_to(:bmp?)
+      expect{ described_class.bmp?(@bmp_file) }.not_to raise_error
+      expect(described_class.bmp?(@bmp_file)).to be(true).or be(false)
+    end
+
+    example 'bmp? method returns true for a bitmap file' do
+      expect(described_class.bmp?(@bmp_file)).to be(true)
+    end
+
+    example 'bmp? method returns false for an image that is not a gif' do
+      expect(described_class.bmp?(@gif_file)).to be(false)
+      expect(described_class.bmp?(@tif_file)).to be(false)
+    end
+
+    example 'bmp? method returns false for a text file' do
+      expect(described_class.bmp?(@txt_file)).to be(false)
+    end
+  end
+
   context 'gif?' do
     example 'gif? method basic functionality' do
       expect(described_class).to respond_to(:gif?)
