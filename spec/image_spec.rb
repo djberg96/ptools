@@ -33,7 +33,7 @@ RSpec.describe File, :image do
       expect(described_class.bmp?(@bmp_file)).to be(true)
     end
 
-    example 'bmp? method returns false for an image that is not a gif' do
+    example 'bmp? method returns false for an image that is not a bitmap' do
       expect(described_class.bmp?(@gif_file)).to be(false)
       expect(described_class.bmp?(@tif_file)).to be(false)
     end
@@ -60,6 +60,27 @@ RSpec.describe File, :image do
 
     example 'gif? method returns false for a text file' do
       expect(described_class.gif?(@txt_file)).to be(false)
+    end
+  end
+
+  context 'ico?' do
+    example 'ico? method basic functionality' do
+      expect(described_class).to respond_to(:ico?)
+      expect{ described_class.ico?(@ico_file) }.not_to raise_error
+      expect(described_class.ico?(@ico_file)).to be(true).or be(false)
+    end
+
+    example 'ico? method returns true for an icon file' do
+      expect(described_class.ico?(@ico_file)).to be(true)
+    end
+
+    example 'ico? method returns false for an image that is not a icon file' do
+      expect(described_class.ico?(@gif_file)).to be(false)
+      expect(described_class.ico?(@png_file)).to be(false)
+    end
+
+    example 'ico? method returns false for a text file' do
+      expect(described_class.ico?(@txt_file)).to be(false)
     end
   end
 
