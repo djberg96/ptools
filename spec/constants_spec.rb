@@ -13,7 +13,7 @@ RSpec.describe File, :constants do
   let(:windows) { File::ALT_SEPARATOR }
 
   example 'PTOOLS_VERSION constant is set to expected value' do
-    expect(File::PTOOLS_VERSION).to eq('1.4.2')
+    expect(File::PTOOLS_VERSION).to eq('1.4.3')
     expect(File::PTOOLS_VERSION.frozen?).to be true
   end
 

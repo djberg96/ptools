@@ -1,3 +1,8 @@
+## 1.4.3 - ???
+* Added more image specs.
+* Updated the File.bmp? method. It now looks at the first six bytes, and
+  uses four of those bytes to verify the file size.
+
 ## 1.4.2 - 6-Jan-2021
 * Fixed a private access modifier that wasn't actually working as intended.
 * Two Windows constants that were never meant for public consumption have been marked private.

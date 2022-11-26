@@ -63,7 +63,7 @@ Add whatever other tools people think might be useful.
 Artistic-2.0
     
 ## Copyright
-(C) 2003-2020 Daniel J. Berger
+(C) 2003-2022 Daniel J. Berger
 All Rights Reserved.
     
 ## Warranty
