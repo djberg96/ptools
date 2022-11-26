@@ -20,23 +20,23 @@ RSpec.describe File, :image do
     @bmp_file  = described_class.join(Dir.pwd, 'img', 'test.bmp')
   end
 
-  context 'jpg?' do
-    example 'jpg? method basic functionality' do
-      expect(described_class).to respond_to(:jpg?)
-      expect{ described_class.jpg?(@jpg_file) }.not_to raise_error
-      expect(described_class.jpg?(@jpg_file)).to be(true).or be(false)
+  context 'gif?' do
+    example 'gif? method basic functionality' do
+      expect(described_class).to respond_to(:gif?)
+      expect{ described_class.gif?(@gif_file) }.not_to raise_error
+      expect(described_class.gif?(@gif_file)).to be(true).or be(false)
     end
 
-    example 'jpg? method returns true for a jpeg file' do
-      expect(described_class.jpg?(@jpg_file)).to be(true)
+    example 'gif? method returns true for a gif file' do
+      expect(described_class.gif?(@gif_file)).to be(true)
     end
 
-    example 'jpg? method returns true for an image that is not a jpeg' do
-      expect(described_class.jpg?(@gif_file)).to be(false)
+    example 'gif? method returns false for an image that is not a gif' do
+      expect(described_class.gif?(@jpg_file)).to be(false)
     end
 
-    example 'jpg? method returns true for a text file' do
-      expect(described_class.jpg?(@txt_file)).to be(false)
+    example 'gif? method returns false for a text file' do
+      expect(described_class.gif?(@txt_file)).to be(false)
     end
   end
 
@@ -79,6 +79,46 @@ RSpec.describe File, :image do
     example "image? returns appropriate value if the extension isn't included" do
       expect(described_class.image?(@no_ext, check_file_extension: true)).to be false
       expect(described_class.image?(@no_ext, check_file_extension: false)).to be true
+    end
+  end
+
+  context 'jpg?' do
+    example 'jpg? method basic functionality' do
+      expect(described_class).to respond_to(:jpg?)
+      expect{ described_class.jpg?(@jpg_file) }.not_to raise_error
+      expect(described_class.jpg?(@jpg_file)).to be(true).or be(false)
+    end
+
+    example 'jpg? method returns true for a jpeg file' do
+      expect(described_class.jpg?(@jpg_file)).to be(true)
+    end
+
+    example 'jpg? method returns false for an image that is not a jpeg' do
+      expect(described_class.jpg?(@gif_file)).to be(false)
+    end
+
+    example 'jpg? method returns false for a text file' do
+      expect(described_class.jpg?(@txt_file)).to be(false)
+    end
+  end
+
+  context 'png?' do
+    example 'png? method basic functionality' do
+      expect(described_class).to respond_to(:png?)
+      expect{ described_class.png?(@png_file) }.not_to raise_error
+      expect(described_class.png?(@png_file)).to be(true).or be(false)
+    end
+
+    example 'png? method returns true for a png file' do
+      expect(described_class.png?(@png_file)).to be(true)
+    end
+
+    example 'png? method returns false for an image that is not a png' do
+      expect(described_class.png?(@gif_file)).to be(false)
+    end
+
+    example 'png? method returns false for a text file' do
+      expect(described_class.png?(@txt_file)).to be(false)
     end
   end
 end
