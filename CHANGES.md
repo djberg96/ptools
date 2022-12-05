@@ -1,3 +1,9 @@
+## 1.5.0 - 5-Dec-2022
+* Change license to Apache-2.0.
+* Altered the File.binary? method. It no longer accepts a second argument,
+  having changed the way it checks for binary files internally, which is
+  now much simpler.
+
 ## 1.4.3 - 26-Nov-2022
 * Added more image specs.
 * Updated the File.bmp? method. It now looks at the first six bytes, and

@@ -60,7 +60,7 @@ And thanks to any and all contributors!
 Add whatever other tools people think might be useful.
    
 ## License
-Artistic-2.0
+Apache-2.0
     
 ## Copyright
 (C) 2003-2022 Daniel J. Berger

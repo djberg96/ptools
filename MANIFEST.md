@@ -1,4 +1,5 @@
 * CHANGES.md
+* LICENSE
 * README.md
 * MANIFEST.md
 * Gemfile
