@@ -49,9 +49,6 @@ later replaced by a version based on the `ruby-which` library.
 The `File.nl_convert` method is based on the nlcvt program found at
 http://www.perl.com/language/ppt/src/nlcvt/nlcvt, written by Tom Christiansen.
     
-The `binary?` method was based almost entirely on a blog post by Ryan
-Davis (who, in turn, based his code on Perl's -B switch).
-
 Thanks go to Matt Hoyle for help with the File.tail method.
 
 And thanks to any and all contributors!
