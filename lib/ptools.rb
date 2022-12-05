@@ -56,32 +56,25 @@ class File
   end
 
   # Returns whether or not +file+ is a binary non-image file, i.e. executable,
-  # shared object, ect. Note that this is NOT guaranteed to be 100% accurate.
-  # It performs a "best guess" based on a simple test of the first
-  # +File.blksize+ characters, or 4096, whichever is smaller.
+  # shared object, etc.
   #
-  # By default it will check to see if more than 30 percent of the characters
-  # are non-text characters. If so, the method returns true. You can configure
-  # this percentage by passing your own as a second argument.
+  # Internally this method simply looks for a double null sequence. This will
+  # work for the vast majority of cases, but it is not guaranteed to be
+  # absolutely accurate.
   #
   # Example:
   #
   #   File.binary?('somefile.exe') # => true
   #   File.binary?('somefile.txt') # => false
-  #--
-  # Based on code originally provided by Ryan Davis (which, in turn, is
-  # based on Perl's -B switch).
   #
-  def self.binary?(file, percentage = 0.30)
+  def self.binary?(file)
     return false if File.stat(file).zero?
     return false if image?(file)
     return false if check_bom?(file)
 
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
-    s = (File.read(file, bytes) || '')
-    s = s.encode('US-ASCII', :undef => :replace).chars
-    ((s.size - s.grep(' '..'~').size) / s.size.to_f) > percentage
+    (File.read(file, bytes) || '').include?("\u0000\u0000")
   end
 
   # Looks for the first occurrence of +program+ within +path+.

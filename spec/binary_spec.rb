@@ -31,6 +31,12 @@ RSpec.describe File, :binary do
     expect(described_class.binary?(bin_file)).to be true
   end
 
+  example 'File.binary? returns true for unix binary files', :unix_only => true do
+    expect(described_class.binary?('/bin/df')).to be true
+    expect(described_class.binary?('/bin/chmod')).to be true
+    expect(described_class.binary?('/bin/cat')).to be true
+  end
+
   example 'File.binary? returns false for text files' do
     expect(described_class.binary?(@emp_file)).to be false
     expect(described_class.binary?(@txt_file)).to be false
@@ -42,11 +48,6 @@ RSpec.describe File, :binary do
     expect(described_class.binary?(@png_file)).to be false
     expect(described_class.binary?(@jpg_file)).to be false
     expect(described_class.binary?(@gif_file)).to be false
-  end
-
-  example 'File.binary? accepts an optional percentage argument' do
-    expect(described_class.binary?(@txt_file, 0.50)).to be false
-    expect(described_class.binary?(@txt_file, 0.05)).to be true
   end
 
   example 'File.binary? raises an error if the file cannot be found' do
