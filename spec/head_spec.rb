@@ -29,7 +29,7 @@ RSpec.describe File, :head do
   end
 
   example 'head method returns the expected results' do
-    expect(described_class.head(test_file)).to be_kind_of(Array)
+    expect(described_class.head(test_file)).to be_a(Array)
     expect(described_class.head(test_file)).to eq(@expected_head1)
     expect(described_class.head(test_file, 5)).to eq(@expected_head2)
   end

@@ -34,7 +34,7 @@ RSpec.describe File, :whereis do
   example 'whereis basic functionality' do
     expect(described_class).to respond_to(:whereis)
     expect{ described_class.whereis('ruby') }.not_to raise_error
-    expect(described_class.whereis('ruby')).to be_kind_of(Array).or be_nil
+    expect(described_class.whereis('ruby')).to be_a(Array).or be_nil
   end
 
   example 'whereis accepts an optional second argument' do
@@ -43,7 +43,7 @@ RSpec.describe File, :whereis do
 
   example 'whereis returns expected values' do
     expect{ @actual_locs = described_class.whereis(ruby) }.not_to raise_error
-    expect(@actual_locs).to be_kind_of(Array)
+    expect(@actual_locs).to be_a(Array)
     expect((@expected_locs & @actual_locs).size > 0).to be true
   end
 

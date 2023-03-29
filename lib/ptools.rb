@@ -90,7 +90,7 @@ class File
   #   File.which('ruby') # => '/usr/local/bin/ruby'
   #   File.which('foo')  # => nil
   #
-  def self.which(program, path = ENV['PATH'])
+  def self.which(program, path = ENV.fetch('PATH', nil))
     raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     # Bail out early if an absolute path is provided.
@@ -143,7 +143,7 @@ class File
   #   File.whereis('ruby') # => ['/usr/bin/ruby', '/usr/local/bin/ruby']
   #   File.whereis('foo')  # => nil
   #
-  def self.whereis(program, path = ENV['PATH'])
+  def self.whereis(program, path = ENV.fetch('PATH', nil))
     raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     paths = []
@@ -423,7 +423,7 @@ class File
   #
   def self.bmp?(file)
     data = File.read(file, 6, nil, :encoding => 'binary')
-    data[0,2] == 'BM' && File.size(file) == data[2,4].unpack('i').first
+    data[0, 2] == 'BM' && File.size(file) == data[2, 4].unpack1('i')
   end
 
   # Is the file a jpeg file?

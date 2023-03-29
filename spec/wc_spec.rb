@@ -35,7 +35,7 @@ RSpec.describe File, :wc do
   end
 
   example 'wc with no option returns expected results' do
-    expect(described_class.wc(test_file)).to be_kind_of(Array)
+    expect(described_class.wc(test_file)).to be_a(Array)
     expect(described_class.wc(test_file)).to eq([166, 166, 25, 25])
   end
 

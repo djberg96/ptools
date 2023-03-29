@@ -74,7 +74,7 @@ RSpec.describe File, :tail do
   end
 
   example 'tail returns the expected values' do
-    expect(described_class.tail(test_file1)).to be_kind_of(Array)
+    expect(described_class.tail(test_file1)).to be_a(Array)
     expect(described_class.tail(test_file1)).to eq(@expected_tail1)
     expect(described_class.tail(test_file1, 5)).to eq(@expected_tail2)
   end

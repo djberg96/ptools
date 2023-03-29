@@ -40,7 +40,7 @@ describe File, :which do
   example 'which method basic functionality' do
     expect(described_class).to respond_to(:which)
     expect{ described_class.which(@ruby) }.not_to raise_error
-    expect(described_class.which(@ruby)).to be_kind_of(String)
+    expect(described_class.which(@ruby)).to be_a(String)
   end
 
   example 'which accepts an optional path to search' do
@@ -92,7 +92,7 @@ describe File, :which do
   end
 
   example 'resolves with with ~', :unix_only => true do
-    old_home = ENV['HOME']
+    old_home = Dir.home
     ENV['HOME'] = Dir::Tmpname.tmpdir
     program = Tempfile.new(['program', '.sh'])
     described_class.chmod(755, program.path)

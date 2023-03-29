@@ -10,7 +10,7 @@ require 'ptools'
 
 RSpec.describe File, :binary do
   let(:dirname)  { described_class.dirname(__FILE__) }
-  let(:bin_file) { File::ALT_SEPARATOR ? described_class.join(ENV['windir'], 'notepad.exe') : '/bin/ls' }
+  let(:bin_file) { File::ALT_SEPARATOR ? described_class.join(ENV.fetch('windir', nil), 'notepad.exe') : '/bin/ls' }
 
   before do
     @txt_file = described_class.join(dirname, 'txt', 'english.txt')
