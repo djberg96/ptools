@@ -37,4 +37,15 @@ Gem::Specification.new do |spec|
     spec.platform = Gem::Platform.new(['universal', 'mingw32'])
     spec.add_dependency('win32-file')
   end
+
+  spec.post_install_message = <<-EOF
+
+  #############################################################################
+  # Amendment VIII of the US Constitution                                     #
+  #                                                                           #
+  # Excessive bail shall not be required, nor excessive fines imposed, nor    #
+  # cruel and unusual punishments inflicted.                                  #
+  #############################################################################
+
+  EOF
 end
