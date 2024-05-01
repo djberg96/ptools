@@ -6,6 +6,8 @@ RSpec/ContextWording:
   Enabled: false
 RSpec/FilePath:
   SpecSuffixOnly: true
+RSpec/IndexedLet:
+  Enabled: false
 RSpec/InstanceVariable:
   Enabled: false
 RSpec/BeforeAfterAll:
@@ -58,7 +60,7 @@ Layout/SpaceBeforeBlockBraces:
 Metrics/AbcSize:
   Enabled: false
 Metrics/BlockLength:
-  IgnoredMethods: ['describe', 'context']
+  AllowedMethods: ['describe', 'context']
 Metrics/ClassLength:
   Enabled: false
 Metrics/MethodLength:
