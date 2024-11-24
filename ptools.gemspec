@@ -25,7 +25,9 @@ Gem::Specification.new do |spec|
     'documentation_uri'     => 'https://github.com/djberg96/ptools/wiki',
     'source_code_uri'       => 'https://github.com/djberg96/ptools',
     'wiki_uri'              => 'https://github.com/djberg96/ptools/wiki',
-    'rubygems_mfa_required' => 'true'
+    'rubygems_mfa_required' => 'true',
+    'github_repo'           => 'https://github.com/djberg96/ptools',
+    'funding_uri'           => 'https://github.com/sponsors/djberg96'
   }
 
   spec.add_development_dependency('rake')
