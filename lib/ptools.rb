@@ -11,7 +11,7 @@ class File
   if File::ALT_SEPARATOR
     MSWINDOWS = true
     if ENV['PATHEXT']
-      WIN32EXTS = ".{#{ENV['PATHEXT'].tr(';', ',').tr('.', '')}}".downcase
+      WIN32EXTS = String.new(".{#{ENV['PATHEXT'].tr(';', ',').tr('.', '')}}").downcase
     else
       WIN32EXTS = '.{exe,com,bat}'.freeze
     end
@@ -429,13 +429,13 @@ class File
   # Is the file a jpeg file?
   #
   def self.jpg?(file)
-    File.read(file, 10, nil, :encoding => 'binary') == "\377\330\377\340\000\020JFIF".force_encoding(Encoding::BINARY)
+    File.read(file, 10, nil, :encoding => 'binary') == String.new("\377\330\377\340\000\020JFIF").force_encoding(Encoding::BINARY)
   end
 
   # Is the file a png file?
   #
   def self.png?(file)
-    File.read(file, 4, nil, :encoding => 'binary') == "\211PNG".force_encoding(Encoding::BINARY)
+    File.read(file, 4, nil, :encoding => 'binary') == String.new("\211PNG").force_encoding(Encoding::BINARY)
   end
 
   # Is the file a gif?
