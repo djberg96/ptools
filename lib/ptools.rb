@@ -29,7 +29,7 @@ class File
   # :startdoc:
 
   # Returns whether or not the file is an image. Only JPEG, PNG, BMP,
-  # GIF, and ICO are checked against.
+  # GIF, TIFF, and ICO are checked against.
   #
   # This reads and checks the first few bytes of the file. For a version
   # that is more robust, but which depends on a 3rd party C library (and is
@@ -48,11 +48,11 @@ class File
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
   def self.image?(file, check_file_extension: true)
-    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
+    magic_number_match = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
 
-    bool &&= IMAGE_EXT.include?(File.extname(file).downcase) if check_file_extension
+    return magic_number_match unless check_file_extension
 
-    bool
+    magic_number_match && IMAGE_EXT.include?(File.extname(file).downcase)
   end
 
   # Returns whether or not +file+ is a binary non-image file, i.e. executable,
@@ -74,7 +74,8 @@ class File
 
     bytes = File.stat(file).blksize
     bytes = 4096 if bytes > 4096
-    (File.read(file, bytes) || '').include?("\u0000\u0000")
+    content = File.read(file, bytes) || ''
+    content.include?("\u0000\u0000")
   end
 
   # Looks for the first occurrence of +program+ within +path+.
@@ -91,41 +92,21 @@ class File
   #   File.which('foo')  # => nil
   #
   def self.which(program, path = ENV.fetch('PATH', nil))
+    raise ArgumentError, 'program cannot be empty' if program.nil? || program.empty?
     raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     # Bail out early if an absolute path is provided.
     if program =~ /^\/|^[a-z]:[\\\/]/i
-      program += WIN32EXTS if MSWINDOWS && File.extname(program).empty?
-      found = Dir[program].first
-      if found && File.executable?(found) && !File.directory?(found)
-        return found
-      else
-        return nil
-      end
+      return find_executable_in_absolute_path(program)
     end
 
     # Iterate over each path glob the dir + program.
     path.split(File::PATH_SEPARATOR).each do |dir|
       dir = File.expand_path(dir)
-
       next unless File.exist?(dir) # In case of bogus second argument
 
-      file = File.join(dir, program)
-
-      # Dir[] doesn't handle backslashes properly, so convert them. Also, if
-      # the program name doesn't have an extension, try them all.
-      if MSWINDOWS
-        file = file.tr(File::ALT_SEPARATOR, File::SEPARATOR)
-        file += WIN32EXTS if File.extname(program).empty?
-      end
-
-      found = Dir[file].first
-
-      # Convert all forward slashes to backslashes if supported
-      if found && File.executable?(found) && !File.directory?(found)
-        found.tr!(File::SEPARATOR, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
-        return found
-      end
+      found = find_executable_in_directory(dir, program)
+      return found if found
     end
 
     nil
@@ -144,46 +125,23 @@ class File
   #   File.whereis('foo')  # => nil
   #
   def self.whereis(program, path = ENV.fetch('PATH', nil))
+    raise ArgumentError, 'program cannot be empty' if program.nil? || program.empty?
     raise ArgumentError, 'path cannot be empty' if path.nil? || path.empty?
 
     paths = []
 
     # Bail out early if an absolute path is provided.
     if program =~ /^\/|^[a-z]:[\\\/]/i
-      program += WIN32EXTS if MSWINDOWS && File.extname(program).empty?
-      program = program.tr(File::ALT_SEPARATOR, File::SEPARATOR) if MSWINDOWS
-      found = Dir[program]
-      if found[0] && File.executable?(found[0]) && !File.directory?(found[0])
-        if File::ALT_SEPARATOR
-          return found.map{ |f| f.tr(File::SEPARATOR, File::ALT_SEPARATOR) }
-        else
-          return found
-        end
-      else
-        return nil
-      end
+      found = find_all_executables_in_absolute_path(program)
+      return found.empty? ? nil : found
     end
 
     # Iterate over each path glob the dir + program.
     path.split(File::PATH_SEPARATOR).each do |dir|
       next unless File.exist?(dir) # In case of bogus second argument
 
-      file = File.join(dir, program)
-
-      # Dir[] doesn't handle backslashes properly, so convert them. Also, if
-      # the program name doesn't have an extension, try them all.
-      if MSWINDOWS
-        file = file.tr(File::ALT_SEPARATOR, File::SEPARATOR)
-        file += WIN32EXTS if File.extname(program).empty?
-      end
-
-      found = Dir[file].first
-
-      # Convert all forward slashes to backslashes if supported
-      if found && File.executable?(found) && !File.directory?(found)
-        found.tr!(File::SEPARATOR, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
-        paths << found
-      end
+      found = find_executable_in_directory(dir, program)
+      paths << found if found
     end
 
     paths.empty? ? nil : paths.uniq
@@ -201,20 +159,22 @@ class File
   #  File.head('somefile.txt'){ |line| puts line }
   #
   def self.head(filename, num_lines = 10)
-    a = []
+    raise ArgumentError, 'num_lines must be non-negative' if num_lines < 0
+    return [] if num_lines == 0
+
+    lines = []
 
     File.foreach(filename) do |line|
-      break if num_lines <= 0
+      break if lines.size >= num_lines
 
-      num_lines -= 1
       if block_given?
         yield line
       else
-        a << line
+        lines << line
       end
     end
 
-    a.empty? ? nil : a # Return nil in block form
+    block_given? ? nil : lines
   end
 
   # In block form, yields the last +num_lines+ of file +filename+.
@@ -315,11 +275,13 @@ class File
   # byte file +filename+ if it doesn't already exist.
   #
   def self.touch(filename)
+    raise ArgumentError, 'filename cannot be nil or empty' if filename.nil? || filename.empty?
+
     if File.exist?(filename)
       time = Time.now
       File.utime(time, time, filename)
     else
-      File.open(filename, 'w'){}
+      File.open(filename, 'w') {}
     end
     self
   end
@@ -331,43 +293,25 @@ class File
   # 'lines'.
   #
   def self.wc(filename, option = 'all')
-    option.downcase!
+    option = option.to_s.downcase
     valid = %w[all bytes characters chars lines words]
 
     raise ArgumentError, "Invalid option: '#{option}'" unless valid.include?(option)
 
-    n = 0
-
-    if option == 'lines'
-      File.foreach(filename){ n += 1 }
-      n
-    elsif option == 'bytes'
-      File.open(filename) do |f|
-        f.each_byte{ n += 1 }
-      end
-      n
-    elsif %w[characters chars].include?(option)
-      File.open(filename) do |f|
-        n += 1 while f.getc
-      end
-      n
-    elsif option == 'words'
-      File.foreach(filename) do |line|
-        n += line.split.length
-      end
-      n
+    case option
+    when 'lines'
+      count_lines(filename)
+    when 'bytes'
+      File.size(filename)
+    when 'characters', 'chars'
+      count_characters(filename)
+    when 'words'
+      count_words(filename)
     else
-      bytes, chars, lines, words = 0, 0, 0, 0
-      File.foreach(filename) do |line|
-        lines += 1
-        words += line.split.length
-        chars += line.chars.length
-      end
-      File.open(filename) do |f|
-        bytes += 1 while f.getc
-      end
-      [bytes, chars, words, lines]
+      count_all_stats(filename)
     end
+  rescue Errno::ENOENT, Errno::EACCES
+    option == 'all' ? [0, 0, 0, 0] : 0
   end
 
   # Already provided by win32-file on MS Windows
@@ -383,6 +327,8 @@ class File
     def self.sparse?(file)
       stats = File.stat(file)
       stats.size > stats.blocks * 512
+    rescue Errno::EACCES, Errno::EISDIR, Errno::ELOOP
+      false
     end
   end
 
@@ -390,14 +336,22 @@ class File
   # If present, we can generally assume it's a text file.
   #
   def self.check_bom?(file)
+    return false if File.zero?(file)
+
     text = File.read(file, 4).force_encoding('utf-8')
 
-    bool = false
-    bool = true if text[0, 3] == "\xEF\xBB\xBF"
-    bool = true if text[0, 4] == "\x00\x00\xFE\xFF" || text[0, 4] == "\xFF\xFE\x00\x00"
-    bool = true if text[0, 2] == "\xFF\xFE" || text[0, 2] == "\xFE\xFF"
+    # Check for UTF-8 BOM
+    return true if text.bytesize >= 3 && text[0, 3] == "\xEF\xBB\xBF"
 
-    bool
+    # Check for UTF-32 BOM (both byte orders)
+    return true if text.bytesize >= 4 && (text[0, 4] == "\x00\x00\xFE\xFF" || text[0, 4] == "\xFF\xFE\x00\x00")
+
+    # Check for UTF-16 BOM (both byte orders)
+    return true if text.bytesize >= 2 && (text[0, 2] == "\xFF\xFE" || text[0, 2] == "\xFE\xFF")
+
+    false
+  rescue Errno::EACCES, Errno::EISDIR, Errno::ELOOP
+    false
   end
 
   private_class_method :check_bom?
@@ -422,48 +376,163 @@ class File
   # Is the file a bitmap file?
   #
   def self.bmp?(file)
-    data = File.read(file, 6, nil, :encoding => 'binary')
+    return false if File.size(file) < 6
+
+    data = File.read(file, 6, nil, encoding: 'binary')
     data[0, 2] == 'BM' && File.size(file) == data[2, 4].unpack1('i')
+  rescue Errno::EACCES, Errno::EISDIR, Errno::ELOOP
+    false
   end
 
   # Is the file a jpeg file?
   #
   def self.jpg?(file)
-    File.read(file, 10, nil, :encoding => 'binary') == String.new("\377\330\377\340\000\020JFIF").force_encoding(Encoding::BINARY)
+    return false if File.size(file) < 10
+
+    data = File.read(file, 10, nil, encoding: 'binary')
+    data == String.new("\377\330\377\340\000\020JFIF").force_encoding(Encoding::BINARY)
+  rescue Errno::EACCES, Errno::EISDIR, Errno::ELOOP
+    false
   end
 
   # Is the file a png file?
   #
   def self.png?(file)
-    File.read(file, 4, nil, :encoding => 'binary') == String.new("\211PNG").force_encoding(Encoding::BINARY)
+    return false if File.size(file) < 4
+
+    data = File.read(file, 4, nil, encoding: 'binary')
+    data == String.new("\211PNG").force_encoding(Encoding::BINARY)
+  rescue Errno::EACCES, Errno::EISDIR, Errno::ELOOP
+    false
   end
 
   # Is the file a gif?
   #
   def self.gif?(file)
-    %w[GIF89a GIF97a].include?(File.read(file, 6))
+    return false if File.size(file) < 6
+
+    header = File.read(file, 6)
+    %w[GIF89a GIF97a].include?(header)
+  rescue Errno::EACCES, Errno::EISDIR, Errno::ELOOP
+    false
   end
 
   # Is the file a tiff?
   #
   def self.tiff?(file)
-    return false if File.size(file) < 12
+    return false if File.size(file) < 4
 
     bytes = File.read(file, 4)
 
     # II is Intel, MM is Motorola
-    return false if bytes[0..1] != 'II' && bytes[0..1] != 'MM'
+    return false unless %w[II MM].include?(bytes[0..1])
 
-    return false if bytes[0..1] == 'II' && bytes[2..3].ord != 42
-
-    return false if bytes[0..1] == 'MM' && bytes[2..3].reverse.ord != 42
-
-    true
+    # Check magic number based on endianness
+    case bytes[0..1]
+    when 'II'
+      bytes[2..3].unpack1('v') == 42  # Little endian
+    when 'MM'
+      bytes[2..3].unpack1('n') == 42  # Big endian
+    else
+      false
+    end
+  rescue Errno::EACCES, Errno::EISDIR, Errno::ELOOP
+    false
   end
 
   # Is the file an ico file?
   #
   def self.ico?(file)
-    ["\000\000\001\000", "\000\000\002\000"].include?(File.read(file, 4, nil, :encoding => 'binary'))
+    return false if File.size(file) < 4
+
+    data = File.read(file, 4, nil, encoding: 'binary')
+    ["\000\000\001\000", "\000\000\002\000"].include?(data)
+  rescue Errno::EACCES, Errno::EISDIR, Errno::ELOOP
+    false
   end
+
+  private_class_method :check_bom?
+
+  # Helper method for finding executable in absolute path
+  def self.find_executable_in_absolute_path(program)
+    program += WIN32EXTS if MSWINDOWS && File.extname(program).empty?
+    found = Dir[program].first
+    if found && File.executable?(found) && !File.directory?(found)
+      return found
+    end
+    nil
+  end
+
+  # Helper method for finding all executables in absolute path
+  def self.find_all_executables_in_absolute_path(program)
+    program += WIN32EXTS if MSWINDOWS && File.extname(program).empty?
+    program = program.tr(File::ALT_SEPARATOR, File::SEPARATOR) if MSWINDOWS
+    found = Dir[program].select { |f| File.executable?(f) && !File.directory?(f) }
+
+    if File::ALT_SEPARATOR
+      found.map { |f| f.tr(File::SEPARATOR, File::ALT_SEPARATOR) }
+    else
+      found
+    end
+  end
+
+  # Helper method for finding executable in directory
+  def self.find_executable_in_directory(dir, program)
+    file = File.join(dir, program)
+
+    # Dir[] doesn't handle backslashes properly, so convert them. Also, if
+    # the program name doesn't have an extension, try them all.
+    if MSWINDOWS
+      file = file.tr(File::ALT_SEPARATOR, File::SEPARATOR)
+      file += WIN32EXTS if File.extname(program).empty?
+    end
+
+    found = Dir[file].first
+
+    # Convert all forward slashes to backslashes if supported
+    if found && File.executable?(found) && !File.directory?(found)
+      found.tr!(File::SEPARATOR, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
+      return found
+    end
+    nil
+  end
+
+  # Helper method for counting lines
+  def self.count_lines(filename)
+    count = 0
+    File.foreach(filename) { count += 1 }
+    count
+  end
+
+  # Helper method for counting characters efficiently
+  def self.count_characters(filename)
+    File.read(filename).length
+  end
+
+  # Helper method for counting words
+  def self.count_words(filename)
+    count = 0
+    File.foreach(filename) do |line|
+      count += line.split.length
+    end
+    count
+  end
+
+  # Helper method for counting all statistics efficiently
+  def self.count_all_stats(filename)
+    bytes = File.size(filename)
+    lines = words = chars = 0
+
+    File.foreach(filename) do |line|
+      lines += 1
+      words += line.split.length
+      chars += line.length
+    end
+
+    [bytes, chars, words, lines]
+  end
+
+  private_class_method :find_executable_in_absolute_path, :find_all_executables_in_absolute_path,
+                       :find_executable_in_directory, :count_lines, :count_characters,
+                       :count_words, :count_all_stats
 end
