@@ -18,8 +18,8 @@ describe File, :which do
 
     Dir.mkdir(@dir) unless described_class.exist?(@dir)
     FileUtils.touch(@non_exe)
-    described_class.chmod(775, @dir)
-    described_class.chmod(644, @non_exe)
+    described_class.chmod(0775, @dir)
+    described_class.chmod(0644, @non_exe)
 
     @exe = described_class.join(
       RbConfig::CONFIG['bindir'],
@@ -95,7 +95,7 @@ describe File, :which do
     old_home = Dir.home
     ENV['HOME'] = Dir::Tmpname.tmpdir
     program = Tempfile.new(['program', '.sh'])
-    described_class.chmod(755, program.path)
+    described_class.chmod(0755, program.path)
 
     expect(described_class.which(described_class.basename(program.path), '~/')).not_to be_nil
   ensure
