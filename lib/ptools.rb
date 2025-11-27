@@ -26,6 +26,10 @@ class File
 
   IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico].freeze
 
+  # Constants for file operations
+  BLOCK_SIZE = 512
+  TAIL_CHUNK_SIZE = 2**16  # 64k chunks
+
   # :startdoc:
 
   # Returns whether or not the file is an image. Only JPEG, PNG, BMP,
@@ -232,13 +236,11 @@ class File
   # to be configured in the future as an optional 3rd argument.
   #
   def self.tail(filename, num_lines = 10, &block)
-    tail_size = 2**16 # 64k chunks
-
     # MS Windows gets unhappy if you try to seek backwards past the
     # end of the file, so we have some extra checks here and later.
     file_size  = File.size(filename)
-    read_bytes = file_size % tail_size
-    read_bytes = tail_size if read_bytes == 0
+    read_bytes = file_size % TAIL_CHUNK_SIZE
+    read_bytes = TAIL_CHUNK_SIZE if read_bytes == 0
 
     line_sep = File::ALT_SEPARATOR ? "\r\n" : "\n"
 
@@ -252,7 +254,7 @@ class File
       while buf.scan(line_sep).size <= num_lines and position >= 0
         fh.seek(position, IO::SEEK_SET)
         buf = fh.read(read_bytes) + buf
-        read_bytes = tail_size
+        read_bytes = TAIL_CHUNK_SIZE
         position -= read_bytes
       end
     end
@@ -382,7 +384,7 @@ class File
     #
     def self.sparse?(file)
       stats = File.stat(file)
-      stats.size > stats.blocks * 512
+      stats.size > stats.blocks * BLOCK_SIZE
     end
   end
 
