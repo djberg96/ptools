@@ -431,19 +431,19 @@ class File
   # Is the file a jpeg file?
   #
   def self.jpg?(file)
-    File.read(file, 10, nil, :encoding => 'binary') == String.new("\377\330\377\340\000\020JFIF").force_encoding(Encoding::BINARY)
+    File.read(file, 10, nil, :encoding => 'binary') == "\xFF\xD8\xFF\xE0\x00\x10JFIF".force_encoding(Encoding::BINARY)
   end
 
   # Is the file a png file?
   #
   def self.png?(file)
-    File.read(file, 4, nil, :encoding => 'binary') == String.new("\211PNG").force_encoding(Encoding::BINARY)
+    File.read(file, 4, nil, :encoding => 'binary') == "\x89PNG".force_encoding(Encoding::BINARY)
   end
 
   # Is the file a gif?
   #
   def self.gif?(file)
-    %w[GIF89a GIF97a].include?(File.read(file, 6))
+    %w[GIF89a GIF97a].include?(File.read(file, 6, nil, :encoding => 'binary'))
   end
 
   # Is the file a tiff?
@@ -451,7 +451,7 @@ class File
   def self.tiff?(file)
     return false if File.size(file) < 12
 
-    bytes = File.read(file, 4)
+    bytes = File.read(file, 4, nil, :encoding => 'binary')
 
     # II is Intel, MM is Motorola
     return false if bytes[0..1] != 'II' && bytes[0..1] != 'MM'
@@ -466,6 +466,6 @@ class File
   # Is the file an ico file?
   #
   def self.ico?(file)
-    ["\000\000\001\000", "\000\000\002\000"].include?(File.read(file, 4, nil, :encoding => 'binary'))
+    ["\x00\x00\x01\x00".force_encoding(Encoding::BINARY), "\x00\x00\x02\x00".force_encoding(Encoding::BINARY)].include?(File.read(file, 4, nil, :encoding => 'binary'))
   end
 end
