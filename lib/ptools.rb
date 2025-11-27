@@ -358,13 +358,13 @@ class File
       n
     else
       bytes, chars, lines, words = 0, 0, 0, 0
-      File.foreach(filename) do |line|
-        lines += 1
-        words += line.split.length
-        chars += line.chars.length
-      end
       File.open(filename) do |f|
-        bytes += 1 while f.getc
+        while (line = f.gets)
+          lines += 1
+          words += line.split.length
+          chars += line.chars.length
+          bytes += line.bytesize
+        end
       end
       [bytes, chars, words, lines]
     end
