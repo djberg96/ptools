@@ -290,23 +290,22 @@ class File
     if old_file == new_file
       require 'tempfile'
       temp_name = Time.new.strftime('%Y%m%d%H%M%S')
-      nf = Tempfile.new("ruby_temp_#{temp_name}")
-    else
-      nf = File.new(new_file, 'w')
-    end
-
-    begin
-      nf.open if old_file == new_file
-      File.foreach(old_file) do |line|
-        line.chomp!
-        nf.print("#{line}#{format}")
-      end
-    ensure
-      nf.close if nf && !nf.closed?
-      if old_file == new_file
+      Tempfile.open("ruby_temp_#{temp_name}") do |nf|
+        File.foreach(old_file) do |line|
+          line.chomp!
+          nf.print("#{line}#{format}")
+        end
+        nf.close
         require 'fileutils'
         File.delete(old_file)
         FileUtils.mv(nf.path, old_file)
+      end
+    else
+      File.open(new_file, 'w') do |nf|
+        File.foreach(old_file) do |line|
+          line.chomp!
+          nf.print("#{line}#{format}")
+        end
       end
     end
 
