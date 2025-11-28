@@ -1,3 +1,11 @@
+## 1.5.1 - 27-Nov-2025
+* Refactoring release.
+* The wc('all') method now only does a single read instead of a double read.
+* The nl_convert method simplified to use the block form of File.open.
+* More consistent binary encoding calls.
+* Some magic numbers were replaced with constants.
+* Specs run in documentation mode.
+
 ## 1.5.0 - 5-Dec-2022
 * Change license to Apache-2.0.
 * Altered the File.binary? method. It no longer accepts a second argument,
