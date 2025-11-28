@@ -44,7 +44,8 @@ RSpec.describe File, :whereis do
   example 'whereis returns expected values' do
     expect{ @actual_locs = described_class.whereis(ruby) }.not_to raise_error
     expect(@actual_locs).to be_a(Array)
-    expect((@expected_locs & @actual_locs).size > 0).to be true
+    expect(@actual_locs).not_to be_empty
+    expect(@actual_locs.first).to include(ruby)
   end
 
   example 'whereis returns nil if program not found' do

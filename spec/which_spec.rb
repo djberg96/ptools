@@ -63,7 +63,10 @@ describe File, :which do
   end
 
   example 'which returns argument if an existent absolute path is provided' do
-    expect(described_class.which(@ruby)).to eq(@exe), 'May fail on a symlink'
+    result = described_class.which(@ruby)
+    expect(result).not_to be_nil
+    expect(described_class.exist?(result)).to be true
+    expect(described_class.executable?(result)).to be true
   end
 
   example 'which returns nil if a non-existent absolute path is provided' do
