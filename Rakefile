@@ -82,6 +82,7 @@ namespace 'spec' do
 
   RSpec::Core::RakeTask.new(:all) do |t|
     t.pattern = 'spec/*_spec.rb'
+    t.rspec_opts = '-f documentation'
   end
 end
 

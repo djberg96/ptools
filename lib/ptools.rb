@@ -26,6 +26,10 @@ class File
 
   IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico].freeze
 
+  # Constants for file operations
+  BLOCK_SIZE = 512
+  TAIL_CHUNK_SIZE = 2**16  # 64k chunks
+
   # :startdoc:
 
   # Returns whether or not the file is an image. Only JPEG, PNG, BMP,
@@ -232,13 +236,11 @@ class File
   # to be configured in the future as an optional 3rd argument.
   #
   def self.tail(filename, num_lines = 10, &block)
-    tail_size = 2**16 # 64k chunks
-
     # MS Windows gets unhappy if you try to seek backwards past the
     # end of the file, so we have some extra checks here and later.
     file_size  = File.size(filename)
-    read_bytes = file_size % tail_size
-    read_bytes = tail_size if read_bytes == 0
+    read_bytes = file_size % TAIL_CHUNK_SIZE
+    read_bytes = TAIL_CHUNK_SIZE if read_bytes == 0
 
     line_sep = File::ALT_SEPARATOR ? "\r\n" : "\n"
 
@@ -252,7 +254,7 @@ class File
       while buf.scan(line_sep).size <= num_lines and position >= 0
         fh.seek(position, IO::SEEK_SET)
         buf = fh.read(read_bytes) + buf
-        read_bytes = tail_size
+        read_bytes = TAIL_CHUNK_SIZE
         position -= read_bytes
       end
     end
@@ -288,23 +290,22 @@ class File
     if old_file == new_file
       require 'tempfile'
       temp_name = Time.new.strftime('%Y%m%d%H%M%S')
-      nf = Tempfile.new("ruby_temp_#{temp_name}")
-    else
-      nf = File.new(new_file, 'w')
-    end
-
-    begin
-      nf.open if old_file == new_file
-      File.foreach(old_file) do |line|
-        line.chomp!
-        nf.print("#{line}#{format}")
-      end
-    ensure
-      nf.close if nf && !nf.closed?
-      if old_file == new_file
+      Tempfile.open("ruby_temp_#{temp_name}") do |nf|
+        File.foreach(old_file) do |line|
+          line.chomp!
+          nf.print("#{line}#{format}")
+        end
+        nf.close
         require 'fileutils'
         File.delete(old_file)
         FileUtils.mv(nf.path, old_file)
+      end
+    else
+      File.open(new_file, 'w') do |nf|
+        File.foreach(old_file) do |line|
+          line.chomp!
+          nf.print("#{line}#{format}")
+        end
       end
     end
 
@@ -358,13 +359,13 @@ class File
       n
     else
       bytes, chars, lines, words = 0, 0, 0, 0
-      File.foreach(filename) do |line|
-        lines += 1
-        words += line.split.length
-        chars += line.chars.length
-      end
       File.open(filename) do |f|
-        bytes += 1 while f.getc
+        while (line = f.gets)
+          lines += 1
+          words += line.split.length
+          chars += line.chars.length
+          bytes += line.bytesize
+        end
       end
       [bytes, chars, words, lines]
     end
@@ -382,7 +383,7 @@ class File
     #
     def self.sparse?(file)
       stats = File.stat(file)
-      stats.size > stats.blocks * 512
+      stats.size > stats.blocks * BLOCK_SIZE
     end
   end
 
@@ -429,19 +430,19 @@ class File
   # Is the file a jpeg file?
   #
   def self.jpg?(file)
-    File.read(file, 10, nil, :encoding => 'binary') == String.new("\377\330\377\340\000\020JFIF").force_encoding(Encoding::BINARY)
+    File.read(file, 10, nil, :encoding => 'binary') == "\xFF\xD8\xFF\xE0\x00\x10JFIF".force_encoding(Encoding::BINARY)
   end
 
   # Is the file a png file?
   #
   def self.png?(file)
-    File.read(file, 4, nil, :encoding => 'binary') == String.new("\211PNG").force_encoding(Encoding::BINARY)
+    File.read(file, 4, nil, :encoding => 'binary') == "\x89PNG".force_encoding(Encoding::BINARY)
   end
 
   # Is the file a gif?
   #
   def self.gif?(file)
-    %w[GIF89a GIF97a].include?(File.read(file, 6))
+    %w[GIF89a GIF97a].include?(File.read(file, 6, nil, :encoding => 'binary'))
   end
 
   # Is the file a tiff?
@@ -449,7 +450,7 @@ class File
   def self.tiff?(file)
     return false if File.size(file) < 12
 
-    bytes = File.read(file, 4)
+    bytes = File.read(file, 4, nil, :encoding => 'binary')
 
     # II is Intel, MM is Motorola
     return false if bytes[0..1] != 'II' && bytes[0..1] != 'MM'
@@ -464,6 +465,6 @@ class File
   # Is the file an ico file?
   #
   def self.ico?(file)
-    ["\000\000\001\000", "\000\000\002\000"].include?(File.read(file, 4, nil, :encoding => 'binary'))
+    ["\x00\x00\x01\x00".force_encoding(Encoding::BINARY), "\x00\x00\x02\x00".force_encoding(Encoding::BINARY)].include?(File.read(file, 4, nil, :encoding => 'binary'))
   end
 end
