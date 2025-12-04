@@ -332,7 +332,7 @@ class File
   # 'lines'.
   #
   def self.wc(filename, option = 'all')
-    option.downcase!
+    option = option.downcase
     valid = %w[all bytes characters chars lines words]
 
     raise ArgumentError, "Invalid option: '#{option}'" unless valid.include?(option)
