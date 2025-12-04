@@ -1,3 +1,9 @@
+## 1.5.2 - 4-Dec-2025
+* Reverted a change that was causing frozen string warnings in Ruby 3.4.x.
+  Thanks go to Daniel Straßner for the report.
+* Fixed a potential warning in the wc method.
+* Updated the Rakefile to run specs with warnings enabled by default.
+
 ## 1.5.1 - 27-Nov-2025
 * Refactoring release.
 * The wc('all') method now only does a single read instead of a double read.
